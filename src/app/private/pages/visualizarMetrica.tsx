@@ -19,7 +19,7 @@ import {
   postMetricaValue,
 } from "../../services/metricaValue.service";
 import Toast from "react-native-toast-message";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList } from "react-native";
 import ModalMetrica from "../../components/ModalMetrica";
 import ModalMeta from "../../components/ModalMeta";
 import CardValorMetrica from "../../components/CardValorMetrica";

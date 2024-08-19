@@ -3,9 +3,7 @@ on:
   push:
     branches:
       - develop
-      - teste/sonar
-      - sonar/carrigindo_sonar
-      - teste/sonarcloud
+      - chore/adapt-for-2024-1
 
   pull_request:
     types: [opened, synchronize, reopened]

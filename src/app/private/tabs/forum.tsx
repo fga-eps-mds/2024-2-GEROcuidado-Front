@@ -17,7 +17,7 @@ import { ECategoriaPesquisa, ECategoriaPublicacao, IOrder, IPublicacao } from ".
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "../../interfaces/user.interface";
 import BarraPesquisa from "../../components/BarraPesquisa";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 
 export default function Forum() {
@@ -69,11 +69,11 @@ export default function Forum() {
       getAllPublicacao(offset, { titulo, isReported }, order)
         .then((response) => {
           const newPublicacoes = response.data as IPublicacao[];
-  
+
           if (newPublicacoes.length === 0) {
             setShowCarregarMais(false);
           }
-  
+
           setPublicacoes([...anterior, ...newPublicacoes]);
         })
         .catch((err) => {
@@ -88,16 +88,16 @@ export default function Forum() {
           setLoading(false);
           setLoadingCarregarMais(false);
         });
-      
+
     } else {
       getAllPublicacao(offset, { titulo, isReported, categoria }, order)
         .then((response) => {
           const newPublicacoes = response.data as IPublicacao[];
-  
+
           if (newPublicacoes.length === 0) {
             setShowCarregarMais(false);
           }
-  
+
           setPublicacoes([...anterior, ...newPublicacoes]);
         })
         .catch((err) => {
@@ -156,7 +156,7 @@ export default function Forum() {
         <BarraPesquisa callbackFn={debouncePesquisar} />
       </View>
 
-      
+
       <View style={styles.botoes}>
         {!usuario?.admin && (
          <View style={styles.list}>
@@ -176,7 +176,7 @@ export default function Forum() {
 
         )}
 
-      
+
         {usuario?.id && usuario?.admin && (
           <View style={styles.reportadas}>
             <Switch

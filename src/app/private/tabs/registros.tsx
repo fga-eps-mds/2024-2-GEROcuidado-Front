@@ -7,7 +7,7 @@ import { IIdoso } from "../../interfaces/idoso.interface";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import IdosoNaoSelecionado from "../../components/IdosoNaoSelecionado";
 import CardMetrica from "../../components/CardMetrica";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList } from "react-native";
 import { IMetrica, IMetricaFilter } from "../../interfaces/metricas.interface";
 import { router } from "expo-router";
 import { Pressable } from "react-native";

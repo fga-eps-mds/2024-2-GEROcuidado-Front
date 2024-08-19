@@ -9,7 +9,7 @@ import {
   Switch,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router, useLocalSearchParams } from "expo-router";
 import { SelectList } from "react-native-dropdown-select-list";
