@@ -11,7 +11,7 @@ import ErrorMessage from "../components/ErrorMessage";
 import { getUserById, loginUser } from "../services/user.service";
 import JWT from "expo-jwt";
 import { IUser } from "../interfaces/user.interface";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 
 interface IErrors {
   email?: string;

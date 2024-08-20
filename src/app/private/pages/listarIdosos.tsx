@@ -6,7 +6,7 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import BackButton from "../../components/BackButton";
 import CardIdoso from "../../components/CardIdoso";

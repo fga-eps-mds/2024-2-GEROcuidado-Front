@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SelectList } from "react-native-dropdown-select-list";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 import { ECategoriaPublicacao } from "../../interfaces/forum.interface";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "../../interfaces/user.interface";

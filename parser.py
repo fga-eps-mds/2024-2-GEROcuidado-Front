@@ -23,18 +23,19 @@ METRICS_SONAR = [
     "security_rating",
 ]
 
-BASE_URL = "https://sonarcloud.io/api/measures/component_tree?component=fga-eps-mds_"
+BASE_URL = "https://sonarcloud.io/api/measures/component_tree?component="
 
 if __name__ == "__main__":
 
-    REPO = sys.argv[1]
-    RELEASE_VERSION = sys.argv[2]
+    REPO_COMPONENT_KEY = sys.argv[1]
+    REPO = sys.argv[2]
+    RELEASE_VERSION = sys.argv[3].replace('/', '')
 
     response = requests.get(
-        f'{BASE_URL}{REPO}&metricKeys={",".join(METRICS_SONAR)}&ps=500'
+        f'{BASE_URL}{REPO_COMPONENT_KEY}&metricKeys={",".join(METRICS_SONAR)}&ps=500'
     )
     j = json.loads(response.text)
-    
+
     file_path = f'./analytics-raw-data/fga-eps-mds-{REPO}-{TODAY.strftime("%m-%d-%Y-%H-%M-%S")}-{RELEASE_VERSION}.json'
 
     with open(file_path, "w") as fp:
