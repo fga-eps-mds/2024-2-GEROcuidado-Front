@@ -10,7 +10,9 @@
     "web": "expo start --web",
     "test": "jest --passWithNoTests --no-cache --runInBand --detectOpenHandles --coverage --colors",
     "test:all": "CI=true npm run test -- --coverage",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "lint:report": "eslint . --format json --output-file reports/lint-report.json",
+    "test:cov": "jest --runInBand --coverage --colors"
   },
   "dependencies": {
     "@expo/metro-config": "^0.18.11",
