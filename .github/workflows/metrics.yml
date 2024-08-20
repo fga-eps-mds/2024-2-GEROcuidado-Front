@@ -1,11 +1,13 @@
 name: Export de métricas
 
 on:
+  push:
+    branches:
+      - chore/adapt-for-2024-1
   pull_request:
     branches:
       - main
       - develop
-      - chore/adapt-for-2024-1
     types: [closed]
 
 jobs:
