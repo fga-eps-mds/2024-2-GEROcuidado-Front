@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     REPO_COMPONENT_KEY = sys.argv[1]
     REPO = sys.argv[2]
-    RELEASE_VERSION = sys.argv[3]
+    RELEASE_VERSION = sys.argv[3].replace('/', '')
 
     response = requests.get(
         f'{BASE_URL}{REPO_COMPONENT_KEY}&metricKeys={",".join(METRICS_SONAR)}&ps=500'
