@@ -89,7 +89,7 @@ export default function EditarRotina() {
   };
 
   const handleErrors = () => {
-    let erros: IErrors = {};
+    const erros: IErrors = {};
 
     if (!titulo) {
       erros.titulo = "Campo obrigatório!";
