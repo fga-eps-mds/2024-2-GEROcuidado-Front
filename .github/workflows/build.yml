@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - develop
-      - chore/adapt-for-2024-1
 
   pull_request:
     types: [opened, synchronize, reopened]
@@ -18,22 +17,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: '18'
-
-      # - name: Install dependencies
-      #   run: npm install --legacy-peer-deps
-
       - name: Install dependencies
         run: yarn
-
-      # - name: Linter
-      #   run: npm run lint:report
-
-      # - name: Tests & Coverage
-      #   run: npm run test:cov
 
       - name: Linter
         run: yarn eslint . --format json --output-file reports/eslint-report.json

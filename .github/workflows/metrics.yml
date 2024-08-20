@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - chore/adapt-for-2024-1
     types: [closed]
 
 jobs:
