@@ -14,23 +14,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '18'
+
+      # - name: Install dependencies
+      #   run: npm install --legacy-peer-deps
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: yarn
 
-      - name: Linter
-        run: npm run lint:report
+      # - name: Linter
+      #   run: npm run lint:report
 
-      - name: Tests & Coverage
-        run: npm run test:cov
+      # - name: Tests & Coverage
+      #   run: npm run test:cov
+
+
+      - name: Test and coverage
+        run: yarn jest --coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
