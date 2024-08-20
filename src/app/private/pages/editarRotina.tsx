@@ -44,7 +44,7 @@ export default function EditarRotina() {
   const [descricao, setDescricao] = useState(params.descricao);
   const [categoria, setCategoria] = useState(params.categoria);
   const [dias, setDias] = useState(
-    params.dias !== "" ? params.dias.split(",").map((dia) => Number(dia)) : [],
+    (params.dias !== "" && params.dias !== undefined) ? params.dias.split(",").map((dia) => Number(dia)) : [],
   );
   const [showLoading, setShowLoading] = useState(false);
   const [erros, setErros] = useState<IErrors>({});
@@ -89,7 +89,7 @@ export default function EditarRotina() {
   };
 
   const handleErrors = () => {
-    const erros: IErrors = {};
+    let erros: IErrors = {};
 
     if (!titulo) {
       erros.titulo = "Campo obrigatório!";
@@ -300,7 +300,7 @@ export default function EditarRotina() {
             inputMaskChange={(hora) => setHora(hora)}
           />
         </View>
-        <View style={styles.erro} testID="Erro-data">
+        <View style={styles.erro} testID="Erro-hora">
           <ErrorMessage show={showErrors} text={erros.hora} />
         </View>
 
