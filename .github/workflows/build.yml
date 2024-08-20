@@ -35,6 +35,8 @@ jobs:
       # - name: Tests & Coverage
       #   run: npm run test:cov
 
+      - name: Linter
+        run: yarn eslint . --format json --output-file reports/tslint-report.json
 
       - name: Test and coverage
         run: yarn jest --coverage
