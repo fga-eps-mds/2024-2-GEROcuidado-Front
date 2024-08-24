@@ -4,7 +4,7 @@ import { EMetricas, IMetrica } from "../interfaces/metricas.interface";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native";
 import ErrorMessage from "./ErrorMessage";
 interface IProps {
   visible: boolean;
