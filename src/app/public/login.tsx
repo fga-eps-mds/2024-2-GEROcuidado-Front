@@ -12,6 +12,9 @@ import { getUserById, loginUser } from "../services/user.service";
 import JWT from "expo-jwt";
 import { IUser } from "../interfaces/user.interface";
 import { ScrollView } from "react-native";
+import database from "../db";
+import { Collection, Q } from "@nozbe/watermelondb";
+import User from "../model/User";
 
 interface IErrors {
   email?: string;
@@ -85,10 +88,58 @@ export default function Login() {
 
   const getUser = async (id: number, token: string) => {
     try {
+      const usersCollection = database.get('users') as Collection<User>;
+
+      try {
+        const queryResult = await usersCollection.query(
+          Q.where('external_id', id.toString())
+        ).fetch();
+
+        // TODO: Remove this in the future
+        console.log(id);
+        console.log(await usersCollection.query().fetch());
+        console.log(queryResult);
+
+        const user = queryResult.at(0);
+
+        if (user instanceof User) {
+          console.log("Settando usuario a partir do objeto do banco!");
+          await AsyncStorage.setItem("usuario", JSON.stringify({
+            email: user.email,
+            senha: user.password,
+            nome: user.name,
+            id: user.externalId,
+            foto: user.photo,
+            admin: user.admin
+          }));
+          return;
+        }
+
+      } catch (err) {
+        console.log(err);
+      }
+
       const response = await getUserById(id, token);
       const responseUser = response.data as IUser & {
         foto: { data: Uint8Array };
       };
+
+      await database.write(async () => {
+        await usersCollection.create(user => {
+          user.name = responseUser.email,
+          user.email = responseUser.email,
+          user.password = responseUser.senha,
+          user.photo = responseUser.foto,
+          user.admin = responseUser.admin,
+          user.externalId = id.toString()
+        });
+      });
+
+      // TODO: Remove this in the future
+      console.log("Criei o usuario no banco:");
+      console.log(await usersCollection.query().fetch());
+
+
       await AsyncStorage.setItem("usuario", JSON.stringify(responseUser));
     } catch (err) {
       const error = err as { message: string };
