@@ -10,14 +10,16 @@ import {
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { deleteUserById, updateUser } from "../../services/user.service";
 import { router, useLocalSearchParams } from "expo-router";
 import ErrorMessage from "../../components/ErrorMessage";
 import CustomButton from "../../components/CustomButton";
-import { IUser } from "../../interfaces/user.interface";
 import UploadImage from "../../components/UploadImage";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import BackButton from "../../components/BackButton";
+import database from "../../db";
+import User from "../../model/User";
+import { Q } from "@nozbe/watermelondb";
+import { IUser } from "../../interfaces/user.interface";
 
 interface IErrors {
   nome?: string;
@@ -33,6 +35,12 @@ export default function EditarPerfil() {
   const [showLoading, setShowLoading] = useState(false);
   const [showLoadingApagar, setShowLoadingApagar] = useState(false);
 
+  useEffect(() => {
+    console.log("user:", user);
+    console.log("foto inicial:", foto);
+    console.log("nome inicial:", nome);
+  }, []);
+
   const salvar = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
@@ -40,26 +48,61 @@ export default function EditarPerfil() {
     }
 
     const body = { nome, foto };
-    const token = await AsyncStorage.getItem("token");
+    console.log("Dados a serem salvos:", body);
 
     if (body.foto && isBase64Image(body.foto)) {
       delete body.foto;
+      console.log("Foto removida do body, pois está em base64");
     }
 
     try {
       setShowLoading(true);
-      const response = await updateUser(user.id, body, token as string);
 
-      AsyncStorage.setItem("usuario", JSON.stringify(response.data)).then();
+      const usersCollection = database.get<User>("users");
+      console.log("Coleção de usuários obtida:", usersCollection);
+
+      await database.write(async () => {
+        const userToUpdate = await usersCollection
+          .query(Q.where("external_id", user.id.toString()))
+          .fetch();
+
+        console.log("Usuário encontrado para atualizar:", userToUpdate);
+
+        if (userToUpdate.length > 0) {
+          console.log("Estado antes da atualização:", userToUpdate[0]);
+
+          await userToUpdate[0].update((user) => {
+            user.name = nome;
+            if (foto) user.photo = foto;
+          });
+
+          const updatedUsers = await usersCollection
+            .query(Q.where("external_id", user.id.toString()))
+            .fetch();
+          console.log("Usuário atualizado no banco de dados:", updatedUsers);
+
+          const updatedUser = {
+            ...user,
+            nome,
+            foto,
+          };
+
+          console.log("Usuário atualizado:", updatedUser);
+
+          await AsyncStorage.setItem("usuario", JSON.stringify(updatedUser));
+        }
+      });
 
       Toast.show({
         type: "success",
         text1: "Sucesso!",
-        text2: response.message as string,
+        text2: "Perfil atualizado com sucesso.",
       });
+
       router.push("/private/tabs/perfil");
     } catch (err) {
       const error = err as { message: string };
+      console.error("Erro ao salvar perfil:", error.message);
       Toast.show({
         type: "error",
         text1: "Erro!",
@@ -73,24 +116,42 @@ export default function EditarPerfil() {
   const isBase64Image = (str: string): boolean => {
     const expression = `data:image\/([a-zA-Z]*);base64,([^\"]*)`;
     const regex = new RegExp(expression);
-
     return regex.test(str);
   };
 
   const apagarConta = async () => {
-    const token = await AsyncStorage.getItem("token");
-
     try {
       setShowLoadingApagar(true);
-      const response = await deleteUserById(user.id, token as string);
+
+      const usersCollection = database.get<User>("users");
+      console.log("Coleção de usuários obtida para deletar:", usersCollection);
+
+      await database.write(async () => {
+        const userToDelete = await usersCollection
+          .query(Q.where("external_id", user.id.toString()))
+          .fetch();
+
+        console.log("Usuário encontrado para deletar:", userToDelete);
+
+        if (userToDelete.length > 0) {
+          await userToDelete[0].destroyPermanently();
+          console.log("Usuário deletado com sucesso:", userToDelete[0]);
+        }
+      });
+
+      await AsyncStorage.removeItem("usuario");
+      console.log("Usuário removido do AsyncStorage");
+
       Toast.show({
         type: "success",
         text1: "Sucesso!",
-        text2: response.message as string,
+        text2: "Conta apagada com sucesso.",
       });
+
       router.replace("/");
     } catch (err) {
       const error = err as { message: string };
+      console.error("Erro ao apagar conta:", error.message);
       Toast.show({
         type: "error",
         text1: "Erro!",
@@ -103,10 +164,12 @@ export default function EditarPerfil() {
 
   const confirmation = () => {
     setModalVisible(!modalVisible);
+    console.log("Modal de confirmação visível:", modalVisible);
   };
 
   const closeModal = () => {
     setModalVisible(false);
+    console.log("Modal fechado");
   };
 
   useEffect(() => handleErrors(), [nome]);
@@ -123,6 +186,7 @@ export default function EditarPerfil() {
     }
 
     setErros(erros);
+    console.log("Erros de validação:", erros);
   };
 
   return (

@@ -10,7 +10,7 @@ import { FlatList } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import BackButton from "../../components/BackButton";
 import CardIdoso from "../../components/CardIdoso";
-import { router } from "expo-router";
+import { useRouter } from "expo-router"; // Usando useRouter para navegação
 import { IIdoso, IOrder } from "../../interfaces/idoso.interface";
 import { getAllIdoso } from "../../services/idoso.service";
 import Toast from "react-native-toast-message";
@@ -61,12 +61,24 @@ export default function ListarIdosos() {
   const [orderOption, setOrderOption] = useState<IOrder>(data[0].key);
   const [idUsuario, setIdUsuario] = useState<number | null>(null);
 
-  const getIdUsuario = () => {
-    AsyncStorage.getItem("usuario").then((response) => {
-      const usuario = JSON.parse(response as string) as IUser;
-      setIdUsuario(usuario.id);
-    });
-  };
+  const router = useRouter(); 
+
+  useEffect(() => {
+    const getIdUsuario = async () => {
+      try {
+        const response = await AsyncStorage.getItem("usuario");
+        if (response) {
+          const usuario = JSON.parse(response) as IUser;
+          setIdUsuario(usuario.id);
+          console.log("Usuário logado:", usuario); 
+        }
+      } catch (error) {
+        console.error("Erro ao obter usuário:", error);
+      }
+    };
+
+    getIdUsuario();
+  }, []);
 
   const getIdosos = () => {
     if (!idUsuario) return;
@@ -82,6 +94,7 @@ export default function ListarIdosos() {
         }));
 
         setIdosos(mappedIdoso);
+        console.log("Idosos carregados:", mappedIdoso); // Adicionado para logar os dados dos idosos
       })
       .catch((err) => {
         const error = err as { message: string };
@@ -97,11 +110,14 @@ export default function ListarIdosos() {
   };
 
   const navigateCadastrar = () => {
-    router.push({ pathname: "/private/pages/cadastrarIdoso" });
+    router.push("/private/pages/cadastrarIdoso"); // Usando push para navegação
   };
 
-  useEffect(() => getIdUsuario(), []);
-  useEffect(() => getIdosos(), [orderOption, idUsuario]);
+  useEffect(() => {
+    if (idUsuario) {
+      getIdosos();
+    }
+  }, [orderOption, idUsuario]);
 
   return (
     <View style={styles.screen}>
