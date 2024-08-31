@@ -151,18 +151,6 @@ export default function CadastrarIdoso() {
 
   useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
-  const metricas = [
-    { key: EMetricas.FREQ_CARDIACA, value: EMetricas.FREQ_CARDIACA },
-    { key: EMetricas.GLICEMIA, value: EMetricas.GLICEMIA },
-    { key: EMetricas.PESO, value: EMetricas.PESO },
-    { key: EMetricas.PRESSAO_SANGUINEA, value: EMetricas.PRESSAO_SANGUINEA },
-    { key: EMetricas.SATURACAO_OXIGENIO, value: EMetricas.SATURACAO_OXIGENIO },
-    { key: EMetricas.TEMPERATURA, value: EMetricas.TEMPERATURA },
-    { key: EMetricas.ALTURA, value: EMetricas.ALTURA },
-    { key: EMetricas.IMC, value: EMetricas.IMC },
-    { key: EMetricas.HORAS_DORMIDAS, value: EMetricas.HORAS_DORMIDAS },
-    { key: EMetricas.HIDRATACAO, value: EMetricas.HIDRATACAO },
-  ];
 
     const body = {
       idUsuario: idUsuario as number,
