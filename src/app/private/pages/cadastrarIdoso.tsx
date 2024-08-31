@@ -130,6 +130,12 @@ export default function CadastrarIdoso() {
     }
 };
 
+  const salvar = async () => {
+    if (Object.keys(erros).length > 0) {
+      setShowErrors(true);
+      return;
+    }
+
   const metricas = [
     { key: EMetricas.FREQ_CARDIACA, value: EMetricas.FREQ_CARDIACA },
     { key: EMetricas.GLICEMIA, value: EMetricas.GLICEMIA },
@@ -142,12 +148,6 @@ export default function CadastrarIdoso() {
     { key: EMetricas.HORAS_DORMIDAS, value: EMetricas.HORAS_DORMIDAS },
     { key: EMetricas.HIDRATACAO, value: EMetricas.HIDRATACAO },
   ];
-
-  const salvar = async () => {
-    if (Object.keys(erros).length > 0) {
-      setShowErrors(true);
-      return;
-    }
 
     const body = {
       idUsuario: idUsuario as number,
