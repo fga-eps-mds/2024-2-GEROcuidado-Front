@@ -128,13 +128,28 @@ export default function CadastrarIdoso() {
     } catch (error) {
       console.error("Erro ao salvar o idoso no banco local:", error);
     }
-};
+  };
 
   const salvar = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
       return;
     }
+
+    try {
+      setShowLoading(true);
+      await salvarNoBancoLocal();
+      ToastAndroid.show("Idoso salvo no banco local com sucesso!", ToastAndroid.SHORT);
+      router.replace("/private/pages/listarIdosos");
+    } catch (err) {
+      const error = err as { message: string };
+      ToastAndroid.show(`Erro: ${error.message}`, ToastAndroid.SHORT);
+    } finally {
+      setShowLoading(false);
+    }
+  };
+
+  useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
   const metricas = [
     { key: EMetricas.FREQ_CARDIACA, value: EMetricas.FREQ_CARDIACA },
@@ -159,28 +174,6 @@ export default function CadastrarIdoso() {
       descricao,
       dataHora: new Date(),
     };
-
-    try {
-      setShowLoading(true);
-      const response = await postIdoso(body, token);
-      Toast.show({
-        type: "success",
-        text1: "Sucesso!",
-        text2: response.message as string,
-      });
-      cadastrarMetricas(response.data?.id as number);
-      router.replace("private/pages/listarIdosos");
-    } catch (err) {
-      const error = err as { message: string };
-      Toast.show({
-        type: "error",
-        text1: "Erro!",
-        text2: error.message,
-      });
-    } finally {
-      setShowLoading(false);
-    }
-  };
 
   const cadastrarMetricas = async (idIdoso: number) => {
     for (const metrica of metricas) {
