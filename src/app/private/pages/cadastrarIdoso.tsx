@@ -26,22 +26,19 @@ interface IErrors {
 }
 
 export default function CadastrarIdoso() {
-  const [foto, setFoto] = useState<string>();
-  const [nome, setNome] = useState("");
-  const [tipoSanguineo, setTipoSanguineo] = useState<
-    ETipoSanguineo | null | undefined
-  >(null);
-  const [telefoneResponsavel, setTelefoneResponsavel] = useState("");
-  const [dataNascimento, setDataNascimento] = useState("");
-  const [descricao, setDescricao] = useState<string | undefined>("");
-
+  const [foto, setFoto] = useState<string | undefined>();
+  const [nome, setNome] = useState<string>("");
+  const [tipoSanguineo, setTipoSanguineo] = useState<ETipoSanguineo>(ETipoSanguineo.AB_NEGATIVO);
+  const [telefoneResponsavel, setTelefoneResponsavel] = useState<string>("");
+  const [dataNascimento, setDataNascimento] = useState<string>("");
+  const [descricao, setDescricao] = useState<string>("");
   const [token, setToken] = useState<string>("");
   const [erros, setErros] = useState<IErrors>({});
-  const [showErrors, setShowErrors] = useState(false);
-  const [showLoading, setShowLoading] = useState(false);
+  const [showErrors, setShowErrors] = useState<boolean>(false);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
   const [idUsuario, setIdUsuario] = useState<number | null>(null);
-  const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] =
-    useState("");
+  const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] = useState<string>("");
+
 
   const getIdUsuario = () => {
     AsyncStorage.getItem("usuario").then((response) => {
