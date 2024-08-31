@@ -151,38 +151,6 @@ export default function CadastrarIdoso() {
 
   useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
-  const cadastrarMetricas = async (idIdoso: number) => {
-    for (const metrica of metricas) {
-      const body = {
-        idIdoso: Number(idIdoso),
-        categoria: metrica.value,
-        valorMaximo: "0",
-      };
-
-      try {
-        setShowLoading(true);
-        const response = await postMetrica(body, token);
-        Toast.show({
-          type: "success",
-          text1: "Sucesso!",
-          text2: response.message as string,
-        });
-      } catch (err) {
-        const error = err as { message: string };
-        Toast.show({
-          type: "error",
-          text1: "Erro!",
-          text2: error.message,
-        });
-      } finally {
-        setShowLoading(false);
-      }
-    }
-  };
-
-  useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
-  useEffect(() => getIdUsuario(), []);
-
   const data = [
     { key: ETipoSanguineo.A_POSITIVO, value: ETipoSanguineo.A_POSITIVO },
     { key: ETipoSanguineo.A_NEGATIVO, value: ETipoSanguineo.A_NEGATIVO },
