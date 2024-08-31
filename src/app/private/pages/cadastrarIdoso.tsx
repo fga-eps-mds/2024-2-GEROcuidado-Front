@@ -26,149 +26,156 @@ import { IIdoso } from "../../interfaces/idoso.interface";
 
 
 interface IErrors {
-  nome?: string;
-  dataNascimento?: string;
-  tipoSanguineo?: string;
-  telefoneResponsavel?: string;
-  descricao?: string;
+ nome?: string;
+ dataNascimento?: string;
+ tipoSanguineo?: string;
+ telefoneResponsavel?: string;
+ descricao?: string;
 }
 
 export default function CadastrarIdoso() {
-  const [foto, setFoto] = useState<string | undefined>();
-  const [nome, setNome] = useState<string>("");
-  const [tipoSanguineo, setTipoSanguineo] = useState<ETipoSanguineo>(ETipoSanguineo.AB_NEGATIVO);
-  const [telefoneResponsavel, setTelefoneResponsavel] = useState<string>("");
-  const [dataNascimento, setDataNascimento] = useState<string>("");
-  const [descricao, setDescricao] = useState<string>("");
-  const [token, setToken] = useState<string>("");
-  const [erros, setErros] = useState<IErrors>({});
-  const [showErrors, setShowErrors] = useState<boolean>(false);
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-  const [idUsuario, setIdUsuario] = useState<number | null>(null);
-  const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] = useState<string>("");
+ const [foto, setFoto] = useState<string | undefined>();
+ const [nome, setNome] = useState<string>("");
+ const [tipoSanguineo, setTipoSanguineo] = useState<ETipoSanguineo>(ETipoSanguineo.AB_NEGATIVO);
+ const [telefoneResponsavel, setTelefoneResponsavel] = useState<string>("");
+ const [dataNascimento, setDataNascimento] = useState<string>("");
+ const [descricao, setDescricao] = useState<string>("");
+ const [token, setToken] = useState<string>("");
+ const [erros, setErros] = useState<IErrors>({});
+ const [showErrors, setShowErrors] = useState<boolean>(false);
+ const [showLoading, setShowLoading] = useState<boolean>(false);
+ const [idUsuario, setIdUsuario] = useState<number | null>(null);
+ const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] = useState<string>("");
 
-  const router = useRouter();
+ const router = useRouter();
 
-  useEffect(() => {
-    const getIdUsuario = async () => {
-      try {
-        const response = await AsyncStorage.getItem("usuario");
-        if (response) {
-          const usuario = JSON.parse(response) as IUser;
-          setIdUsuario(usuario.id);
-          console.log("Usuário logado:", usuario);
-        } else {
-          console.log("Usuário não encontrado no AsyncStorage.");
-        }
-      } catch (error) {
-        console.error("Erro ao obter usuário:", error);
-      }
-    };
+ useEffect(() => {
+   const getIdUsuario = async () => {
+     try {
+       const response = await AsyncStorage.getItem("usuario");
+       if (response) {
+         const usuario = JSON.parse(response) as IUser;
+         setIdUsuario(usuario.id);
+         console.log("Usuário logado:", usuario);
+       } else {
+         console.log("Usuário não encontrado no AsyncStorage.");
+       }
+     } catch (error) {
+       console.error("Erro ao obter usuário:", error);
+     }
+   };
 
-    getIdUsuario();
-  }, []);
 
-  useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
+   getIdUsuario();
+ }, []);
 
-  const getDateIsoString = (value: string) => {
-    const dateArray = value.split("/");
-    return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
-  };
 
-  const handleErrors = () => {
-    const erros: IErrors = {};
+ useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
-    if (!nome) {
-      erros.nome = "Campo obrigatório!";
-    } else if (nome.length < 5) {
-      erros.nome = "O nome completo deve ter pelo menos 5 caractéres.";
-    } else if (nome.length > 60) {
-      erros.nome = "O nome completo deve ter no máximo 60 caractéres.";
-    }
 
-    if (!dataNascimento) {
-      erros.dataNascimento = "Campo obrigatório";
-    } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)) {
-      erros.dataNascimento = "Data deve ser no formato dd/mm/yyyy!";
-    }
+ const getDateIsoString = (value: string) => {
+   const dateArray = value.split("/");
+   return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
+ };
 
-    if (!telefoneResponsavel) {
-      erros.telefoneResponsavel = "Campo obrigatório!";
-    } else if (telefoneResponsavel.length !== 11) {
-      erros.telefoneResponsavel = "Deve estar no formato (XX)XXXXX-XXXX";
-    }
 
-    setErros(erros);
-  };
+ const handleErrors = () => {
+   const erros: IErrors = {};
 
-  const salvarNoBancoLocal = async () => {
-    if (!idUsuario) {
-      console.error('Usuário não encontrado.');
-      return;
-    }
-    try {
-      const idosoCollection = database.get('idoso') as Collection<Idoso>;
-      const usersCollection = database.get('users') as Collection<User>;
-      const userQuery = await usersCollection.query(Q.where('external_id', idUsuario.toString())).fetch();
 
-      if (userQuery.length === 0) {
-        console.error('Usuário não encontrado.');
-        return;
-      }
+   if (!nome) {
+     erros.nome = "Campo obrigatório!";
+   } else if (nome.length < 5) {
+     erros.nome = "O nome completo deve ter pelo menos 5 caracteres.";
+   } else if (nome.length > 60) {
+     erros.nome = "O nome completo deve ter no máximo 60 caracteres.";
+   }
 
-      const user = userQuery[0];
 
-      await database.write(async () => {
+   if (!dataNascimento) {
+     erros.dataNascimento = "Campo obrigatório";
+   } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)) {
+     erros.dataNascimento = "Data deve ser no formato dd/mm/yyyy!";
+   }
 
-      await database.write(async () => {
-        await idosoCollection.create((idoso) => {
-          idoso.nome = nome;
-          idoso.dataNascimento = getDateIsoString(dataNascimento);
-          idoso.telefoneResponsavel = telefoneResponsavel;
-          idoso.descricao = descricao;
-          idoso.tipoSanguineo = tipoSanguineo;
-          idoso.userId = idUsuario.toString();
-          idoso.foto = foto || '';
-        });
-      });
 
-      console.log("Idoso salvo no banco local com sucesso!");
-    } catch (error) {
-      console.error("Erro ao salvar o idoso no banco local:", error);
-    }
-  };
+   if (!telefoneResponsavel) {
+     erros.telefoneResponsavel = "Campo obrigatório!";
+   } else if (telefoneResponsavel.length !== 11) {
+     erros.telefoneResponsavel = "Deve estar no formato (XX)XXXXX-XXXX";
+   }
 
-  const salvar = async () => {
-    if (Object.keys(erros).length > 0) {
-      setShowErrors(true);
-      return;
-    }
 
-    try {
-      setShowLoading(true);
-      await salvarNoBancoLocal();
-      ToastAndroid.show("Idoso salvo no banco local com sucesso!", ToastAndroid.SHORT);
-      router.replace("/private/pages/listarIdosos");
-    } catch (err) {
-      const error = err as { message: string };
-      ToastAndroid.show(`Erro: ${error.message}`, ToastAndroid.SHORT);
-    } finally {
-      setShowLoading(false);
-    }
-  };
+   setErros(erros);
+ };
 
-  useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
-  const data = [
-    { key: ETipoSanguineo.A_POSITIVO, value: ETipoSanguineo.A_POSITIVO },
-    { key: ETipoSanguineo.A_NEGATIVO, value: ETipoSanguineo.A_NEGATIVO },
-    { key: ETipoSanguineo.B_POSITIVO, value: ETipoSanguineo.B_POSITIVO },
-    { key: ETipoSanguineo.B_NEGATIVO, value: ETipoSanguineo.B_NEGATIVO },
-    { key: ETipoSanguineo.AB_POSITIVO, value: ETipoSanguineo.AB_POSITIVO },
-    { key: ETipoSanguineo.AB_NEGATIVO, value: ETipoSanguineo.AB_NEGATIVO },
-    { key: ETipoSanguineo.O_POSITIVO, value: ETipoSanguineo.O_POSITIVO },
-    { key: ETipoSanguineo.O_NEGATIVO, value: ETipoSanguineo.O_NEGATIVO },
-  ];
+ const salvarNoBancoLocal = async () => {
+   if (!idUsuario) {
+     console.error('Usuário não encontrado.');
+     return;
+   }
+  try {
+     const idosoCollection = database.get('idoso') as Collection<Idoso>;
+     const usersCollection = database.get('users') as Collection<User>;
+     const userQuery = await usersCollection.query(Q.where('external_id', idUsuario.toString())).fetch();
+
+     if (userQuery.length === 0) {
+       console.error('Usuário não encontrado.');
+       return;
+     }
+
+     const user = userQuery[0];
+
+     await database.write(async () => {
+       await idosoCollection.create((idoso) => {
+         idoso.nome = nome;
+         idoso.dataNascimento = getDateIsoString(dataNascimento);
+         idoso.telefoneResponsavel = telefoneResponsavel;
+         idoso.descricao = descricao;
+         idoso.tipoSanguineo = tipoSanguineo;
+         idoso.userId = idUsuario.toString();
+         idoso.foto = foto || '';
+       });
+     });
+
+     console.log("Idoso salvo no banco local com sucesso!");
+   } catch (error) {
+     console.error("Erro ao salvar o idoso no banco local:", error);
+   }
+ };
+
+ const salvar = async () => {
+   if (Object.keys(erros).length > 0) {
+     setShowErrors(true);
+     return;
+   }
+
+   try {
+     setShowLoading(true);
+     await salvarNoBancoLocal();
+     ToastAndroid.show("Idoso salvo no banco local com sucesso!", ToastAndroid.SHORT);
+     router.replace("/private/pages/listarIdosos");
+   } catch (err) {
+     const error = err as { message: string };
+     ToastAndroid.show(`Erro: ${error.message}`, ToastAndroid.SHORT);
+   } finally {
+     setShowLoading(false);
+   }
+ };
+
+ useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
+
+ const data = [
+   { key: ETipoSanguineo.A_POSITIVO, value: ETipoSanguineo.A_POSITIVO },
+   { key: ETipoSanguineo.A_NEGATIVO, value: ETipoSanguineo.A_NEGATIVO },
+   { key: ETipoSanguineo.B_POSITIVO, value: ETipoSanguineo.B_POSITIVO },
+   { key: ETipoSanguineo.B_NEGATIVO, value: ETipoSanguineo.B_NEGATIVO },
+   { key: ETipoSanguineo.AB_POSITIVO, value: ETipoSanguineo.AB_POSITIVO },
+   { key: ETipoSanguineo.AB_NEGATIVO, value: ETipoSanguineo.AB_NEGATIVO },
+   { key: ETipoSanguineo.O_POSITIVO, value: ETipoSanguineo.O_POSITIVO },
+   { key: ETipoSanguineo.O_NEGATIVO, value: ETipoSanguineo.O_NEGATIVO },
+ ];
 
   return (
     <View>
