@@ -16,6 +16,14 @@ import MaskInput, { Masks } from "react-native-mask-input";
 import UploadImageV2 from "../../components/UploadImageV2";
 import { EMetricas } from "../../interfaces/metricas.interface";
 import { postMetrica } from "../../services/metrica.service";
+import database from "../../db";
+import Idoso from "../../model/Idoso";
+import User from "../../model/User";
+import { Collection, Q } from "@nozbe/watermelondb";
+import { ToastAndroid } from "react-native";
+import { useRouter } from "expo-router";
+import { IIdoso } from "../../interfaces/idoso.interface";
+
 
 interface IErrors {
   nome?: string;
