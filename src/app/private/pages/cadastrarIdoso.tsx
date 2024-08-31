@@ -151,18 +151,6 @@ export default function CadastrarIdoso() {
 
   useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
-
-    const body = {
-      idUsuario: idUsuario as number,
-      nome,
-      dataNascimento: getDateIsoString(dataNascimento),
-      telefoneResponsavel,
-      foto,
-      tipoSanguineo,
-      descricao,
-      dataHora: new Date(),
-    };
-
   const cadastrarMetricas = async (idIdoso: number) => {
     for (const metrica of metricas) {
       const body = {
