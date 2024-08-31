@@ -39,16 +39,28 @@ export default function CadastrarIdoso() {
   const [idUsuario, setIdUsuario] = useState<number | null>(null);
   const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] = useState<string>("");
 
+  const router = useRouter();
 
-  const getIdUsuario = () => {
-    AsyncStorage.getItem("usuario").then((response) => {
-      const usuario = JSON.parse(response as string) as IUser;
-      setIdUsuario(usuario.id);
-    });
-    AsyncStorage.getItem("token").then((response) => {
-      setToken(response as string);
-    });
-  };
+  useEffect(() => {
+    const getIdUsuario = async () => {
+      try {
+        const response = await AsyncStorage.getItem("usuario");
+        if (response) {
+          const usuario = JSON.parse(response) as IUser;
+          setIdUsuario(usuario.id);
+          console.log("Usuário logado:", usuario);
+        } else {
+          console.log("Usuário não encontrado no AsyncStorage.");
+        }
+      } catch (error) {
+        console.error("Erro ao obter usuário:", error);
+      }
+    };
+
+    getIdUsuario();
+  }, []);
+
+  useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
   const getDateIsoString = (value: string) => {
     const dateArray = value.split("/");
