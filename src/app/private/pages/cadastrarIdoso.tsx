@@ -64,9 +64,71 @@ export default function CadastrarIdoso() {
 
   const getDateIsoString = (value: string) => {
     const dateArray = value.split("/");
-
     return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
   };
+
+  const handleErrors = () => {
+    const erros: IErrors = {};
+
+    if (!nome) {
+      erros.nome = "Campo obrigatório!";
+    } else if (nome.length < 5) {
+      erros.nome = "O nome completo deve ter pelo menos 5 caractéres.";
+    } else if (nome.length > 60) {
+      erros.nome = "O nome completo deve ter no máximo 60 caractéres.";
+    }
+
+    if (!dataNascimento) {
+      erros.dataNascimento = "Campo obrigatório";
+    } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)) {
+      erros.dataNascimento = "Data deve ser no formato dd/mm/yyyy!";
+    }
+
+    if (!telefoneResponsavel) {
+      erros.telefoneResponsavel = "Campo obrigatório!";
+    } else if (telefoneResponsavel.length !== 11) {
+      erros.telefoneResponsavel = "Deve estar no formato (XX)XXXXX-XXXX";
+    }
+
+    setErros(erros);
+  };
+
+  const salvarNoBancoLocal = async () => {
+    if (!idUsuario) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+    try {
+      const idosoCollection = database.get('idoso') as Collection<Idoso>;
+      const usersCollection = database.get('users') as Collection<User>;
+      const userQuery = await usersCollection.query(Q.where('external_id', idUsuario.toString())).fetch();
+
+      if (userQuery.length === 0) {
+        console.error('Usuário não encontrado.');
+        return;
+      }
+
+      const user = userQuery[0];
+
+      await database.write(async () => {
+
+      await database.write(async () => {
+        await idosoCollection.create((idoso) => {
+          idoso.nome = nome;
+          idoso.dataNascimento = getDateIsoString(dataNascimento);
+          idoso.telefoneResponsavel = telefoneResponsavel;
+          idoso.descricao = descricao;
+          idoso.tipoSanguineo = tipoSanguineo;
+          idoso.userId = idUsuario.toString();
+          idoso.foto = foto || '';
+        });
+      });
+
+      console.log("Idoso salvo no banco local com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar o idoso no banco local:", error);
+    }
+};
 
   const metricas = [
     { key: EMetricas.FREQ_CARDIACA, value: EMetricas.FREQ_CARDIACA },
@@ -151,32 +213,6 @@ export default function CadastrarIdoso() {
 
   useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
   useEffect(() => getIdUsuario(), []);
-
-  const handleErrors = () => {
-    const erros: IErrors = {};
-
-    if (!nome) {
-      erros.nome = "Campo obrigatório!";
-    } else if (nome.length < 5) {
-      erros.nome = "O nome completo deve ter pelo menos 5 caractéres.";
-    } else if (nome.length > 60) {
-      erros.nome = "O nome completo deve ter no máximo 60 caractéres.";
-    }
-
-    if (!dataNascimento) {
-      erros.dataNascimento = "Campo obrigatório";
-    } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)) {
-      erros.dataNascimento = "Data deve ser no formato dd/mm/yyyy!";
-    }
-
-    if (!telefoneResponsavel) {
-      erros.telefoneResponsavel = "Campo obrigatório!";
-    } else if (telefoneResponsavel.length !== 11) {
-      erros.telefoneResponsavel = "Deve estar no formato (XX)XXXXX-XXXX";
-    }
-
-    setErros(erros);
-  };
 
   const data = [
     { key: ETipoSanguineo.A_POSITIVO, value: ETipoSanguineo.A_POSITIVO },
