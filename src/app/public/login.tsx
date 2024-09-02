@@ -40,16 +40,18 @@ export default function Login() {
 
     try {
       setShowLoading(true);
+      console.log("Iniciando o login...");
+
       const response = await loginUser(body);
-      Toast.show({
-        type: "success",
-        text1: "Sucesso!",
-        text2: response.message as string,
-      });
+      console.log("Resposta do login:", response);
+
       const token = response.data;
+      console.log("Token recebido:", token);
+
       await handleUser(token);
       router.push("/private/pages/listarIdosos");
     } catch (err) {
+      console.error("Erro durante o login:", err);
       const error = err as { message: string };
       Toast.show({
         type: "error",
@@ -80,15 +82,37 @@ export default function Login() {
   };
 
   const handleUser = async (token: string) => {
-    AsyncStorage.setItem("token", token);
-    const key = process.env.EXPO_PUBLIC_JWT_TOKEN_SECRET as string;
-    const userInfo = JWT.decode(token as string, key, { timeSkew: 30 }) as unknown as IUser;
-    await getUser(userInfo.id, token as string);
+    try {
+      console.log("Processando o token para obter o usuário...");
+      AsyncStorage.setItem("token", token);
+      const key = process.env.EXPO_PUBLIC_JWT_TOKEN_SECRET as string;
+
+      let userInfo: IUser | null = null;
+
+      try {
+        // Decodifica o token JWT
+        userInfo = JWT.decode(token, key, { timeSkew: 30 }) as unknown as IUser;
+        console.log("Token decodificado:", userInfo);
+      } catch (decodeError) {
+        console.error("Erro ao decodificar o token:", decodeError);
+        // Trate o erro conforme necessário, talvez exiba uma mensagem para o usuário
+      }
+
+      if (userInfo) {
+        await getUser(userInfo.id, token);
+      }
+    } catch (err) {
+      console.error("Erro ao processar o token:", err);
+      throw err;
+    }
   };
 
   const getUser = async (id: number, token: string) => {
     try {
+      // Aqui acontece a sincronização com o backend
       await syncDatabaseWithServer();
+
+      console.log("Buscando usuário no banco...");
       const usersCollection = database.get('usuario') as Collection<Usuario>;
 
       try {
@@ -96,10 +120,7 @@ export default function Login() {
           Q.where('id', id.toString())
         ).fetch();
 
-        // TODO: Remove this in the future
-        console.log(id);
-        console.log(await usersCollection.query().fetch());
-        console.log(queryResult);
+        console.log("Resultado da busca no banco:", queryResult);
 
         const user = queryResult.at(0);
 
@@ -125,7 +146,7 @@ export default function Login() {
         }
 
       } catch (err) {
-        console.log(err);
+        console.log("Erro ao buscar usuário no banco local:", err);
       }
 
       const response = await getUserById(id, token);
@@ -139,6 +160,7 @@ export default function Login() {
 
       await AsyncStorage.setItem("usuario", JSON.stringify(responseUser));
     } catch (err) {
+      console.error("Erro ao obter o usuário:", err);
       const error = err as { message: string };
       Toast.show({
         type: "error",

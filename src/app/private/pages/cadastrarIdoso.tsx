@@ -16,169 +16,166 @@ import MaskInput, { Masks } from "react-native-mask-input";
 import UploadImageV2 from "../../components/UploadImageV2";
 import { EMetricas } from "../../interfaces/metricas.interface";
 import { postMetrica } from "../../services/metrica.service";
+import database from "../../db";
+import Idoso from "../../model/Idoso";
+import User from "../../model/User";
+import { Collection, Q } from "@nozbe/watermelondb";
+import { ToastAndroid } from "react-native";
+import { useRouter } from "expo-router";
+import { IIdoso } from "../../interfaces/idoso.interface";
+
 
 interface IErrors {
-  nome?: string;
-  dataNascimento?: string;
-  tipoSanguineo?: string;
-  telefoneResponsavel?: string;
-  descricao?: string;
+ nome?: string;
+ dataNascimento?: string;
+ tipoSanguineo?: string;
+ telefoneResponsavel?: string;
+ descricao?: string;
 }
 
 export default function CadastrarIdoso() {
-  const [foto, setFoto] = useState<string>();
-  const [nome, setNome] = useState("");
-  const [tipoSanguineo, setTipoSanguineo] = useState<
-    ETipoSanguineo | null | undefined
-  >(null);
-  const [telefoneResponsavel, setTelefoneResponsavel] = useState("");
-  const [dataNascimento, setDataNascimento] = useState("");
-  const [descricao, setDescricao] = useState<string | undefined>("");
+ const [foto, setFoto] = useState<string | undefined>();
+ const [nome, setNome] = useState<string>("");
+ const [tipoSanguineo, setTipoSanguineo] = useState<ETipoSanguineo>(ETipoSanguineo.AB_NEGATIVO);
+ const [telefoneResponsavel, setTelefoneResponsavel] = useState<string>("");
+ const [dataNascimento, setDataNascimento] = useState<string>("");
+ const [descricao, setDescricao] = useState<string>("");
+ const [token, setToken] = useState<string>("");
+ const [erros, setErros] = useState<IErrors>({});
+ const [showErrors, setShowErrors] = useState<boolean>(false);
+ const [showLoading, setShowLoading] = useState<boolean>(false);
+ const [idUsuario, setIdUsuario] = useState<number | null>(null);
+ const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] = useState<string>("");
 
-  const [token, setToken] = useState<string>("");
-  const [erros, setErros] = useState<IErrors>({});
-  const [showErrors, setShowErrors] = useState(false);
-  const [showLoading, setShowLoading] = useState(false);
-  const [idUsuario, setIdUsuario] = useState<number | null>(null);
-  const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] =
-    useState("");
+ const router = useRouter();
 
-  const getIdUsuario = () => {
-    AsyncStorage.getItem("usuario").then((response) => {
-      const usuario = JSON.parse(response as string) as IUser;
-      setIdUsuario(usuario.id);
-    });
-    AsyncStorage.getItem("token").then((response) => {
-      setToken(response as string);
-    });
-  };
+ useEffect(() => {
+   const getIdUsuario = async () => {
+     try {
+       const response = await AsyncStorage.getItem("usuario");
+       if (response) {
+         const usuario = JSON.parse(response) as IUser;
+         setIdUsuario(usuario.id);
+         console.log("Usuário logado:", usuario);
+       } else {
+         console.log("Usuário não encontrado no AsyncStorage.");
+       }
+     } catch (error) {
+       console.error("Erro ao obter usuário:", error);
+     }
+   };
 
-  const getDateIsoString = (value: string) => {
-    const dateArray = value.split("/");
 
-    return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
-  };
+   getIdUsuario();
+ }, []);
 
-  const metricas = [
-    { key: EMetricas.FREQ_CARDIACA, value: EMetricas.FREQ_CARDIACA },
-    { key: EMetricas.GLICEMIA, value: EMetricas.GLICEMIA },
-    { key: EMetricas.PESO, value: EMetricas.PESO },
-    { key: EMetricas.PRESSAO_SANGUINEA, value: EMetricas.PRESSAO_SANGUINEA },
-    { key: EMetricas.SATURACAO_OXIGENIO, value: EMetricas.SATURACAO_OXIGENIO },
-    { key: EMetricas.TEMPERATURA, value: EMetricas.TEMPERATURA },
-    { key: EMetricas.ALTURA, value: EMetricas.ALTURA },
-    { key: EMetricas.IMC, value: EMetricas.IMC },
-    { key: EMetricas.HORAS_DORMIDAS, value: EMetricas.HORAS_DORMIDAS },
-    { key: EMetricas.HIDRATACAO, value: EMetricas.HIDRATACAO },
-  ];
 
-  const salvar = async () => {
-    if (Object.keys(erros).length > 0) {
-      setShowErrors(true);
-      return;
-    }
+ useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
-    const body = {
-      idUsuario: idUsuario as number,
-      nome,
-      dataNascimento: getDateIsoString(dataNascimento),
-      telefoneResponsavel,
-      foto,
-      tipoSanguineo,
-      descricao,
-      dataHora: new Date(),
-    };
 
-    try {
-      setShowLoading(true);
-      const response = await postIdoso(body, token);
-      Toast.show({
-        type: "success",
-        text1: "Sucesso!",
-        text2: response.message as string,
-      });
-      cadastrarMetricas(response.data?.id as number);
-      router.replace("private/pages/listarIdosos");
-    } catch (err) {
-      const error = err as { message: string };
-      Toast.show({
-        type: "error",
-        text1: "Erro!",
-        text2: error.message,
-      });
-    } finally {
-      setShowLoading(false);
-    }
-  };
+ const getDateIsoString = (value: string) => {
+   const dateArray = value.split("/");
+   return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
+ };
 
-  const cadastrarMetricas = async (idIdoso: number) => {
-    for (const metrica of metricas) {
-      const body = {
-        idIdoso: Number(idIdoso),
-        categoria: metrica.value,
-        valorMaximo: "0",
-      };
 
-      try {
-        setShowLoading(true);
-        const response = await postMetrica(body, token);
-        Toast.show({
-          type: "success",
-          text1: "Sucesso!",
-          text2: response.message as string,
-        });
-      } catch (err) {
-        const error = err as { message: string };
-        Toast.show({
-          type: "error",
-          text1: "Erro!",
-          text2: error.message,
-        });
-      } finally {
-        setShowLoading(false);
-      }
-    }
-  };
+ const handleErrors = () => {
+   const erros: IErrors = {};
 
-  useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
-  useEffect(() => getIdUsuario(), []);
 
-  const handleErrors = () => {
-    const erros: IErrors = {};
+   if (!nome) {
+     erros.nome = "Campo obrigatório!";
+   } else if (nome.length < 5) {
+     erros.nome = "O nome completo deve ter pelo menos 5 caracteres.";
+   } else if (nome.length > 60) {
+     erros.nome = "O nome completo deve ter no máximo 60 caracteres.";
+   }
 
-    if (!nome) {
-      erros.nome = "Campo obrigatório!";
-    } else if (nome.length < 5) {
-      erros.nome = "O nome completo deve ter pelo menos 5 caractéres.";
-    } else if (nome.length > 60) {
-      erros.nome = "O nome completo deve ter no máximo 60 caractéres.";
-    }
 
-    if (!dataNascimento) {
-      erros.dataNascimento = "Campo obrigatório";
-    } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)) {
-      erros.dataNascimento = "Data deve ser no formato dd/mm/yyyy!";
-    }
+   if (!dataNascimento) {
+     erros.dataNascimento = "Campo obrigatório";
+   } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)) {
+     erros.dataNascimento = "Data deve ser no formato dd/mm/yyyy!";
+   }
 
-    if (!telefoneResponsavel) {
-      erros.telefoneResponsavel = "Campo obrigatório!";
-    } else if (telefoneResponsavel.length !== 11) {
-      erros.telefoneResponsavel = "Deve estar no formato (XX)XXXXX-XXXX";
-    }
 
-    setErros(erros);
-  };
+   if (!telefoneResponsavel) {
+     erros.telefoneResponsavel = "Campo obrigatório!";
+   } else if (telefoneResponsavel.length !== 11) {
+     erros.telefoneResponsavel = "Deve estar no formato (XX)XXXXX-XXXX";
+   }
 
-  const data = [
-    { key: ETipoSanguineo.A_POSITIVO, value: ETipoSanguineo.A_POSITIVO },
-    { key: ETipoSanguineo.A_NEGATIVO, value: ETipoSanguineo.A_NEGATIVO },
-    { key: ETipoSanguineo.B_POSITIVO, value: ETipoSanguineo.B_POSITIVO },
-    { key: ETipoSanguineo.B_NEGATIVO, value: ETipoSanguineo.B_NEGATIVO },
-    { key: ETipoSanguineo.AB_POSITIVO, value: ETipoSanguineo.AB_POSITIVO },
-    { key: ETipoSanguineo.AB_NEGATIVO, value: ETipoSanguineo.AB_NEGATIVO },
-    { key: ETipoSanguineo.O_POSITIVO, value: ETipoSanguineo.O_POSITIVO },
-    { key: ETipoSanguineo.O_NEGATIVO, value: ETipoSanguineo.O_NEGATIVO },
-  ];
+
+   setErros(erros);
+ };
+
+
+ const salvarNoBancoLocal = async () => {
+   if (!idUsuario) {
+     console.error('Usuário não encontrado.');
+     return;
+   }
+  try {
+     const idosoCollection = database.get('idoso') as Collection<Idoso>;
+     const usersCollection = database.get('users') as Collection<User>;
+     const userQuery = await usersCollection.query(Q.where('external_id', idUsuario.toString())).fetch();
+
+     if (userQuery.length === 0) {
+       console.error('Usuário não encontrado.');
+       return;
+     }
+
+     const user = userQuery[0];
+
+     await database.write(async () => {
+       await idosoCollection.create((idoso) => {
+         idoso.nome = nome;
+         idoso.dataNascimento = getDateIsoString(dataNascimento);
+         idoso.telefoneResponsavel = telefoneResponsavel;
+         idoso.descricao = descricao;
+         idoso.tipoSanguineo = tipoSanguineo;
+         idoso.userId = idUsuario.toString();
+         idoso.foto = foto || '';
+       });
+     });
+
+     console.log("Idoso salvo no banco local com sucesso!");
+   } catch (error) {
+     console.error("Erro ao salvar o idoso no banco local:", error);
+   }
+ };
+
+ const salvar = async () => {
+   if (Object.keys(erros).length > 0) {
+     setShowErrors(true);
+     return;
+   }
+
+   try {
+     setShowLoading(true);
+     await salvarNoBancoLocal();
+     ToastAndroid.show("Idoso salvo no banco local com sucesso!", ToastAndroid.SHORT);
+     router.replace("/private/pages/listarIdosos");
+   } catch (err) {
+     const error = err as { message: string };
+     ToastAndroid.show(`Erro: ${error.message}`, ToastAndroid.SHORT);
+   } finally {
+     setShowLoading(false);
+   }
+ };
+
+ useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
+
+ const data = [
+   { key: ETipoSanguineo.A_POSITIVO, value: ETipoSanguineo.A_POSITIVO },
+   { key: ETipoSanguineo.A_NEGATIVO, value: ETipoSanguineo.A_NEGATIVO },
+   { key: ETipoSanguineo.B_POSITIVO, value: ETipoSanguineo.B_POSITIVO },
+   { key: ETipoSanguineo.B_NEGATIVO, value: ETipoSanguineo.B_NEGATIVO },
+   { key: ETipoSanguineo.AB_POSITIVO, value: ETipoSanguineo.AB_POSITIVO },
+   { key: ETipoSanguineo.AB_NEGATIVO, value: ETipoSanguineo.AB_NEGATIVO },
+   { key: ETipoSanguineo.O_POSITIVO, value: ETipoSanguineo.O_POSITIVO },
+   { key: ETipoSanguineo.O_NEGATIVO, value: ETipoSanguineo.O_NEGATIVO },
+ ];
 
   return (
     <View>
