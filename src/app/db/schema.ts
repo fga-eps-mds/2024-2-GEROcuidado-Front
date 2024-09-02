@@ -5,14 +5,13 @@ export default appSchema({
   tables: [
     // We'll add tableSchemas here later
     tableSchema({
-      name: 'users',
+      name: 'usuario',
       columns: [
-        { name: 'external_id', type: 'string' },
-        { name: 'name', type: 'string' },
+        { name: 'nome', type: 'string' },
+        { name: 'foto', type: 'string' },
         { name: 'email', type: 'string' },
-        { name: 'photo', type: 'string' },
+        { name: 'senha', type: 'string' },
         { name: 'admin', type: 'boolean'},
-        { name: 'password', type: 'string' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
