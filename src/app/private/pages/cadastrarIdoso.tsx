@@ -23,6 +23,7 @@ import { Collection, Q } from "@nozbe/watermelondb";
 import { ToastAndroid } from "react-native";
 import { useRouter } from "expo-router";
 import { IIdoso } from "../../interfaces/idoso.interface";
+import Usuario from "../../model/Usuario";
 
 
 interface IErrors {
@@ -117,8 +118,8 @@ export default function CadastrarIdoso() {
    }
   try {
      const idosoCollection = database.get('idoso') as Collection<Idoso>;
-     const usersCollection = database.get('users') as Collection<User>;
-     const userQuery = await usersCollection.query(Q.where('external_id', idUsuario.toString())).fetch();
+     const usersCollection = database.get('usuario') as Collection<Usuario>;
+     const userQuery = await usersCollection.query(Q.where('id', idUsuario.toString())).fetch();
 
      if (userQuery.length === 0) {
        console.error('Usuário não encontrado.');

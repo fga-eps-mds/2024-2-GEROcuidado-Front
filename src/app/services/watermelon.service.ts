@@ -50,7 +50,6 @@ export const syncDatabaseWithServer = async (): Promise<void> => {
 
       return { changes, timestamp }
     },
-    log: logger.newLog(),
-    migrationsEnabledAtVersion: 1,
+    log: logger.newLog()
   });
 }

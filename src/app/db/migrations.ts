@@ -7,10 +7,10 @@ export default schemaMigrations({
     {
       toVersion: 2,
       steps: [
-        // Passo para adicionar as colunas à tabela 'users' se elas ainda não existirem
+        // Passo para adicionar as colunas à tabela 'usuario' se elas ainda não existirem
         {
           type: 'add_columns',
-          table: 'users',
+          table: 'usuario',
           columns: [
             { name: 'created_at', type: 'number' },
             { name: 'updated_at', type: 'number' },
