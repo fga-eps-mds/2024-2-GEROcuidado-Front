@@ -1,9 +1,30 @@
 import React from "react";
-import { render, fireEvent, act } from "@testing-library/react-native";
+import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
 import CadastrarIdoso from "../private/pages/cadastrarIdoso";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 
 // Mock any dependencies if needed
+// Substituindo o módulo real do expo-router por uma versão mockada
+jest.mock('expo-router', () => ({
+  useLocalSearchParams: jest.fn().mockReturnValue({
+    id: "123",
+    nome: "Nome Teste",
+    foto: null,
+  }),
+  router: {
+    push: jest.fn(), // Mocka o método push para verificações de navegação
+    back: jest.fn(), // Mocka o método back para o caso de não haver a prop route
+    canGoBack: jest.fn().mockReturnValue(true), // Mocka o método canGoBack
+  },
+  useRouter: jest.fn().mockReturnValue({
+    push: jest.fn(), // Mocka novamente o push no caso do uso da função useRouter
+    back: jest.fn(),
+    canGoBack: jest.fn().mockReturnValue(true),
+  }),
+}));
+
+
 // Mock AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
@@ -120,5 +141,23 @@ describe("CadastrarIdoso component", () => {
     expect(erroData.props.children.props.text).toBe(
       "Deve estar no formato (XX)XXXXX-XXXX",
     );
+  });
+
+  // Novo teste para verificar a navegação ao clicar no botão de voltar na tela de cadastrar idoso
+  test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
+    // Renderiza o componente EditarPerfil
+    const { getByTestId } = render(<CadastrarIdoso />);
+    
+    // Obtendo o botão de voltar
+    const backButton = getByTestId("back-button-pressable");
+    
+    // Simula o clique no botão de voltar
+    fireEvent.press(backButton);
+
+    // Verifica se a função de navegação foi chamada corretamente e se ele navega pra tela de listar idosos
+    await waitFor(() => {
+      // expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
+      expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
+    });
   });
 });

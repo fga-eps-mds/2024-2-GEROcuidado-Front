@@ -1,11 +1,11 @@
 <testExecutions version="1">
-<file path="src\app\__tests__\editarPerfil.spec.tsx">
-<testCase name="EditarPerfil component Atualiza nome com o input" duration="1453" />
-<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome vazio" duration="107" />
-<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome muito curto" duration="66" />
-<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome muito longo" duration="64" />
-<testCase name="EditarPerfil component N&#xe3;o exibe mensagem de erro ao salvar com nome v&#xe1;lido" duration="156" />
-<testCase name="EditarPerfil component Exibe mensagem de confirma&#xe7;&#xe3;o ao apagar conta" duration="66" />
-<testCase name="EditarPerfil component Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="106" />
+<file path="src\app\__tests__\cadastrarIdoso.spec.tsx">
+<testCase name="CadastrarIdoso component renders correctly" duration="1637" />
+<testCase name="CadastrarIdoso component Salvar sem nome" duration="176" />
+<testCase name="CadastrarIdoso component Salvar com nome muito grande" duration="118" />
+<testCase name="CadastrarIdoso component Salvar com nome curto" duration="77" />
+<testCase name="CadastrarIdoso component Salvar data com formato errado" duration="92" />
+<testCase name="CadastrarIdoso component Salvar com telefone errado" duration="74" />
+<testCase name="CadastrarIdoso component Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="54" />
 </file>
 </testExecutions>
