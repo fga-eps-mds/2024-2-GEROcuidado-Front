@@ -23,7 +23,7 @@ export interface IIdosoBody {
 }
 
 export interface IIdoso extends IIdosoBody {
-  id: number;
+  id: string;
 }
 
 export interface IIdosoFilter {

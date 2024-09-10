@@ -28,13 +28,16 @@ import { Image } from "expo-image";
 import { IIdoso } from "../../interfaces/idoso.interface";
 import moment from "moment";
 import "moment/locale/pt-br";
+import database from "../../db";
+import { Collection, Q } from "@nozbe/watermelondb";
+import Rotina from "../../model/Rotina";
 
 export default function Rotinas() {
   moment.locale("pt-br");
 
   const [idoso, setIdoso] = useState<IIdoso>();
   const [user, setUser] = useState<IUser>();
-  const [rotinas, setRotinas] = useState<IRotina[]>([]);
+  const [rotinas, setRotinas] = useState<Rotina[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(moment());
   const order: IOrder = {
@@ -92,7 +95,7 @@ export default function Rotinas() {
     });
   };
 
-  const getRotinas = () => {
+  const getRotinas = async () => {
     if (idoso == undefined || !selectedDate) return;
 
     setLoading(true);
@@ -101,37 +104,50 @@ export default function Rotinas() {
     dataHora.setHours(dataHora.getHours() - 3);
 
     const rotinaFilter: IRotinaFilter = {
-      idIdoso: Number(idoso.id),
+      idIdoso: idoso.id,
       dataHora: dataHora.toISOString(),
     };
 
-    getAllRotina(rotinaFilter, order)
-      .then((response) => {
-        const newRotinas = response.data as IRotina[];
-        const filteredRotinas = newRotinas.filter((rotina) => {
-          if (rotina.dias.length > 0) {
-            const date = selectedDate.toDate();
-            const weekday = date.getDay();
-            const dateRotina = new Date(rotina.dataHora);
+    try {
+      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
 
-            return rotina.dias.includes(weekday) && dateRotina < date;
-          } else {
-            return true;
-          }
-        });
-        setRotinas(filteredRotinas);
-      })
-      .catch((err) => {
-        const error = err as { message: string };
-        Toast.show({
-          type: "error",
-          text1: "Erro!",
-          text2: error.message,
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      const filteredRotinas = await rotinaCollection.query(
+        Q.where('idoso_id', idoso.id)
+      ).fetch();
+
+      setRotinas(filteredRotinas);
+
+    } finally {
+      setLoading(false);
+    }
+
+    // getAllRotina(rotinaFilter, order)
+    //   .then((response) => {
+    //     const newRotinas = response.data as IRotina[];
+    //     const filteredRotinas = newRotinas.filter((rotina) => {
+    //       if (rotina.dias.length > 0) {
+    //         const date = selectedDate.toDate();
+    //         const weekday = date.getDay();
+    //         const dateRotina = new Date(rotina.dataHora);
+
+    //         return rotina.dias.includes(weekday) && dateRotina < date;
+    //       } else {
+    //         return true;
+    //       }
+    //     });
+    //     setRotinas(filteredRotinas);
+    //   })
+    //   .catch((err) => {
+    //     const error = err as { message: string };
+    //     Toast.show({
+    //       type: "error",
+    //       text1: "Erro!",
+    //       text2: error.message,
+    //     });
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   };
 
   const markedDates = [
@@ -143,7 +159,11 @@ export default function Rotinas() {
 
   useEffect(() => handleUser(), []);
   useEffect(() => getIdoso(), []);
-  useEffect(() => getRotinas(), [idoso, selectedDate]);
+  useEffect(() => {
+      getRotinas()
+    },
+    [idoso, selectedDate]
+  );
 
   return (
     <>

@@ -1,6 +1,7 @@
 import { Model } from '@nozbe/watermelondb';
-import { text, field, readonly, relation, date } from '@nozbe/watermelondb/decorators';
+import { text, field, readonly, relation, date, children } from '@nozbe/watermelondb/decorators';
 import Usuario from './Usuario';
+import Metrica from './Metrica';
 
 export default class Idoso extends Model {
   static table = 'idoso';
@@ -17,4 +18,6 @@ export default class Idoso extends Model {
 
   @readonly @date('created_at') createdAt!: Date;
   @readonly @date('updated_at') updatedAt!: Date;
+
+  @children('metrica') metricas!: Metrica;
 }
