@@ -39,7 +39,7 @@ export default appSchema({
       { name: 'dataHora', type: 'number' },
       { name: 'descricao', type: 'string' },
       { name: 'token', type: 'string' },
-      { name: 'notificao', type: 'boolean' },
+      { name: 'notificacao', type: 'boolean' },
       { name: 'dataHoraConcluidos', type: 'string' },
       { name: 'idoso_id', type: 'string', isIndexed: true },
       { name: 'created_at', type: 'number' },

@@ -19,7 +19,7 @@ export default class Rotina extends Model {
 
   @field('token') token!: string;
 
-  @field('notificao') notificao!: boolean;
+  @field('notificacao') notificacao!: boolean;
 
   @field('dataHoraConcluidos') dataHoraConcluidos!: string;
 

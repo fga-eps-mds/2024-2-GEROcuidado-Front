@@ -17,7 +17,7 @@ import UploadImage from "../../components/UploadImage";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import BackButton from "../../components/BackButton";
 import database from "../../db";
-import User from "../../model/User";
+import User from "../../model/Usuario";
 import { Q } from "@nozbe/watermelondb";
 import { IUser } from "../../interfaces/user.interface";
 import Usuario from "../../model/Usuario";

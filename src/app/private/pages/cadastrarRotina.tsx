@@ -138,7 +138,7 @@ export default function CadastrarRotina() {
         rotina.dias = dias.join(';');
         rotina.dataHora = Date.parse(getDateIsoString());
         rotina.token = token;
-        rotina.notificao = notificacao;
+        rotina.notificacao = notificacao;
         rotina.dataHoraConcluidos = "";
         rotina.idoso_id = String(idoso?.id);
       });

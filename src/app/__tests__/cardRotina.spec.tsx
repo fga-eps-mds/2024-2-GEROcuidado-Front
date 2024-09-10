@@ -20,6 +20,7 @@ const rotina = {
   dataHoraConcluidos: [],
   dataHora: new Date(),
   dias: [EDiasSemana.Domingo],
+  notificacao: true,
 };
 
 const rotina_exercicios = {
@@ -31,6 +32,7 @@ const rotina_exercicios = {
   dataHoraConcluidos: [],
   dataHora: new Date(),
   dias: [EDiasSemana.Domingo],
+  notificacao: true,
 };
 
 const rotina_medicamentos = {
@@ -42,6 +44,7 @@ const rotina_medicamentos = {
   dataHoraConcluidos: [],
   dataHora: new Date(),
   dias: [EDiasSemana.Domingo],
+  notificacao: true,
 };
 
 describe("Teste Componente Card Rotina", () => {
