@@ -1,6 +1,23 @@
 import React from "react";
 import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import EditarPerfil from "../private/pages/editarPerfil";
+import { router, useLocalSearchParams } from "expo-router";
+
+// Substituindo o módulo real do expo-router por uma versão mockada
+jest.mock('expo-router', () => ({
+  // função mockada com objeto de retorno especificado
+  useLocalSearchParams: jest.fn().mockReturnValue({
+    id: "123",
+    nome: "Nome Teste",
+    foto: null,
+  }),
+  // mockando o objeto router
+  router: {
+    push: jest.fn(),
+    back: jest.fn(),
+    canGoBack: jest.fn().mockReturnValue(true),
+  },
+}));
 
 describe("EditarPerfil component", () => {
   test("Atualiza nome com o input", async () => {
@@ -108,6 +125,23 @@ describe("EditarPerfil component", () => {
     // Aguarde até que a mensagem de confirmação seja encontrada
     await waitFor(() => {
       expect(findByText("Prosseguir com a exclusão da conta?")).toBeTruthy();
+    });
+  });
+
+  // Novo teste para verificar a navegação ao clicar no botão de voltar
+  test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
+    // Renderiza o componente EditarPerfil
+    const { getByTestId } = render(<EditarPerfil />);
+    
+    // Obtendo o botão de voltar
+    const backButton = getByTestId("back-button-pressable");
+    
+    // Simula o clique no botão de voltar
+    fireEvent.press(backButton);
+
+    // Verifica se a função de navegação foi chamada corretamente
+    await waitFor(() => {
+      expect(router.push).toHaveBeenCalledWith("/private/tabs/perfil");
     });
   });
 });
