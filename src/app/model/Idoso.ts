@@ -10,6 +10,7 @@ export default class Idoso extends Model {
   @field('tipoSanguineo') tipoSanguineo!: string;
   @text('telefoneResponsavel') telefoneResponsavel!: string;
   @text('descricao') descricao!: string;
+  @text('foto') foto!: string;  // Adicione a propriedade foto aqui
   
   @field('user_id') userId!: string;
 

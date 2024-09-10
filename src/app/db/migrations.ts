@@ -28,6 +28,7 @@ export default schemaMigrations({
               { name: 'telefoneResponsavel', type: 'string' },
               { name: 'descricao', type: 'string', isOptional: true },
               { name: 'user_id', type: 'string', isIndexed: true },
+              { name: 'foto', type: 'string' },
             ],
           }),
         },
