@@ -1,29 +1,23 @@
 import { Model } from "@nozbe/watermelondb";
-import { field, text, date, readonly, relation } from "@nozbe/watermelondb/decorators";
+import { field, text, date, readonly, relation, json } from "@nozbe/watermelondb/decorators";
 import Idoso from "./Idoso";
+
+const sanitizeStringArray = (rawDias: any): string[] => {
+  return Array.isArray(rawDias) ? rawDias.map(String) : [];
+};
 
 export default class Rotina extends Model {
   static table = 'rotina';
 
   @text('titulo') titulo!: string;
-
   @text('categoria') categoria!: string;
-
-  // Comma separated integer values:
-  // "0;1;2;3"
-  @text('dias') dias!: string;
-
-  @date('dataHora') dataHora!: number;
-
+  @json('dias', sanitizeStringArray) dias!: string[];
+  @date('dataHora') dataHora!: Date;
   @text('descricao') descricao!: string;
-
   @field('token') token!: string;
-
   @field('notificacao') notificacao!: boolean;
-
-  @field('dataHoraConcluidos') dataHoraConcluidos!: string;
-
-  @field('idoso_id') idoso_id!: string;
+  @json('dataHoraConcluidos', sanitizeStringArray) dataHoraConcluidos!: string[];
+  @field('idoso_id') idIdoso!: string;
 
   @readonly @date('created_at') createdAt!: Date;
   @readonly @date('updated_at') updatedAt!: Date;

@@ -11,7 +11,7 @@ export default class Idoso extends Model {
   @field('tipoSanguineo') tipoSanguineo!: string;
   @text('telefoneResponsavel') telefoneResponsavel!: string;
   @text('descricao') descricao!: string;
-
+  @field('foto') foto!: string;
   @field('user_id') userId!: string;
 
   @relation('usuario', 'user_id') user!: Usuario;

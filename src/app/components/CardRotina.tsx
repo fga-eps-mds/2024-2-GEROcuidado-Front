@@ -6,6 +6,9 @@ import { ECategoriaRotina, IRotina } from "../interfaces/rotina.interface";
 import { updateRotina } from "../services/rotina.service";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import database from "../db";
+import { Collection } from "@nozbe/watermelondb";
+import Rotina from "../model/Rotina";
 
 interface IProps {
   item: IRotina;
@@ -61,7 +64,16 @@ export default function CardRotina({ item, index, date }: IProps) {
     }
 
     try {
-      await updateRotina(item.id, { dataHoraConcluidos }, token);
+      // await updateRotina(item.id, { dataHoraConcluidos }, token);
+      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+
+      await database.write(async () => {
+        const rotina = await rotinaCollection.find(item.id);
+        await rotina.update(() => {
+          rotina.dataHoraConcluidos = dataHoraConcluidos;
+        })
+      })
+
     } catch (err) {
       const error = err as { message: string };
       Toast.show({
@@ -77,7 +89,7 @@ export default function CardRotina({ item, index, date }: IProps) {
 
     router.push({
       pathname: "/private/pages/editarRotina",
-      params: params,
+      params: params as unknown as & { notificacao: string },
     });
   };
 

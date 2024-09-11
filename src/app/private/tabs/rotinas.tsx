@@ -100,54 +100,30 @@ export default function Rotinas() {
 
     setLoading(true);
 
-    const dataHora = selectedDate.toDate();
-    dataHora.setHours(dataHora.getHours() - 3);
-
-    const rotinaFilter: IRotinaFilter = {
-      idIdoso: idoso.id,
-      dataHora: dataHora.toISOString(),
-    };
-
     try {
       const rotinaCollection = database.get('rotina') as Collection<Rotina>;
 
-      const filteredRotinas = await rotinaCollection.query(
+      const allIdosoRotinas = await rotinaCollection.query(
         Q.where('idoso_id', idoso.id)
       ).fetch();
+
+      // TODO: tenta fazer essa filtragem direto na query meu nobre
+      const filteredRotinas = allIdosoRotinas.filter((rotina) => {
+        if (rotina.dias.length > 0) {
+          const date = selectedDate.toDate();
+          const weekday = date.getDay().toString();
+
+          return rotina.dias.includes(weekday) && rotina.dataHora < date;
+        } else {
+          return true;
+        }
+      });
 
       setRotinas(filteredRotinas);
 
     } finally {
       setLoading(false);
     }
-
-    // getAllRotina(rotinaFilter, order)
-    //   .then((response) => {
-    //     const newRotinas = response.data as IRotina[];
-    //     const filteredRotinas = newRotinas.filter((rotina) => {
-    //       if (rotina.dias.length > 0) {
-    //         const date = selectedDate.toDate();
-    //         const weekday = date.getDay();
-    //         const dateRotina = new Date(rotina.dataHora);
-
-    //         return rotina.dias.includes(weekday) && dateRotina < date;
-    //       } else {
-    //         return true;
-    //       }
-    //     });
-    //     setRotinas(filteredRotinas);
-    //   })
-    //   .catch((err) => {
-    //     const error = err as { message: string };
-    //     Toast.show({
-    //       type: "error",
-    //       text1: "Erro!",
-    //       text2: error.message,
-    //     });
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
   };
 
   const markedDates = [
@@ -220,7 +196,7 @@ export default function Rotinas() {
                 data={rotinas}
                 renderItem={({ item, index }) => (
                   <CardRotina
-                    item={item}
+                    item={item as unknown as IRotina & { categoria: string }}
                     index={index}
                     date={selectedDate.toDate() || new Date()}
                   />

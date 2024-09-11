@@ -5,7 +5,7 @@ import { tableSchema } from '@nozbe/watermelondb';
 export default schemaMigrations({
   migrations: [
     {
-      toVersion: 2,
+      toVersion: 3,
       steps: [
         // Passo para adicionar as colunas à tabela 'usuario' se elas ainda não existirem
         {

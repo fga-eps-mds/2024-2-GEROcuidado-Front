@@ -124,30 +124,31 @@ export default function CadastrarRotina() {
   };
 
   const salvarNoBancoLocal = async () => {
-    if (Object.keys(erros).length > 0) {
-      setShowErrors(true);
-      return;
-    }
-
     const rotinaCollection = database.get('rotina') as Collection<Rotina>;
 
     await database.write(async () => {
       await rotinaCollection.create((rotina) => {
         rotina.titulo = titulo;
+        rotina.descricao = descricao;
         rotina.categoria = String(categoria);
-        rotina.dias = dias.join(';');
-        rotina.dataHora = Date.parse(getDateIsoString());
+        rotina.dias = dias.map(String); // Mudar o tipo de dias pra String[]
+        rotina.dataHora = new Date(getDateIsoString());
         rotina.token = token;
         rotina.notificacao = notificacao;
-        rotina.dataHoraConcluidos = "";
-        rotina.idoso_id = String(idoso?.id);
+        rotina.dataHoraConcluidos = [];
+        rotina.idIdoso = String(idoso?.id);
       });
     });
 
-    console.log("Estado atual do banco:", await rotinaCollection.query().fetch());
+    // console.log("Estado atual do banco:", await rotinaCollection.query().fetch());
   }
 
   const salvar = async () => {
+    if (Object.keys(erros).length > 0) {
+      setShowErrors(true);
+      return;
+    }
+
     try {
       setShowLoading(true);
       await salvarNoBancoLocal();
