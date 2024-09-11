@@ -1,0 +1,10 @@
+<testExecutions version="1">
+<file path="src\app\__tests__\cadastrarRotina.spec.tsx">
+<testCase name="CadastrarRotina component renders correctly" duration="619" />
+<testCase name="CadastrarRotina component Mostra erro quando o t&#xed;tulo est&#xe1; vazio" duration="43" />
+<testCase name="CadastrarRotina component Mostra erro quando o t&#xed;tulo &#xe9; muito longo" duration="34" />
+<testCase name="CadastrarRotina component Mostra erro para o formato de data incorreta" duration="43" />
+<testCase name="CadastrarRotina component Mostra erro para o formato de tempo incorreto" duration="30" />
+<testCase name="CadastrarRotina component Mostra erro quando descri&#xe7;&#xe3;o &#xe9; muito longa" duration="33" />
+</file>
+</testExecutions>
