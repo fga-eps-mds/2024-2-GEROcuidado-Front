@@ -62,6 +62,7 @@ export default function ModalMeta({
                 onChangeText={setValor}
                 style={styles.textInput}
                 placeholderTextColor={"#3D3D3D"}
+                testID="modal-input"
               />
               <View style={styles.erroValor}>
                 <ErrorMessage show={showErrors} text={erros.valor} />
