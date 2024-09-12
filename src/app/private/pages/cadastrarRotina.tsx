@@ -24,6 +24,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IIdoso } from "../../interfaces/idoso.interface";
 import ErrorMessage from "../../components/ErrorMessage";
 import * as Notifications from "expo-notifications";
+import database from "../../db";
+import { Collection } from "@nozbe/watermelondb";
+import Rotina from "../../model/Rotina";
 
 interface IErrors {
   titulo?: string;
@@ -120,41 +123,51 @@ export default function CadastrarRotina() {
     return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T${hora}:00.000`;
   };
 
+  const salvarNoBancoLocal = async () => {
+    const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+
+    await database.write(async () => {
+      await rotinaCollection.create((rotina) => {
+        rotina.titulo = titulo;
+        rotina.descricao = descricao;
+        rotina.categoria = String(categoria);
+        rotina.dias = dias.map(String); // Mudar o tipo de dias pra String[]
+        rotina.dataHora = new Date(getDateIsoString());
+        rotina.token = token;
+        rotina.notificacao = notificacao;
+        rotina.dataHoraConcluidos = [];
+        rotina.idIdoso = String(idoso?.id);
+      });
+    });
+
+    // console.log("Estado atual do banco:", await rotinaCollection.query().fetch());
+  }
+
   const salvar = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
       return;
     }
 
-    const body = {
-      idIdoso: Number(idoso?.id),
-      titulo,
-      dataHora: getDateIsoString(),
-      categoria: categoria as ECategoriaRotina,
-      dias: dias,
-      token: expoToken,
-      notificacao,
-      descricao,
-      dataHoraConcluidos: [],
-    };
-
     try {
       setShowLoading(true);
-      const response = await postRotina(body, token);
+      await salvarNoBancoLocal();
       Toast.show({
         type: "success",
         text1: "Sucesso!",
-        text2: response.message as string,
+        text2: "Rotina criada",
       });
       router.replace({
         pathname: "private/tabs/rotinas",
       });
+
     } catch (err) {
       const error = err as { message: string };
+      console.log(error);
       Toast.show({
         type: "error",
         text1: "Erro!",
-        text2: error.message,
+        text2: "Algo deu errado na criação da rotina :(",
       });
     } finally {
       setShowLoading(false);

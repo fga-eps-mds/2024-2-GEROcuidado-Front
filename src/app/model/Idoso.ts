@@ -1,6 +1,7 @@
 import { Model } from '@nozbe/watermelondb';
-import { text, field, readonly, relation, date } from '@nozbe/watermelondb/decorators';
-import User from './User';
+import { text, field, readonly, relation, date, children } from '@nozbe/watermelondb/decorators';
+import Usuario from './Usuario';
+import Metrica from './Metrica';
 
 export default class Idoso extends Model {
   static table = 'idoso';
@@ -10,11 +11,13 @@ export default class Idoso extends Model {
   @field('tipoSanguineo') tipoSanguineo!: string;
   @text('telefoneResponsavel') telefoneResponsavel!: string;
   @text('descricao') descricao!: string;
-  
+  @field('foto') foto!: string;
   @field('user_id') userId!: string;
 
-  @relation('users', 'user_id') user!: User;
-  
+  @relation('usuario', 'user_id') user!: Usuario;
+
   @readonly @date('created_at') createdAt!: Date;
   @readonly @date('updated_at') updatedAt!: Date;
+
+  @children('metrica') metricas!: Metrica;
 }

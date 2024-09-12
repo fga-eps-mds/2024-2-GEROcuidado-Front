@@ -6,6 +6,9 @@ import { ECategoriaRotina, IRotina } from "../interfaces/rotina.interface";
 import { updateRotina } from "../services/rotina.service";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import database from "../db";
+import { Collection } from "@nozbe/watermelondb";
+import Rotina from "../model/Rotina";
 
 interface IProps {
   item: IRotina;
@@ -61,7 +64,16 @@ export default function CardRotina({ item, index, date }: IProps) {
     }
 
     try {
-      await updateRotina(item.id, { dataHoraConcluidos }, token);
+      // await updateRotina(item.id, { dataHoraConcluidos }, token);
+      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+
+      await database.write(async () => {
+        const rotina = await rotinaCollection.find(item.id);
+        await rotina.update(() => {
+          rotina.dataHoraConcluidos = dataHoraConcluidos;
+        })
+      })
+
     } catch (err) {
       const error = err as { message: string };
       Toast.show({
@@ -73,7 +85,22 @@ export default function CardRotina({ item, index, date }: IProps) {
   };
 
   const editar = () => {
-    const params = { ...item, id: item.id };
+    const rotina = item as unknown as Rotina;
+    const rotinaAttributes = {
+      id: rotina.id,
+      titulo: rotina.titulo,
+      categoria: rotina.categoria,
+      dias: rotina.dias,
+      dataHora: rotina.dataHora,
+      descricao: rotina.descricao,
+      token: rotina.token,
+      notificacao: rotina.notificacao,
+      dataHoraConcluidos: rotina.dataHoraConcluidos,
+      idosoId: rotina.idIdoso,
+      createdAt: rotina.createdAt,
+      updatedAt: rotina.updatedAt,
+    }
+    const params = { rotina: JSON.stringify(rotinaAttributes) };
 
     router.push({
       pathname: "/private/pages/editarRotina",

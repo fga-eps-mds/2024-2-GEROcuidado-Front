@@ -14,7 +14,8 @@ import { IUser } from "../interfaces/user.interface";
 import { ScrollView } from "react-native";
 import database from "../db";
 import { Collection, Q } from "@nozbe/watermelondb";
-import User from "../model/User";
+import { syncDatabaseWithServer } from "../services/watermelon.service";
+import Usuario from "../model/Usuario";
 
 interface IErrors {
   email?: string;
@@ -87,10 +88,10 @@ export default function Login() {
       const key = process.env.EXPO_PUBLIC_JWT_TOKEN_SECRET as string;
 
       let userInfo: IUser | null = null;
-      
+
       try {
         // Decodifica o token JWT
-        userInfo = JWT.decode(token, key) as unknown as IUser;
+        userInfo = JWT.decode(token, key, { timeSkew: 30 }) as unknown as IUser;
         console.log("Token decodificado:", userInfo);
       } catch (decodeError) {
         console.error("Erro ao decodificar o token:", decodeError);
@@ -108,28 +109,39 @@ export default function Login() {
 
   const getUser = async (id: number, token: string) => {
     try {
+      // Aqui acontece a sincronização com o backend
+      await syncDatabaseWithServer();
+
       console.log("Buscando usuário no banco...");
-      const usersCollection = database.get('users') as Collection<User>;
+      const usersCollection = database.get('usuario') as Collection<Usuario>;
 
       try {
         const queryResult = await usersCollection.query(
-          Q.where('external_id', id.toString())
+          Q.where('id', id.toString())
         ).fetch();
 
         console.log("Resultado da busca no banco:", queryResult);
 
         const user = queryResult.at(0);
 
-        if (user instanceof User) {
+        if (user instanceof Usuario) {
           console.log("Settando usuario a partir do objeto do banco!");
-          await AsyncStorage.setItem("usuario", JSON.stringify({
+
+          const userTransformed = {
+            id: user.id.toString(),
             email: user.email,
-            senha: user.password,
-            nome: user.name,
-            id: user.externalId,
-            foto: user.photo,
-            admin: user.admin
-          }));
+            senha: user.senha,
+            foto: user.foto,
+            admin: user.admin,
+            nome: user.nome
+          }
+
+          console.log("userTransformed", userTransformed);
+          await AsyncStorage.setItem("usuario", JSON.stringify(
+            userTransformed
+          ));
+
+          console.log(await AsyncStorage.getItem('usuario'));
           return;
         }
 
@@ -142,20 +154,8 @@ export default function Login() {
         foto: { data: Uint8Array };
       };
 
-      console.log("Usuário obtido da API:", responseUser);
-
-      await database.write(async () => {
-        await usersCollection.create(user => {
-          user.name = responseUser.email,
-          user.email = responseUser.email,
-          user.password = responseUser.senha,
-          user.photo = responseUser.foto,
-          user.admin = responseUser.admin,
-          user.externalId = id.toString()
-        });
-      });
-
-      console.log("Usuário criado no banco local:");
+      // TODO: Remove this in the future
+      console.log("Usuario buscado diretamente da API...");
       console.log(await usersCollection.query().fetch());
 
       await AsyncStorage.setItem("usuario", JSON.stringify(responseUser));

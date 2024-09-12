@@ -7,7 +7,7 @@ export enum ECategoriaRotina {
 
 export interface IRotinaBody {
   titulo: string;
-  idIdoso: number;
+  idIdoso: string;
   categoria?: ECategoriaRotina | null;
   descricao?: string;
   notificacao: boolean;
@@ -18,11 +18,11 @@ export interface IRotinaBody {
 }
 
 export interface IRotina extends IRotinaBody {
-  id: number;
+  id: string;
 }
 
 export interface IRotinaFilter {
-  idIdoso?: number;
+  idIdoso?: string;
   dataHora?: string;
 }
 

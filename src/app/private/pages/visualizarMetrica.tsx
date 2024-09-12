@@ -28,6 +28,9 @@ import {
   getSomaHidratacao,
   updateMetrica,
 } from "../../services/metrica.service";
+import database from "../../db";
+import { Collection, Q } from "@nozbe/watermelondb";
+import ValorMetrica from "../../model/ValorMetrica";
 
 export default function VisualizarMetrica() {
   const params = useLocalSearchParams() as unknown as IMetrica;
@@ -67,25 +70,25 @@ export default function VisualizarMetrica() {
     });
   };
 
-  const getMetricasValues = () => {
-    setShowLoading(true);
-    const filter: IMetricaValueFilter = { idMetrica: params.id };
-    getAllMetricaValues(filter, order)
-      .then((response) => {
-        const newMetricasVAlues = response.data as IValorMetrica[];
-        setValueMetrica(newMetricasVAlues);
-      })
-      .catch((err) => {
-        const error = err as { message: string };
-        Toast.show({
-          type: "error",
-          text1: "Erro!",
-          text2: error.message,
-        });
-      })
-      .finally(() => {
-        setShowLoading(false);
-      });
+  const getMetricasValues = async () => {
+    try {
+      setShowLoading(true);
+
+      console.log(params);
+
+      const valorMetricasCollection = database.get('valor_metrica');
+      const valoresMetrica = await valorMetricasCollection.query(
+        Q.where('metrica_id', params.id),
+        Q.sortBy('created_at', Q.desc),
+        Q.take(100)
+      ).fetch();
+
+      setValueMetrica(valoresMetrica);
+    } catch (err) {
+      console.log("Erro ao buscar valores de metrica:", err);
+    } finally {
+      setShowLoading(false);
+    }
   };
 
   const novoValor = () => {
@@ -97,30 +100,22 @@ export default function VisualizarMetrica() {
   };
 
   const salvar = async (valor: string) => {
-    const body = {
-      idMetrica: Number(params.id),
-      valor,
-      dataHora: new Date(),
-    };
-
     try {
       setShowLoading(true);
-      const response = await postMetricaValue(body, token);
-      Toast.show({
-        type: "success",
-        text1: "Sucesso!",
-        text2: response.message as string,
+      const valorMetricasCollection = database.get('valor_metrica') as Collection<ValorMetrica>;
+
+      await database.write(async () => {
+        const createdValorMetrica = await valorMetricasCollection.create((valorMetrica) => {
+          valorMetrica.idMetrica = String(params.id);
+          valorMetrica.valor = valor;
+          valorMetrica.dataHora = new Date();
+        });
       });
       setModalVisible(false);
       getMetricasValues();
       getHidratacao(token);
     } catch (err) {
-      const error = err as { message: string };
-      Toast.show({
-        type: "error",
-        text1: "Erro!",
-        text2: error.message,
-      });
+      console.log("Erro ao salvar valor de metrica:", err);
     } finally {
       setShowLoading(false);
     }
@@ -135,27 +130,37 @@ export default function VisualizarMetrica() {
   const getIMC = async () => {
     if (params.categoria !== EMetricas.IMC || !idoso) return;
 
-    const metricaFilter: IMetricaFilter = {
-      idIdoso: Number(idoso.id),
-    };
+    try {
+      const valorMetricasCollection = database.get('valor_metrica') as Collection<ValorMetrica>;
+      const metricaAltura = await valorMetricasCollection.query(
+        Q.on('metrica', [
+          Q.where('idoso_id', idoso.id),
+          Q.where('categoria', EMetricas.ALTURA),
+        ]),
+        Q.sortBy('created_at', Q.desc),
+        Q.take(1)
+      ).fetch();
 
-    const response = await getAllMetrica(metricaFilter);
-    const newMetricas = response.data as IMetrica[];
+      const metricaPeso = await valorMetricasCollection.query(
+        Q.on('metrica', [
+          Q.where('idoso_id', idoso.id),
+          Q.where('categoria', EMetricas.PESO),
+        ]),
+        Q.sortBy('created_at', Q.desc),
+        Q.take(1)
+      ).fetch();
+      const altura = metricaAltura.at(0)?.valor;
+      const peso = metricaPeso.at(0)?.valor;
 
-    const metricaPeso = newMetricas.find((metrica) => {
-      return metrica.categoria == EMetricas.PESO;
-    }) as IMetrica;
+      const alturaMetro = Number(altura) / 100;
+      const alturaMetro2 = alturaMetro != 0.0 ? alturaMetro * alturaMetro : 1.0;
 
-    const metricaAltura = newMetricas.find((metrica) => {
-      return metrica.categoria == EMetricas.ALTURA;
-    }) as IMetrica;
+      return (Number(peso) / alturaMetro2).toFixed(2);
 
-    const peso = await getLastValue(metricaPeso.id);
-    const altura = await getLastValue(metricaAltura.id);
-
-    const alturaMetro = Number(altura) / 100;
-
-    return Number(peso) / (alturaMetro * alturaMetro);
+    } catch (err) {
+      console.log("Erro ao buscar metricas pro IMC:", err);
+      return 0;
+    }
   };
 
   const getLastValue = async (idMetrica: number) => {
@@ -173,31 +178,10 @@ export default function VisualizarMetrica() {
   };
 
   const calcular = async () => {
-    setShowLoading(true);
-
     try {
+      setShowLoading(true);
       const IMC = await getIMC();
-
-      const body = {
-        idMetrica: Number(params.id),
-        valor: String(IMC?.toFixed(2)),
-        dataHora: new Date(),
-      };
-
-      const response = await postMetricaValue(body, token);
-      Toast.show({
-        type: "success",
-        text1: "Sucesso!",
-        text2: response.message as string,
-      });
-      getMetricasValues();
-    } catch (err) {
-      const error = err as { message: string };
-      Toast.show({
-        type: "error",
-        text1: "Erro!",
-        text2: error.message,
-      });
+      salvar(String(IMC));
     } finally {
       setShowLoading(false);
     }
@@ -232,6 +216,7 @@ export default function VisualizarMetrica() {
   };
 
   const getHidratacao = (token: string) => {
+    return 0; // Forgive me father
     if (params.categoria !== EMetricas.HIDRATACAO) return;
 
     getSomaHidratacao(params.id, token)
@@ -303,7 +288,7 @@ export default function VisualizarMetrica() {
         renderItem={({ item }) => (
           <Pressable>
             <CardValorMetrica
-              item={{ ...item, categoria: params.categoria }}
+              item={{ ...item._raw, categoria: params.categoria }}
               metrica={params}
             />
           </Pressable>

@@ -4,8 +4,11 @@ import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
 
 import schema from './schema'
 import migrations from './migrations'
-import User from '../model/User'
+import Usuario from '../model/Usuario'
 import Idoso from '../model/Idoso'
+import Rotina from '../model/Rotina'
+import Metrica from '../model/Metrica'
+import ValorMetrica from '../model/ValorMetrica'
 // import Post from './model/Post' // ⬅️ You'll import your Models here
 
 // First, create the adapter to the underlying database:
@@ -28,7 +31,7 @@ const database = new Database({
   adapter,
   modelClasses: [
     // Post, // ⬅️ You'll add Models to Watermelon here
-    User, Idoso
+    Usuario, Idoso, Rotina, Metrica, ValorMetrica
   ],
 });
 

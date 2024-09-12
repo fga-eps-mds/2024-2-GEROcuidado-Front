@@ -17,9 +17,10 @@ import UploadImage from "../../components/UploadImage";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import BackButton from "../../components/BackButton";
 import database from "../../db";
-import User from "../../model/User";
+import User from "../../model/Usuario";
 import { Q } from "@nozbe/watermelondb";
 import { IUser } from "../../interfaces/user.interface";
+import Usuario from "../../model/Usuario";
 
 interface IErrors {
   nome?: string;
@@ -58,12 +59,12 @@ export default function EditarPerfil() {
     try {
       setShowLoading(true);
 
-      const usersCollection = database.get<User>("users");
+      const usersCollection = database.get<Usuario>("usuario");
       console.log("Coleção de usuários obtida:", usersCollection);
 
       await database.write(async () => {
         const userToUpdate = await usersCollection
-          .query(Q.where("external_id", user.id.toString()))
+          .query(Q.where("id", user.id.toString()))
           .fetch();
 
         console.log("Usuário encontrado para atualizar:", userToUpdate);
@@ -72,12 +73,12 @@ export default function EditarPerfil() {
           console.log("Estado antes da atualização:", userToUpdate[0]);
 
           await userToUpdate[0].update((user) => {
-            user.name = nome;
-            if (foto) user.photo = foto;
+            user.nome = nome;
+            if (foto) user.foto = foto;
           });
 
           const updatedUsers = await usersCollection
-            .query(Q.where("external_id", user.id.toString()))
+            .query(Q.where("id", user.id.toString()))
             .fetch();
           console.log("Usuário atualizado no banco de dados:", updatedUsers);
 
@@ -123,12 +124,12 @@ export default function EditarPerfil() {
     try {
       setShowLoadingApagar(true);
 
-      const usersCollection = database.get<User>("users");
+      const usersCollection = database.get<Usuario>("usuario");
       console.log("Coleção de usuários obtida para deletar:", usersCollection);
 
       await database.write(async () => {
         const userToDelete = await usersCollection
-          .query(Q.where("external_id", user.id.toString()))
+          .query(Q.where("id", user.id.toString()))
           .fetch();
 
         console.log("Usuário encontrado para deletar:", userToDelete);
