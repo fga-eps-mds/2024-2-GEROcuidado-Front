@@ -14,6 +14,9 @@ import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 import ModalConfirmation from "./ModalConfirmation";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import database from "../db";
+import { Collection } from "@nozbe/watermelondb";
+import ValorMetrica from "../model/ValorMetrica";
 
 interface IProps {
   item: IValorMetricaCategoria;
@@ -128,21 +131,21 @@ export default function CardValorMetrica({ item, metrica }: IProps) {
   };
 
   const apagarValor = async () => {
-    setModalVisible(false);
     try {
-      await deleteMetricaValue(item.id, token);
+      setModalVisible(false);
+
+      const valorMetricasCollection = database.get('valor_metrica') as Collection<ValorMetrica>;
+      await database.write(async () => {
+        const valorMetrica = await valorMetricasCollection.find(String(item.id));
+        await valorMetrica.destroyPermanently(); // Change it to mark as deleted when implementing sync
+      });
+
       router.replace({
         pathname: "/private/pages/visualizarMetrica",
         params: metrica,
       });
     } catch (err) {
-      const error = err as { message: string };
-      Toast.show({
-        type: "error",
-        text1: "Erro!",
-        text2: error.message,
-      });
-    } finally {
+      console.log("Erro ao apagar valor de metrica:", err);
     }
   };
 

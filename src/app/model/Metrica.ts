@@ -5,7 +5,7 @@ import ValorMetrica from "./ValorMetrica";
 export default class Metrica extends Model {
   static table = 'metrica';
 
-  @field('idoso_id') idosoId!: string;
+  @field('idoso_id') idIdoso!: string;
   @text('categoria') categoria!: string;
   @text('valorMaximo') valorMaximo!: string;
   @readonly @date('created_at') created_at!: Date;

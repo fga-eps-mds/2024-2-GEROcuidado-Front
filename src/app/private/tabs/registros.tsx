@@ -13,6 +13,8 @@ import { router } from "expo-router";
 import { Pressable } from "react-native";
 import { getAllMetrica } from "../../services/metrica.service";
 import Toast from "react-native-toast-message";
+import database from "../../db";
+import { Q } from "@nozbe/watermelondb";
 
 export default function Registros() {
   const [user, setUser] = useState<IUser | undefined>(undefined);
@@ -60,40 +62,29 @@ export default function Registros() {
   const visualizarMetrica = (item: IMetrica) => {
     router.push({
       pathname: "private/pages/visualizarMetrica",
-      params: item,
+      params: item._raw,
     });
   };
 
-  const getMetricas = () => {
+  const getMetricas = async () => {
     if (idoso == undefined) return;
 
-    setLoading(true);
+    const metricasCollection = database.get('metrica');
 
-    const metricaFilter: IMetricaFilter = {
-      idIdoso: Number(idoso.id),
-    };
-
-    getAllMetrica(metricaFilter)
-      .then((response) => {
-        const newMetricas = response.data as IMetrica[];
-        setMetricas(newMetricas);
-      })
-      .catch((err) => {
-        const error = err as { message: string };
-        Toast.show({
-          type: "error",
-          text1: "Erro!",
-          text2: error.message,
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      setLoading(true);
+      const idosoMetricas = await metricasCollection.query(Q.where('idoso_id', idoso.id)).fetch();
+      setMetricas(idosoMetricas);
+    } catch (err) {
+      console.log("Erro ao obter metricas do idoso:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => handleUser(), []);
   useEffect(() => getIdoso(), []);
-  useEffect(() => getMetricas(), [idoso]);
+  useEffect(() => { getMetricas() }, [idoso]);
 
   return (
     <>

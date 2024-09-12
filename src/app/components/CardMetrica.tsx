@@ -13,6 +13,9 @@ import {
 import { getAllMetricaValues } from "../services/metricaValue.service";
 import Toast from "react-native-toast-message";
 import { Entypo } from "@expo/vector-icons";
+import database from "../db";
+import { Q } from "@nozbe/watermelondb";
+import ValorMetrica from "../model/ValorMetrica";
 
 interface IProps {
   item: IMetrica;
@@ -113,21 +116,19 @@ export default function CardMetrica({ item }: IProps) {
     }
   };
 
-  const getMetricas = () => {
-    const filter: IMetricaValueFilter = { idMetrica: item.id };
-    getAllMetricaValues(filter, order)
-      .then((response) => {
-        const newMetricasVAlues = response.data as IValorMetrica[];
-        setValorMetrica(newMetricasVAlues[0]);
-      })
-      .catch((err) => {
-        const error = err as { message: string };
-        Toast.show({
-          type: "error",
-          text1: "Erro!",
-          text2: error.message,
-        });
-      });
+  const getMetricas = async () => {
+    try {
+      const valorMetricasCollection = database.get('valor_metrica');
+      const valorMetrica = await valorMetricasCollection.query(
+        Q.where('metrica_id', item.id),
+        Q.sortBy('created_at', Q.desc),
+        Q.take(1)
+      ).fetch();
+
+      setValorMetrica(valorMetrica.at(0));
+    } catch (err) {
+      console.log("Erro ao buscar valor de metrica:", err);
+    }
   };
 
   const separaDataHora = () => {
@@ -145,7 +146,7 @@ export default function CardMetrica({ item }: IProps) {
     setData(`${separaData[2]}/${separaData[1]}/${separaData[0]}`);
   };
 
-  useEffect(getMetricas, []);
+  useEffect(() => { getMetricas() }, []);
   useEffect(() => separaDataHora(), [dataHora, valorMetrica]);
 
   return (
