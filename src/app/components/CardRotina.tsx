@@ -85,11 +85,26 @@ export default function CardRotina({ item, index, date }: IProps) {
   };
 
   const editar = () => {
-    const params = { ...item, id: item.id };
+    const rotina = item as unknown as Rotina;
+    const rotinaAttributes = {
+      id: rotina.id,
+      titulo: rotina.titulo,
+      categoria: rotina.categoria,
+      dias: rotina.dias,
+      dataHora: rotina.dataHora,
+      descricao: rotina.descricao,
+      token: rotina.token,
+      notificacao: rotina.notificacao,
+      dataHoraConcluidos: rotina.dataHoraConcluidos,
+      idosoId: rotina.idIdoso,
+      createdAt: rotina.createdAt,
+      updatedAt: rotina.updatedAt,
+    }
+    const params = { rotina: JSON.stringify(rotinaAttributes) };
 
     router.push({
       pathname: "/private/pages/editarRotina",
-      params: params as unknown as & { notificacao: string },
+      params: params,
     });
   };
 

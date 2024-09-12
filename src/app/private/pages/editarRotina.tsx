@@ -26,6 +26,9 @@ import ErrorMessage from "../../components/ErrorMessage";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import { IIdoso } from "../../interfaces/idoso.interface";
 import * as Notifications from "expo-notifications";
+import Rotina from "../../model/Rotina";
+import database from "../../db";
+import { Collection } from "@nozbe/watermelondb";
 
 interface IErrors {
   titulo?: string;
@@ -36,15 +39,14 @@ interface IErrors {
 }
 
 export default function EditarRotina() {
-  const params = useLocalSearchParams() as unknown as IRotina & {
-    dias: string;
-  };
+  const { rotina } = useLocalSearchParams();
+  const params = JSON.parse(rotina as string);
   const [idoso, setIdoso] = useState<IIdoso>();
   const [titulo, setTitulo] = useState(params.titulo);
   const [descricao, setDescricao] = useState(params.descricao);
   const [categoria, setCategoria] = useState(params.categoria);
   const [dias, setDias] = useState(
-    (params.dias !== "" && params.dias !== undefined) ? params.dias.split(",").map((dia) => Number(dia)) : [],
+    params.dias.map(Number)
   );
   const [showLoading, setShowLoading] = useState(false);
   const [erros, setErros] = useState<IErrors>({});
@@ -140,36 +142,31 @@ export default function EditarRotina() {
       return;
     }
 
-    const body = {
-      idIdoso: Number(idoso?.id),
-      titulo,
-      dataHora: getDateIsoString(data, hora),
-      categoria: categoria as ECategoriaRotina,
-      dias,
-      token: expoToken,
-      notificacao,
-      descricao,
-    };
-
     try {
       setShowLoading(true);
-      const response = await updateRotina(params.id, body, token);
+
+      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+      await database.write(async () => {
+        const rotina = await rotinaCollection.find(params.id);
+        await rotina.update(() => {
+          rotina.titulo = titulo;
+          rotina.categoria = categoria;
+          rotina.dias = dias;
+          rotina.dataHora = new Date(getDateIsoString(data, hora));
+          rotina.descricao = descricao;
+          rotina.token = token;
+          rotina.notificacao = notificacao
+        });
+      });
+
       Toast.show({
         type: "success",
         text1: "Sucesso!",
-        text2: response.message as string,
+        text2: "Rotina atualizada com sucesso",
       });
-      router.replace({
-        pathname: "private/tabs/rotinas",
-        params: idoso,
-      });
-    } catch (err) {
-      const error = err as { message: string };
-      Toast.show({
-        type: "error",
-        text1: "Erro!",
-        text2: error.message,
-      });
+
+    } catch(err) {
+      console.log("Erro ao atualizar rotina:", err);
     } finally {
       setShowLoading(false);
     }
@@ -180,18 +177,20 @@ export default function EditarRotina() {
     setShowLoadingApagar(true);
 
     try {
-      await deleteRotina(params.id, token);
+      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+      await database.write(async () => {
+        const rotina = await rotinaCollection.find(params.id);
+
+        // TODO: mudar para `markAsDeleted` quando houver sincronização
+        await rotina.destroyPermanently();
+      });
+
       router.replace({
         pathname: "private/tabs/rotinas",
         params: idoso,
       });
     } catch (err) {
-      const error = err as { message: string };
-      Toast.show({
-        type: "error",
-        text1: "Erro!",
-        text2: error.message,
-      });
+      console.log("Erro ao apagar rotina:", err);
     } finally {
       setShowLoadingApagar(false);
     }
