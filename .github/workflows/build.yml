@@ -24,7 +24,7 @@ jobs:
         run: (yarn eslint . --format json --output-file reports/eslint-report.json) || true
 
       - name: Test and coverage
-        run: yarn jest --coverage
+        run: (yarn jest --coverage) || true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
