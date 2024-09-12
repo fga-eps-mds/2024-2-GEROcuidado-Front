@@ -1,11 +1,549 @@
 <testExecutions version="1">
+<file path="src/app/__tests__/user.service.spec.tsx">
+<testCase name="postUser deve fazer uma chamada de API bem-sucedida" duration="2" />
+<testCase name="postUser deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="updateUser deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="updateUser deve lidar com uma chamada de API com erro" duration="2" />
+<testCase name="getUserById deve fazer uma chamada de API bem-sucedida" duration="2" />
+<testCase name="getUserById deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="deleteUserById deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="deleteUserById deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="loginUser deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="loginUser deve lidar com uma chamada de API com erro" duration="1" />
+</file>
+<file path="src/app/__tests__/modalmetrica.spec.tsx">
+<testCase name="ModalMetrica Component renderiza sem erros" duration="6206" />
+<testCase name="ModalMetrica Component exibe as unidades corretas" duration="4" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 1" duration="6" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 2" duration="6" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 3" duration="3" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 4" duration="3" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 5" duration="4" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 6" duration="3" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 7" duration="4" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 8" duration="3" />
+<testCase name="ModalMetrica Component Exibe mensagem de erro para valor vazio" duration="6" />
+<testCase name="ModalMetrica Component fecha o modal ao pressionar o bot&#xe3;o Cancelar" duration="3" />
+<testCase name="ModalMetrica Component exibe mensagem de erro ao tentar salvar com valor inv&#xe1;lido" duration="4" />
+</file>
+<file path="src/app/__tests__/forum.service.spec.tsx">
+<testCase name="getAllPublicacao Get: deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="getAllPublicacao deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="postPublicacao Post: deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="postPublicacao deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="updatePublicacao deve fazer uma chamada de API bem-sucedida" duration="4" />
+<testCase name="updatePublicacao deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="deletePublicacaoById deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="deletePublicacaoById deve lidar com uma chamada de API com erro" duration="1" />
+</file>
+<file path="src/app/__tests__/idoso.service.spec.tsx">
+<testCase name="postIdoso deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="postIdoso deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="updateIdoso deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="updateIdoso deve lidar com uma chamada de API com erro" duration="0" />
+<testCase name="getAllIdoso Get: deve fazer uma chamada de API bem-sucedida" duration="0" />
+<testCase name="getAllIdoso deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="deleteIdoso deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="deleteIdoso deve lidar com uma chamada de API com erro" duration="0" />
+</file>
+<file path="src/app/__tests__/rotina.service.spec.tsx">
+<testCase name="postRotina deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="postRotina deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="updateRotina deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="updateRotina deve lidar com uma chamada de API com erro" duration="0" />
+<testCase name="getAllRotina Get: deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="getAllRotina deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="deleteRotina deve fazer uma chamada de API bem-sucedida" duration="0" />
+<testCase name="deleteRotina deve lidar com uma chamada de API com erro" duration="1" />
+</file>
+<file path="src/app/__tests__/cadastro.spec.tsx">
+<testCase name="Cadastro Component renderiza corretamente" duration="32" />
+<testCase name="Cadastro Component deve chamar a fun&#xe7;&#xe3;o &apos;postUser&apos; quando n&#xe3;o h&#xe1; erros nos campos" duration="137" />
+<testCase name="Cadastro Component n&#xe3;o deve chamar a fun&#xe7;&#xe3;o &apos;postUser&apos; quando h&#xe1; espec&#xed;ficos erros nos campos" duration="84" />
+<testCase name="Cadastro Component n&#xe3;o deve chamar a fun&#xe7;&#xe3;o &apos;postUser&apos; quando h&#xe1; erros nos campos" duration="11" />
+<testCase name="Cadastro Component n&#xe3;o deve chamar a fun&#xe7;&#xe3;o &apos;postUser&apos; quando h&#xe1; erros espec&#xed;ficos de nome nos campos" duration="13" />
+<testCase name="Cadastro Component deve exibir o Toast de erro" duration="28" />
+<testCase name="Cadastro Component deve alterar o estado do escondeSenha" duration="12" />
+</file>
+<file path="src/app/__tests__/cadastrarIdoso.spec.tsx">
+<testCase name="CadastrarIdoso component renders correctly" duration="137" />
+<testCase name="CadastrarIdoso component Salvar sem nome" duration="20" />
+<testCase name="CadastrarIdoso component Salvar com nome muito grande" duration="18" />
+<testCase name="CadastrarIdoso component Salvar com nome curto" duration="18" />
+<testCase name="CadastrarIdoso component Salvar data com formato errado" duration="22" />
+<testCase name="CadastrarIdoso component Salvar com telefone errado" duration="17" />
+<testCase name="CadastrarIdoso component Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="15" />
+</file>
+<file path="src/app/__tests__/cardMetrica.spec.tsx">
+<testCase name="CardMetricas Component renderiza sem erros" duration="34" />
+<testCase name="CardMetricas Component exibe as unidades corretas" duration="1" />
+<testCase name="CardMetricas Component exibe as unidades corretas 1" duration="2" />
+<testCase name="CardMetricas Component exibe as unidades corretas 2" duration="2" />
+<testCase name="CardMetricas Component exibe as unidades corretas 3" duration="2" />
+<testCase name="CardMetricas Component exibe as unidades corretas 4" duration="5" />
+<testCase name="CardMetricas Component exibe as unidades corretas 5" duration="3" />
+<testCase name="CardMetricas Component exibe as unidades corretas 6" duration="3" />
+<testCase name="CardMetricas Component exibe as unidades corretas 7" duration="2" />
+<testCase name="CardMetricas Component exibe as unidades corretas 8" duration="1" />
+<testCase name="CardMetricas Component Deve retornar se n&#xe3;o houver dataHora" duration="1" />
+</file>
 <file path="src/app/__tests__/editarPerfil.spec.tsx">
-<testCase name="EditarPerfil component Atualiza nome com o input" duration="848" />
-<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome vazio" duration="124" />
-<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome muito curto" duration="155" />
-<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome muito longo" duration="127" />
-<testCase name="EditarPerfil component N&#xe3;o exibe mensagem de erro ao salvar com nome v&#xe1;lido" duration="218" />
-<testCase name="EditarPerfil component Exibe mensagem de confirma&#xe7;&#xe3;o ao apagar conta" duration="108" />
-<testCase name="Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="75" />
+<testCase name="EditarPerfil component Atualiza nome com o input" duration="42" />
+<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome vazio" duration="15" />
+<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome muito curto" duration="15" />
+<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome muito longo" duration="10" />
+<testCase name="EditarPerfil component N&#xe3;o exibe mensagem de erro ao salvar com nome v&#xe1;lido" duration="18" />
+<testCase name="EditarPerfil component Exibe mensagem de confirma&#xe7;&#xe3;o ao apagar conta" duration="10" />
+<testCase name="Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="8" />
+</file>
+<file path="src/app/__tests__/editarRotina.spec.tsx">
+<testCase name="EditarRotina Component Salvar sem t&#xed;tulo" duration="21">
+<failure message="Error"><![CDATA[SyntaxError: &quot;undefined&quot; is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at parse (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/private/pages/editarRotina.tsx:43:23)
+    at renderWithHooks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6351:18)
+    at mountIndeterminateComponent (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9855:13)
+    at beginWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11312:16)
+    at performUnitOfWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15808:12)
+    at workLoopSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15745:5)
+    at renderRootSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15717:7)
+    at performSyncWorkOnRoot (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15422:20)
+    at flushSyncCallbacks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2597:22)
+    at flushActQueue (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2667:24)
+    at Object.act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2521:11)
+    at act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render-act.ts:13:16)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:62:33)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:32:10)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/editarRotina.spec.tsx:7:68)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="EditarRotina Component Salvar com t&#xed;tulo muito grande" duration="1">
+<failure message="Error"><![CDATA[SyntaxError: &quot;undefined&quot; is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at parse (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/private/pages/editarRotina.tsx:43:23)
+    at renderWithHooks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6351:18)
+    at mountIndeterminateComponent (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9855:13)
+    at beginWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11312:16)
+    at performUnitOfWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15808:12)
+    at workLoopSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15745:5)
+    at renderRootSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15717:7)
+    at performSyncWorkOnRoot (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15422:20)
+    at flushSyncCallbacks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2597:22)
+    at flushActQueue (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2667:24)
+    at Object.act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2521:11)
+    at act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render-act.ts:13:16)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:62:33)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:32:10)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/editarRotina.spec.tsx:26:55)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="EditarRotina Component Salvar data com formato errado" duration="1">
+<failure message="Error"><![CDATA[SyntaxError: &quot;undefined&quot; is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at parse (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/private/pages/editarRotina.tsx:43:23)
+    at renderWithHooks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6351:18)
+    at mountIndeterminateComponent (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9855:13)
+    at beginWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11312:16)
+    at performUnitOfWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15808:12)
+    at workLoopSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15745:5)
+    at renderRootSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15717:7)
+    at performSyncWorkOnRoot (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15422:20)
+    at flushSyncCallbacks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2597:22)
+    at flushActQueue (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2667:24)
+    at Object.act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2521:11)
+    at act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render-act.ts:13:16)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:62:33)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:32:10)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/editarRotina.spec.tsx:48:68)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="EditarRotina Component Salvar sem hora" duration="3">
+<failure message="Error"><![CDATA[SyntaxError: &quot;undefined&quot; is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at parse (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/private/pages/editarRotina.tsx:43:23)
+    at renderWithHooks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6351:18)
+    at mountIndeterminateComponent (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9855:13)
+    at beginWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11312:16)
+    at performUnitOfWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15808:12)
+    at workLoopSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15745:5)
+    at renderRootSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15717:7)
+    at performSyncWorkOnRoot (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15422:20)
+    at flushSyncCallbacks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2597:22)
+    at flushActQueue (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2667:24)
+    at Object.act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2521:11)
+    at act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render-act.ts:13:16)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:62:33)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:32:10)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/editarRotina.spec.tsx:69:68)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="EditarRotina Component Salvar hora com formato errado" duration="2">
+<failure message="Error"><![CDATA[SyntaxError: &quot;undefined&quot; is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at parse (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/private/pages/editarRotina.tsx:43:23)
+    at renderWithHooks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6351:18)
+    at mountIndeterminateComponent (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9855:13)
+    at beginWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11312:16)
+    at performUnitOfWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15808:12)
+    at workLoopSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15745:5)
+    at renderRootSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15717:7)
+    at performSyncWorkOnRoot (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15422:20)
+    at flushSyncCallbacks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2597:22)
+    at flushActQueue (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2667:24)
+    at Object.act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2521:11)
+    at act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render-act.ts:13:16)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:62:33)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:32:10)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/editarRotina.spec.tsx:88:68)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="EditarRotina Component Salvar com descri&#xe7;&#xe3;o muito grande" duration="1">
+<failure message="Error"><![CDATA[SyntaxError: &quot;undefined&quot; is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at parse (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/private/pages/editarRotina.tsx:43:23)
+    at renderWithHooks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6351:18)
+    at mountIndeterminateComponent (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9855:13)
+    at beginWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11312:16)
+    at performUnitOfWork (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15808:12)
+    at workLoopSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15745:5)
+    at renderRootSync (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15717:7)
+    at performSyncWorkOnRoot (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15422:20)
+    at flushSyncCallbacks (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2597:22)
+    at flushActQueue (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2667:24)
+    at Object.act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/react/cjs/react.development.js:2521:11)
+    at act (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render-act.ts:13:16)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:62:33)
+    at renderInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@testing-library/react-native/src/render.tsx:32:10)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/editarRotina.spec.tsx:109:55)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+</file>
+<file path="src/app/__tests__/cardValorMetrica.spec.tsx">
+<testCase name="CardValorMetrica Component renderiza corretamente" duration="25" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 1" duration="6" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 2" duration="7" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 3" duration="6" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 4" duration="6" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 5" duration="7" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 6" duration="8" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 7" duration="7" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 8" duration="10" />
+</file>
+<file path="src/app/__tests__/image.helper.spec.tsx">
+<testCase name="getImageUri deve retornar uma URI de imagem v&#xe1;lida para um Buffer fornecido" duration="2" />
+<testCase name="getImageUri Imagem ja esta codificada" duration="0" />
+<testCase name="getImageUri Imagem vazia" duration="0" />
+</file>
+<file path="src/app/__tests__/MaskHour.spec.tsx">
+<testCase name="MaskInput Component should apply mask correctly for valid times" duration="38" />
+<testCase name="MaskInput Component should clear the input correctly" duration="1" />
+<testCase name="MaskInput Component should handle different lengths of input" duration="1" />
+<testCase name="MaskInput Component should ignore non-numeric characters" duration="1" />
+<testCase name="MaskInput Component should not call inputMaskChange if the value does not change" duration="2" />
+<testCase name="MaskInput Component should apply mask correctly for inputs longer than required" duration="1" />
+</file>
+<file path="src/app/__tests__/ModalMeta.spec.tsx">
+<testCase name="ModalMeta Component should render modal when visible prop is true" duration="43" />
+<testCase name="ModalMeta Component should not render modal when visible prop is false" duration="2" />
+<testCase name="ModalMeta Component should show error message when input is empty and Save button is pressed" duration="9" />
+<testCase name="ModalMeta Component should show error message when input is invalid format and Save button is pressed" duration="9" />
+<testCase name="ModalMeta Component should call callbackFn with input value when input is valid and Save button is pressed" duration="7" />
+<testCase name="ModalMeta Component should call closeModal when Cancel button is pressed" duration="5" />
+</file>
+<file path="src/app/__tests__/listarIdosos.spec.tsx">
+<testCase name="ListarIdosos deve exibir a lista de idosos ap&#xf3;s a conclus&#xe3;o da chamada da API" duration="1050">
+<failure message="Error"><![CDATA[Error: expect(jest.fn()).toHaveBeenCalled()
+
+Expected number of calls: &gt;= 1
+Received number of calls:    0
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/listarIdosos.spec.tsx:53:18)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="ListarIdosos deve exibir uma mensagem de erro se a chamada da API falhar" duration="5003">
+<failure message="Error"><![CDATA[Error: thrown: &quot;Exceeded timeout of 5000 ms for a test.
+Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.&quot;
+    at it (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/listarIdosos.spec.tsx:60:3)
+    at _dispatchDescribe (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/index.js:91:26)
+    at describe (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/index.js:55:5)
+    at Object.describe (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/src/app/__tests__/listarIdosos.spec.tsx:30:1)
+    at Runtime._execModule (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runtime/build/index.js:1439:24)
+    at Runtime._loadModule (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runtime/build/index.js:1022:12)
+    at Runtime.requireModule (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runtime/build/index.js:882:12)
+    at jestAdapter (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:77:13)
+    at runTestInternal (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/ugor/Documentos/TCC2/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="ListarIdosos Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="10" />
+</file>
+<file path="src/app/__tests__/login.spec.tsx">
+<testCase name="Login deve exibir mensagem de erro se o login falhar" duration="100" />
+<testCase name="Login deve realizar login com sucesso" duration="61" />
+</file>
+<file path="src/app/__tests__/metrica.service.spec.tsx">
+<testCase name="metricas.service postMetrica deve chamar a API corretamente ao criar uma m&#xe9;trica" duration="2" />
+<testCase name="metricas.service postMetrica deve lan&#xe7;ar um erro se a resposta da API n&#xe3;o for bem-sucedida" duration="4" />
+<testCase name="metricas.service getAllMetrica deve chamar a API corretamente ao obter todas as m&#xe9;tricas" duration="1" />
+<testCase name="metricas.service getAllMetrica deve lan&#xe7;ar um erro se a resposta da API n&#xe3;o for bem-sucedida" duration="4" />
+</file>
+<file path="src/app/__tests__/cardRotina.spec.tsx">
+<testCase name="Teste Componente Card Rotina Renderiza corretamente" duration="50" />
+<testCase name="Teste Componente Card Rotina Renderiza corretamente Card de exercicios" duration="7" />
+<testCase name="Teste Componente Card Rotina Renderiza corretamente Card de Medicamentos" duration="6" />
+</file>
+<file path="src/app/__tests__/CardIdoso.spec.tsx">
+<testCase name="CardIdoso renderiza o componente CardIdoso com o nome correto" duration="35" />
+<testCase name="CardIdoso navega para a edi&#xe7;&#xe3;o do Idoso ao pressionar o &#xed;cone de l&#xe1;pis" duration="2" />
+<testCase name="CardIdoso seleciona o Idoso ao pressionar o componente CardIdoso" duration="5" />
+</file>
+<file path="src/app/__tests__/login-success.spec.tsx">
+<testCase name="Login Component - Sucesso deve lidar com campos vazios e inv&#xe1;lidos" duration="39" />
+<testCase name="Login Component - Sucesso deve lidar com senha inv&#xe1;lida" duration="7" />
+</file>
+<file path="src/app/__tests__/tutorial.spec.tsx">
+<testCase name="O componente Tutorial deve renderizar corretamente" duration="59" />
+<testCase name="O bot&#xe3;o &quot;Pular&quot; deve chamar a fun&#xe7;&#xe3;o &quot;router.replace&quot; com o caminho correto" duration="5" />
+<testCase name="O bot&#xe3;o &quot;Avan&#xe7;ar&quot; deve permitir navegar entre os slides" duration="6" />
+<testCase name="O bot&#xe3;o &quot;Avan&#xe7;ar&quot; deve permitir navegar entre os slides" duration="5" />
+</file>
+<file path="src/app/__tests__/perfil.spec.tsx">
+<testCase name="Perfil renderiza corretamente" duration="38" />
+<testCase name="Perfil renderiza corretamente com user id" duration="7" />
+<testCase name="Perfil renderiza corretamente com user id e foto" duration="9" />
+<testCase name="Perfil deve chamar logout" duration="104" />
+<testCase name="Perfil deve chamar navigate" duration="103" />
+</file>
+<file path="src/app/__tests__/cadastrarRotina.spec.tsx">
+<testCase name="CadastrarRotina Component should show error if title is empty" duration="41" />
+<testCase name="CadastrarRotina Component should render input field and save button" duration="17" />
+<testCase name="CadastrarRotina Component should hide error message when input is corrected" duration="35" />
+</file>
+<file path="src/app/__tests__/ModalConfirmation.spec.tsx">
+<testCase name="ModalConfirmation deve renderizar corretamente quando vis&#xed;vel" duration="35" />
+<testCase name="ModalConfirmation deve chamar a fun&#xe7;&#xe3;o de fechamento do modal ao pressionar &quot;Cancelar&quot;" duration="2" />
+<testCase name="ModalConfirmation n&#xe3;o deve renderizar quando n&#xe3;o vis&#xed;vel" duration="1" />
+</file>
+<file path="src/app/__tests__/LinkButton.spec.tsx">
+<testCase name="LinkButton deve renderizar corretamente" duration="20" />
+<testCase name="LinkButton deve usar a cor de fundo personalizada" duration="2" />
+<testCase name="LinkButton deve chamar a fun&#xe7;&#xe3;o de navega&#xe7;&#xe3;o corretamente" duration="1" />
+</file>
+<file path="src/app/__tests__/FiltroDropdown.spec.tsx">
+<testCase name="FiltroDropdown Component should render the dropdown with default label" duration="34" />
+<testCase name="FiltroDropdown Component should display options when dropdown is clicked" duration="12" />
+<testCase name="FiltroDropdown Component should toggle dropdown visibility when dropdown button is clicked" duration="6" />
+<testCase name="FiltroDropdown Component should show selected option when a filter is provided" duration="2" />
+</file>
+<file path="src/app/__tests__/UploadImage.spec.tsx">
+<testCase name="UploadImage renderiza corretamente sem imagem inicial" duration="108" />
+<testCase name="UploadImage deve renderizar corretamente" duration="3" />
+<testCase name="UploadImage escolher imagem e chamar setFoto corretamente" duration="53" />
+</file>
+<file path="src/app/__tests__/Publicacao.spec.tsx">
+<testCase name="Publicacao deve formatar o nome corretamente com crop ativado" duration="18" />
+</file>
+<file path="src/app/__tests__/BarraPesquisa.spec.tsx">
+<testCase name="BarraPesquisa deve renderizar corretamente" duration="32" />
+<testCase name="BarraPesquisa deve chamar a fun&#xe7;&#xe3;o de retorno (callbackFn) com o valor do campo de pesquisa" duration="4" />
+</file>
+<file path="src/app/__tests__/BackButton.spec.tsx">
+<testCase name="BackButton chama router.back() quando pressionado" duration="34" />
+<testCase name="BackButton chama router.push() com a rota correta quando route &#xe9; fornecido" duration="2" />
+</file>
+<file path="src/app/__tests__/PublicacaoVisualizar.spec.tsx">
+<testCase name="PublicacaoVisualizar n&#xe3;o deve renderizar a imagem do usu&#xe1;rio quando n&#xe3;o h&#xe1; foto" duration="37" />
+<testCase name="PublicacaoVisualizar deve formatar a data corretamente" duration="2" />
+</file>
+<file path="src/app/__tests__/UploadImageV2.spec.tsx">
+<testCase name="UploadImageV2 deve renderizar corretamente e chamar a fun&#xe7;&#xe3;o de callback ao selecionar uma imagem" duration="39" />
+</file>
+<file path="src/app/__tests__/cadastrarMetrica.spec.tsx">
+<testCase name="criarMetrica Component renderiza corretamente e interage com as m&#xe9;tricas" duration="53" />
+</file>
+<file path="src/app/__tests__/visualizarValoresMedidos.spec.tsx">
+<testCase name="VisualizarValoresMedidos The component rendered" duration="24" />
+</file>
+<file path="src/app/__tests__/visualizarPublicacao.spec.tsx">
+<testCase name="Visualizar publicacao Rendeziza sem quebrar" duration="26" />
+<testCase name="Visualizar publicacao displays actions correctly for admin" duration="10" />
+<testCase name="Visualizar publicacao Testa apertar o botao de apagar" duration="10" />
+</file>
+<file path="src/app/__tests__/Loading.spec.tsx">
+<testCase name="Loading deve renderizar o componente de carregamento corretamente" duration="34" />
+</file>
+<file path="src/app/__tests__/editarIdoso.spec.tsx">
+<testCase name="EditarIdoso renderiza corretamente" duration="35" />
+</file>
+<file path="src/app/__tests__/index.spec.tsx">
+<testCase name="Home renderiza corretamente" duration="84" />
+<testCase name="Home deve conter um t&#xed;tulo" duration="4" />
+<testCase name="Home deve conter bot&#xf5;es de a&#xe7;&#xe3;o" duration="5" />
+</file>
+<file path="src/app/__tests__/criaPublicacao.spec.tsx">
+<testCase name="CriaPublicacao The component rendered" duration="28" />
+</file>
+<file path="src/app/__tests__/editarValorMetrica.spec.tsx">
+<testCase name="EditarMetrica Component The component rendered" duration="20" />
+</file>
+<file path="src/app/components/__tests__/ModalConfirmation.spec.tsx">
+<testCase name="ModalConfirmation Component renderiza corretamente" duration="34" />
+</file>
+<file path="src/app/__tests__/weekDay.spec.tsx">
+<testCase name="Testes para WeekDays deve renderizar corretamente" duration="37" />
+<testCase name="Testes para WeekDays deve chamar a fun&#xe7;&#xe3;o de callback corretamente ao pressionar um dia" duration="4" />
+</file>
+<file path="src/app/__tests__/CustomButton.spec.tsx">
+<testCase name="CustomButton renderiza corretamente" duration="35" />
+<testCase name="CustomButton Chama a fun&#xe7;&#xe3;o de callback quando pressionado" duration="2" />
+</file>
+<file path="src/app/__tests__/NaoAutenticado.spec.tsx">
+<testCase name="NaoAutenticado deve renderizar o componente &apos;NaoAutenticado&apos; corretamente" duration="16" />
+</file>
+<file path="src/app/__tests__/EmConstrucao.spec.tsx">
+<testCase name="EmConstrucao component renders correctly" duration="32" />
+</file>
+<file path="src/app/__tests__/response.interface.spec.tsx">
+<testCase name="IResponse Interface deve ser uma interface com as propriedades data e message" duration="1" />
+</file>
+<file path="src/app/__tests__/event.spec.tsx">
+<testCase name="Event component renders correctly with given props" duration="35" />
+</file>
+<file path="src/app/__tests__/registros.spec.tsx">
+<testCase name="Registros renderiza corretamente" duration="24" />
+<testCase name="Registros renderiza corretamente com user id" duration="5" />
+</file>
+<file path="src/app/__tests__/rotinas.spec.tsx">
+<testCase name="Rotinas renderiza corretamente" duration="10" />
+<testCase name="Rotinas renderiza corretamente com user id" duration="3" />
+</file>
+<file path="src/app/__tests__/ItemTutorial.spec.tsx">
+<testCase name="ItemTutorial renderiza corretamente" duration="79" />
+</file>
+<file path="src/app/__tests__/ErrorMessage.spec.tsx">
+<testCase name="ErrorMessage renderiza corretamente" duration="33" />
+</file>
+<file path="src/app/__tests__/editarPublicacao.spec.tsx">
+<testCase name="&lt;EditarPublicacao /&gt; renders without crashing" duration="23" />
+</file>
+<file path="src/app/__tests__/forum.spec.tsx">
+<testCase name="Forum renderiza corretamente" duration="26" />
 </file>
 </testExecutions>
