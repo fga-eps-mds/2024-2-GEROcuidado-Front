@@ -1,10 +1,11 @@
 <testExecutions version="1">
 <file path="src\app\__tests__\cadastrarIdoso.spec.tsx">
-<testCase name="CadastrarIdoso component renders correctly" duration="3690" />
-<testCase name="CadastrarIdoso component Salvar sem nome" duration="198" />
-<testCase name="CadastrarIdoso component Salvar com nome muito grande" duration="170" />
-<testCase name="CadastrarIdoso component Salvar com nome curto" duration="146" />
-<testCase name="CadastrarIdoso component Salvar data com formato errado" duration="160" />
-<testCase name="CadastrarIdoso component Salvar com telefone errado" duration="156" />
+<testCase name="CadastrarIdoso component renders correctly" duration="1912" />
+<testCase name="CadastrarIdoso component Salvar sem nome" duration="259" />
+<testCase name="CadastrarIdoso component Salvar com nome muito grande" duration="256" />
+<testCase name="CadastrarIdoso component Salvar com nome curto" duration="136" />
+<testCase name="CadastrarIdoso component Salvar data com formato errado" duration="136" />
+<testCase name="CadastrarIdoso component Salvar com telefone errado" duration="314" />
+<testCase name="CadastrarIdoso component Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="125" />
 </file>
 </testExecutions>
