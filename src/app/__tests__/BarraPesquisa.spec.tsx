@@ -27,4 +27,40 @@ describe("BarraPesquisa", () => {
     // Verifica se a função de retorno (callbackFn) foi chamada com o valor correto
     expect(callbackFn).toHaveBeenCalledWith("Texto de pesquisa");
   });
+
+  it("deve limpar o campo de pesquisa quando o texto for apagado", () => {
+    const callbackFn = jest.fn();
+    const { getByPlaceholderText, queryByDisplayValue } = render(
+      <BarraPesquisa callbackFn={callbackFn} />,
+    );
+    const inputElement = getByPlaceholderText("Pesquise uma publicação");
+
+    // Simula a digitação de texto no campo de pesquisa
+    fireEvent.changeText(inputElement, "Texto de pesquisa");
+
+    // Simula a limpeza do campo de pesquisa
+    fireEvent.changeText(inputElement, "");
+
+    // Verifica se o campo de pesquisa foi limpo
+    expect(queryByDisplayValue("Texto de pesquisa")).toBeNull();
+    expect(callbackFn).toHaveBeenCalledWith("");
+  });
+
+  it("deve chamar a função de retorno (callbackFn) quando o usuário pressionar Enter", () => {
+    const callbackFn = jest.fn();
+    const { getByPlaceholderText } = render(
+      <BarraPesquisa callbackFn={callbackFn} />,
+    );
+    const inputElement = getByPlaceholderText("Pesquise uma publicação");
+
+    // Simula a digitação de texto no campo de pesquisa
+    fireEvent.changeText(inputElement, "Texto de pesquisa");
+
+    // Simula o envio do texto ao pressionar Enter
+    fireEvent(inputElement, "submitEditing");
+
+    // Verifica se a função de retorno foi chamada corretamente
+    expect(callbackFn).toHaveBeenCalledWith("Texto de pesquisa");
+  });
+
 });
