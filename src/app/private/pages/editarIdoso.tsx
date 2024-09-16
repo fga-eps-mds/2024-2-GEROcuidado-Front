@@ -213,7 +213,7 @@ export default function EditarIdoso() {
 
 
    if (!dataNascimento) {
-     erros.dataNascimento = "Campo obrigatório!";
+     erros.dataNascimento = "Campo obrigatório";
    } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento as string)) {
      erros.dataNascimento = "Data deve ser no formato dd/mm/yyyy!";
    }
