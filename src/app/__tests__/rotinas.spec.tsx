@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitFor } from "@testing-library/react-native";
+import { render, waitFor, fireEvent } from "@testing-library/react-native";
 import Rotinas from "../private/tabs/rotinas";
 import AsyncStorage from "@react-native-async-storage/async-storage/jest/async-storage-mock";
 
@@ -25,6 +25,24 @@ describe("Rotinas", () => {
     // Verifica se o texto "Idoso não selecionado" está presente
     await waitFor(() => {
       expect(getByText(/Idoso não selecionado/i)).toBeTruthy();
+    });
+  });
+
+  beforeEach(async () => {
+    // Clear AsyncStorage before each test
+    await AsyncStorage.clear();
+  });
+
+  it("renderiza corretamente quando todas as condições são atendidas", async () => {
+    // Define um usuário e idoso válidos no AsyncStorage
+    await AsyncStorage.setItem("usuario", JSON.stringify({ id: 1 }));
+    await AsyncStorage.setItem("idoso", JSON.stringify({ id: 1, foto: null, nome: "João" }));
+
+    const { getByText } = render(<Rotinas />);
+
+    // Espera que o nome do idoso esteja na tela
+    await waitFor(() => {
+      expect(getByText(/João/i)).toBeTruthy();
     });
   });
 });
