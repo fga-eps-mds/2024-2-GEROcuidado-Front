@@ -21,6 +21,7 @@ jest.mock('expo-router', () => ({
     push: jest.fn(), // Mocka novamente o push no caso do uso da função useRouter
     back: jest.fn(),
     canGoBack: jest.fn().mockReturnValue(true),
+    replace: jest.fn(),
   }),
 }));
 // Mock AsyncStorage
@@ -156,6 +157,61 @@ describe("CadastrarIdoso component", () => {
       await waitFor(() => {
         // expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
         expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
+      });
+    });
+
+    it("Cadastra um idoso com sucesso quando todos os dados estão válidos", async () => {
+      const { getByText, getByPlaceholderText } = render(<CadastrarIdoso />);
+    
+      fireEvent.changeText(getByPlaceholderText("Nome"), "Nome Completo");
+      fireEvent.changeText(getByPlaceholderText("Data de Nascimento"), "01/01/1960");
+      fireEvent.changeText(getByPlaceholderText("Telefone Responsável"), "(11)12345-6789");
+    
+      const cadastrarButton = getByText("Cadastrar");
+      fireEvent.press(cadastrarButton);
+    
+      await waitFor(() => {
+        const { replace } = useRouter();
+        expect(replace).toHaveBeenCalledWith("/private/pages/listarIdosos");
+      });
+    });
+
+    it("Navega para a tela anterior ao clicar no botão de voltar quando canGoBack é falso", async () => {
+      (router.canGoBack as jest.Mock).mockReturnValue(false);
+  
+      const { getByTestId } = render(<CadastrarIdoso />);
+  
+      const backButton = getByTestId("back-button-pressable");
+      fireEvent.press(backButton);
+  
+      await waitFor(() => {
+        expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
+      });
+    });
+
+    it("Exibe mensagem de erro ao deixar campos obrigatórios em branco", async () => {
+      const { getByText, getByTestId, getByPlaceholderText } = render(<CadastrarIdoso />);
+  
+      const nome = getByPlaceholderText("Nome");
+      const dataNascimento = getByPlaceholderText("Data de Nascimento");
+      const telefone = getByPlaceholderText("Telefone Responsável");
+      const cadastrar = getByText("Cadastrar");
+  
+      act(() => {
+        fireEvent.changeText(nome, "");
+        fireEvent.changeText(dataNascimento, "");
+        fireEvent.changeText(telefone, "");
+        fireEvent.press(cadastrar);
+      });
+  
+      await waitFor(() => {
+        const erroNome = getByTestId("Erro-nome");
+        const erroData = getByTestId("Erro-data");
+        const erroTelefone = getByTestId("Erro-telefone");
+  
+        expect(erroNome.props.children.props.text).toBe("Campo obrigatório!");
+        expect(erroData.props.children.props.text).toBe("Campo obrigatório!");
+        expect(erroTelefone.props.children.props.text).toBe("Campo obrigatório!");
       });
     });
 });
