@@ -21,6 +21,7 @@ jest.mock('expo-router', () => ({
     push: jest.fn(), // Mocka novamente o push no caso do uso da função useRouter
     back: jest.fn(),
     canGoBack: jest.fn().mockReturnValue(true),
+    replace: jest.fn(),
   }),
 }));
 // Mock AsyncStorage
@@ -156,6 +157,22 @@ describe("CadastrarIdoso component", () => {
       await waitFor(() => {
         // expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
         expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
+      });
+    });
+    
+    it("Cadastra um idoso com sucesso quando todos os dados estão válidos", async () => {
+      const { getByText, getByPlaceholderText } = render(<CadastrarIdoso />);
+    
+      fireEvent.changeText(getByPlaceholderText("Nome"), "Nome Completo");
+      fireEvent.changeText(getByPlaceholderText("Data de Nascimento"), "01/01/1960");
+      fireEvent.changeText(getByPlaceholderText("Telefone Responsável"), "(11)12345-6789");
+    
+      const cadastrarButton = getByText("Cadastrar");
+      fireEvent.press(cadastrarButton);
+    
+      await waitFor(() => {
+        const { replace } = useRouter();
+        expect(replace).toHaveBeenCalledWith("/private/pages/listarIdosos");
       });
     });
 });
