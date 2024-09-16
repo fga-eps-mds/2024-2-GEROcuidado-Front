@@ -13,4 +13,18 @@ describe("Rotinas", () => {
 
     await waitFor(() => render(<Rotinas />));
   });
+
+  it("renderiza corretamente quando o idoso não está selecionado", async () => {
+    // Define um usuário válido no AsyncStorage
+    await AsyncStorage.setItem("usuario", JSON.stringify({ id: 1 }));
+    // Remove a chave "idoso" para simular a situação onde o idoso não está selecionado
+    await AsyncStorage.removeItem("idoso");
+
+    const { getByText } = render(<Rotinas />);
+
+    // Verifica se o texto "Idoso não selecionado" está presente
+    await waitFor(() => {
+      expect(getByText(/Idoso não selecionado/i)).toBeTruthy();
+    });
+  });
 });
