@@ -151,4 +151,20 @@ describe("MaskInput Component", () => {
     fireEvent.changeText(input, "1944");
     expect(mockInputMaskChange).toHaveBeenCalledWith("19:44");
   });
+
+  it("should only keep the hour part if the first digit of the minute is greater than 5", () => {
+    const mockInputMaskChange = jest.fn();
+    const { getByPlaceholderText } = render(
+      <MaskInput
+        inputMaskChange={mockInputMaskChange}
+        placeholder="Enter time"
+      />
+    );
+
+    const input = getByPlaceholderText("Enter time");
+
+    // Simulate invalid minutes (first digit of minute greater than 5)
+    fireEvent.changeText(input, "1259");
+    expect(mockInputMaskChange).toHaveBeenCalledWith("12:59");
+  });
 });
