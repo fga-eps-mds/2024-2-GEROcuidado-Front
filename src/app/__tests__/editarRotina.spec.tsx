@@ -136,17 +136,25 @@
 // });
 
 
-import { within, render, fireEvent, screen } from '@testing-library/react-native';
+import { within, render, fireEvent, screen, waitFor  } from '@testing-library/react-native';
 import React from 'react';
 import EditarRotina from "../private/pages/editarRotina";
 import { useLocalSearchParams } from 'expo-router';
+import Toast from 'react-native-toast-message';
+import * as router from 'expo-router';
 import * as Notifications from 'expo-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 jest.mock('expo-notifications', () => require("../../../__mocks__/expo-notifications"));
+
 
 // Mock para useLocalSearchParams
 jest.mock('expo-router', () => ({
   ...jest.requireActual('expo-router'),
   useLocalSearchParams: jest.fn(),
+}));
+
+jest.mock('react-native-toast-message', () => ({
+  show: jest.fn(),
 }));
 
 // Mock para expo-notifications
@@ -157,11 +165,15 @@ jest.mock('expo-notifications', () => ({
   setNotificationChannelAsync: jest.fn(),
 }));
 
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn().mockResolvedValue(JSON.stringify({ id: '1', nome: 'Idoso Teste' })),
+}));
 
 describe("EditarRotina Component", () => {
   beforeEach(() => {
     (useLocalSearchParams as jest.Mock).mockReturnValue({
       rotina: JSON.stringify({
+        id: 1,
         titulo: 'Rotina Teste',
         descricao: 'Descrição Teste',
         categoria: 'GERAL',
