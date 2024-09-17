@@ -1,77 +1,3 @@
-// import React from "react";
-// import { render, fireEvent, waitFor, act, screen } from "@testing-library/react-native";
-// import EditarRotina from "../private/pages/editarRotina";
-// import { useLocalSearchParams } from 'expo-router';
-
-
-// // Pending correction
-// describe("EditarRotina Component", () => {
-//   it("Does nothing", async () => {
-//     // ...
-//   });
-
-  // it("Salvar sem título", async () => {
-  //   const { getByText, getByPlaceholderText, getByTestId } = render(
-  //     <EditarRotina />
-  //   );
-
-  //   const titulo = getByPlaceholderText("Adicionar título");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(titulo, "");
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroTitulo = getByTestId("Erro-titulo");
-  //     expect(erroTitulo.props.children.props.text).toBe("Campo obrigatório!");
-  //   });
-  // });
-
-  // it("Salvar com título muito grande", async () => {
-  //   const { getByText, getByPlaceholderText } = render(<EditarRotina />);
-
-  //   const titulo = getByPlaceholderText("Adicionar título");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(
-  //       titulo,
-  //       "Por que o livro de matemática está sempre triste? Porque tem muitos problemas! hahahahahahhahahahahhahahaahahahahahahhahahahahahahahahahahahhahaahahahahahahahahah"
-  //     );
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroTitulo = getByText(
-  //       "O título deve ter no máximo 100 caractéres."
-  //     );
-  //     expect(erroTitulo).toBeTruthy();
-  //   });
-  // });
-
-  // it("Salvar data com formato errado", async () => {
-  //   const { getByText, getByPlaceholderText, getByTestId } = render(
-  //     <EditarRotina />
-  //   );
-
-  //   const data = getByPlaceholderText("Data da rotina");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(data, "2010");
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroData = getByTestId("Erro-data");
-  //     expect(erroData.props.children.props.text).toBe(
-  //       "Data deve ser no formato dd/mm/yyyy!"
-  //     );
-  //   });
-  // });
-
 import { waitFor, within, render, fireEvent, screen, act } from '@testing-library/react-native';
 import React from 'react';
 import EditarRotina from "../private/pages/editarRotina";
@@ -268,6 +194,28 @@ describe("EditarRotina Component", () => {
     await waitFor(() => {
       const erroHora = getByTestId("Erro-hora");
       expect(erroHora.props.children.props.text).toBe("Campo obrigatório!");
+    });
+  });
+
+  it("Salvar com título muito grande", async () => {
+    const { getByText, getByPlaceholderText } = render(<EditarRotina />);
+
+    const titulo = getByPlaceholderText("Adicionar título");
+    const salvar = getByText("Salvar");
+
+    await act(async () => {
+      fireEvent.changeText(
+        titulo,
+        "Por que o livro de matemática está sempre triste? Porque tem muitos problemas! hahahahahahhahahahahhahahaahahahahahahhahahahahahahahahahahahhahaahahahahahahahahah"
+      );
+      fireEvent.press(salvar);
+    });
+
+    await waitFor(() => {
+      const erroTitulo = getByText(
+        "O título deve ter no máximo 100 caractéres."
+      );
+      expect(erroTitulo).toBeTruthy();
     });
   });
 

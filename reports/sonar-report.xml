@@ -1,11 +1,12 @@
 <testExecutions version="1">
 <file path="src\app\__tests__\editarRotina.spec.tsx">
-<testCase name="EditarRotina Component deve renderizar todos os componentes" duration="1818" />
-<testCase name="EditarRotina Component deve atualizar os valores dos inputs corretamente" duration="353" />
-<testCase name="EditarRotina Component deve exibir mensagens de erro corretamente" duration="181" />
-<testCase name="EditarRotina Component deve solicitar permiss&#xf5;es de notifica&#xe7;&#xf5;es e obter o token" duration="143" />
-<testCase name="EditarRotina Component Salvar com descri&#xe7;&#xe3;o muito grande" duration="296" />
-<testCase name="EditarRotina Component Salvar hora com formato errado" duration="91" />
-<testCase name="EditarRotina Component Salvar sem hora" duration="88" />
+<testCase name="EditarRotina Component deve renderizar todos os componentes" duration="972" />
+<testCase name="EditarRotina Component deve atualizar os valores dos inputs corretamente" duration="479" />
+<testCase name="EditarRotina Component deve exibir mensagens de erro corretamente" duration="155" />
+<testCase name="EditarRotina Component deve solicitar permiss&#xf5;es de notifica&#xe7;&#xf5;es e obter o token" duration="79" />
+<testCase name="EditarRotina Component Salvar com descri&#xe7;&#xe3;o muito grande" duration="96" />
+<testCase name="EditarRotina Component Salvar hora com formato errado" duration="117" />
+<testCase name="EditarRotina Component Salvar sem hora" duration="144" />
+<testCase name="EditarRotina Component Salvar com t&#xed;tulo muito grande" duration="99" />
 </file>
 </testExecutions>
