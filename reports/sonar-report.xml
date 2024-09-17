@@ -1,6 +1,8 @@
 <testExecutions version="1">
-<file path="src\app\__tests__\layout.spec.tsx">
-<testCase name="AppLayout renderiza corretamente" duration="502" />
-<testCase name="AppLayout deve registrar e remover listeners de notifica&#xe7;&#xf5;es" duration="24" />
+<file path="src\app\__tests__\schema.spec.tsx">
+<testCase name="Database Schema deve ter a vers&#xe3;o correta" duration="6" />
+<testCase name="Database Schema deve ter as tabelas corretas" duration="185" />
+<testCase name="Database Schema deve ter as colunas corretas para cada tabela" duration="81" />
+<testCase name="Database Schema deve ter as colunas corretas com o tipo correto" duration="55" />
 </file>
 </testExecutions>
