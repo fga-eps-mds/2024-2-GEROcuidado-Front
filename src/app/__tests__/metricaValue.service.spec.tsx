@@ -12,8 +12,8 @@ import { IValorMetricaBody, IMetricaValueFilter, IOrder } from "../interfaces/me
   
     describe("getAllMetricaValues", () => {
       it("deve chamar a API corretamente ao obter todos os valores de métrica", async () => {
-        const mockFilter: IMetricaValueFilter = { /* defina um mock válido de filtro */ };
-        const mockOrder: IOrder = { /* defina uma ordem válida */ };
+        const mockFilter: IMetricaValueFilter = { };
+        const mockOrder: IOrder = {  };
   
         const mockResponse = {
           status: 200,
@@ -53,4 +53,35 @@ import { IValorMetricaBody, IMetricaValueFilter, IOrder } from "../interfaces/me
         await expect(getAllMetricaValues(mockFilter, mockOrder)).rejects.toThrow("Erro na API");
     });
   });
+
+  describe("postMetricaValue", () => {
+    it("deve chamar a API corretamente ao criar um valor de métrica", async () => {
+      const mockBody: IValorMetricaBody = { };
+      const mockToken = "token-exemplo";
+
+      const mockResponse = {
+        status: 201,
+        json: jest.fn().mockResolvedValue({ data: { id: 1 } }),
+      };
+
+      global.fetch.mockResolvedValue(mockResponse);
+
+      const result = await postMetricaValue(mockBody, mockToken);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        BASE_URL,
+        expect.objectContaining({
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${mockToken}`,
+          },
+          body: JSON.stringify(mockBody),
+        }),
+      );
+
+      expect(result).toEqual({ data: { id: 1 } });
+    });
+});
   
