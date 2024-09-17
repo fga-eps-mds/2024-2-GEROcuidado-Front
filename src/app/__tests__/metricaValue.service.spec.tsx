@@ -98,3 +98,33 @@ import { IValorMetricaBody, IMetricaValueFilter, IOrder } from "../interfaces/me
       await expect(postMetricaValue(mockBody, mockToken)).rejects.toThrow("Erro na API");
     });
   });
+
+  describe("deleteMetricaValue", () => {
+    it("deve chamar a API corretamente ao deletar um valor de métrica", async () => {
+      const mockId = 1;
+      const mockToken = "token-exemplo";
+
+      const mockResponse = {
+        status: 200,
+        json: jest.fn().mockResolvedValue({ message: "Deletado com sucesso" }),
+      };
+
+      global.fetch.mockResolvedValue(mockResponse);
+
+      const result = await deleteMetricaValue(mockId, mockToken);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        `${BASE_URL}/${mockId}`,
+        expect.objectContaining({
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${mockToken}`,
+          },
+        }),
+      );
+
+      expect(result).toEqual({ message: "Deletado com sucesso" });
+    });
+});
