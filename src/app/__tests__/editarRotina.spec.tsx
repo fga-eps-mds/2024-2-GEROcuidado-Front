@@ -1,149 +1,12 @@
-// import React from "react";
-// import { render, fireEvent, waitFor, act, screen } from "@testing-library/react-native";
-// import EditarRotina from "../private/pages/editarRotina";
-// import { useLocalSearchParams } from 'expo-router';
-
-
-// // Pending correction
-// describe("EditarRotina Component", () => {
-//   it("Does nothing", async () => {
-//     // ...
-//   });
-
-  // it("Salvar sem título", async () => {
-  //   const { getByText, getByPlaceholderText, getByTestId } = render(
-  //     <EditarRotina />
-  //   );
-
-  //   const titulo = getByPlaceholderText("Adicionar título");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(titulo, "");
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroTitulo = getByTestId("Erro-titulo");
-  //     expect(erroTitulo.props.children.props.text).toBe("Campo obrigatório!");
-  //   });
-  // });
-
-  // it("Salvar com título muito grande", async () => {
-  //   const { getByText, getByPlaceholderText } = render(<EditarRotina />);
-
-  //   const titulo = getByPlaceholderText("Adicionar título");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(
-  //       titulo,
-  //       "Por que o livro de matemática está sempre triste? Porque tem muitos problemas! hahahahahahhahahahahhahahaahahahahahahhahahahahahahahahahahahhahaahahahahahahahahah"
-  //     );
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroTitulo = getByText(
-  //       "O título deve ter no máximo 100 caractéres."
-  //     );
-  //     expect(erroTitulo).toBeTruthy();
-  //   });
-  // });
-
-  // it("Salvar data com formato errado", async () => {
-  //   const { getByText, getByPlaceholderText, getByTestId } = render(
-  //     <EditarRotina />
-  //   );
-
-  //   const data = getByPlaceholderText("Data da rotina");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(data, "2010");
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroData = getByTestId("Erro-data");
-  //     expect(erroData.props.children.props.text).toBe(
-  //       "Data deve ser no formato dd/mm/yyyy!"
-  //     );
-  //   });
-  // });
-
-  // it("Salvar sem hora", async () => {
-  //   const { getByText, getByPlaceholderText, getByTestId } = render(
-  //     <EditarRotina />
-  //   );
-
-  //   const hora = getByPlaceholderText("Horário de início");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(hora, "");
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroHora = getByTestId("Erro-hora");
-  //     expect(erroHora.props.children.props.text).toBe("Campo obrigatório");
-  //   });
-  // });
-
-  // it("Salvar hora com formato errado", async () => {
-  //   const { getByText, getByPlaceholderText, getByTestId } = render(
-  //     <EditarRotina />
-  //   );
-
-  //   const hora = getByPlaceholderText("Horário de início");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(hora, "201");
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroHora = getByTestId("Erro-hora");
-  //     expect(erroHora.props.children.props.text).toBe(
-  //       "Hora deve ser no formato hh:mm!"
-  //     );
-  //   });
-  // });
-
-  // it("Salvar com descrição muito grande", async () => {
-  //   const { getByText, getByPlaceholderText } = render(<EditarRotina />);
-
-  //   const descricao = getByPlaceholderText("Descrição");
-  //   const salvar = getByText("Salvar");
-
-  //   await act(async () => {
-  //     fireEvent.changeText(
-  //       descricao,
-  //       "Num universo vasto e misterioso, onde galáxias dançam em uma sinfonia cósmica, a teia da existência se entrelaça, conectando cada átomo e cada pensamento em uma tapeçaria intricada de tempo e espaço; neste intricado emaranhado, as histórias dos indivíduos se entrelaçam, tecendo um tecido social complexo onde sonhos se desdobram e destinos se entrelaçam, criando uma narrativa épica que transcende as fronteiras do tempo, desafiando a compreensão humana e convidando-nos a contemplar a beleza efêmera da vida, como se fôssemos observadores temporários de um espetáculo cósmico em constante evolução, onde cada escolha, cada suspiro, ecoa através das eras, deixando uma marca indelével na vastidão do infinito."
-  //     );
-  //     fireEvent.press(salvar);
-  //   });
-
-  //   await waitFor(() => {
-  //     const erroDescricao = getByText(
-  //       "A descrição deve ter no máximo 300 caracteres."
-  //     );
-  //     expect(erroDescricao).toBeTruthy();
-  //   });
-  // });
-// });
-
-
-import { within, render, fireEvent, screen, waitFor  } from '@testing-library/react-native';
+import { waitFor, within, render, fireEvent, screen, act } from '@testing-library/react-native';
 import React from 'react';
 import EditarRotina from "../private/pages/editarRotina";
 import { useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import * as router from 'expo-router';
 import * as Notifications from 'expo-notifications';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CustomPermissionStatus, CustomExpoPushToken } from '../../../__mocks__/notifications';
+import { PermissionStatus } from 'expo-notifications'; // Importa a enum PermissionStatus
 jest.mock('expo-notifications', () => require("../../../__mocks__/expo-notifications"));
 
 
@@ -165,9 +28,26 @@ jest.mock('expo-notifications', () => ({
   setNotificationChannelAsync: jest.fn(),
 }));
 
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: jest.fn().mockResolvedValue(JSON.stringify({ id: '1', nome: 'Idoso Teste' })),
-}));
+/// Mock das funções de notificações com propriedades alinhadas
+jest.spyOn(Notifications, 'getPermissionsAsync').mockResolvedValueOnce({
+  status: 'granted', // Use o valor literal, se o enum não estiver disponível
+  expires: 'never',
+  granted: true,
+  canAskAgain: true,
+} as any); // Use `as any` se necessário para evitar erros de tipo
+
+jest.spyOn(Notifications, 'requestPermissionsAsync').mockResolvedValueOnce({
+  status: 'granted', // Use o valor literal, se o enum não estiver disponível
+  expires: 'never',
+  granted: true,
+  canAskAgain: true,
+} as any); // Use `as any` se necessário para evitar erros de tipo
+
+jest.spyOn(Notifications, 'getExpoPushTokenAsync').mockResolvedValueOnce({
+  data: 'mockToken',
+  type: 'expo', // Ajuste conforme o tipo esperado
+} as any); // Use `as any` se necessário para evitar erros de tipo
+
 
 describe("EditarRotina Component", () => {
   beforeEach(() => {
@@ -253,5 +133,98 @@ describe("EditarRotina Component", () => {
     });
   });
   
+  test('deve solicitar permissões de notificações e obter o token', async () => {
+    render(<EditarRotina />);
   
+    // Espera que a função de notificações tenha sido chamada
+    await waitFor(() => {
+      expect(Notifications.getPermissionsAsync).toHaveBeenCalled();
+      expect(Notifications.getExpoPushTokenAsync).toHaveBeenCalled();
+    });
+  });
+
+  it("Salvar com descrição muito grande", async () => {
+    const { getByText, getByPlaceholderText } = render(<EditarRotina />);
+
+    const descricao = getByPlaceholderText("Descrição");
+    const salvar = getByText("Salvar");
+
+    await act(async () => {
+      fireEvent.changeText(
+        descricao,
+        "Num universo vasto e misterioso, onde galáxias dançam em uma sinfonia cósmica, a teia da existência se entrelaça, conectando cada átomo e cada pensamento em uma tapeçaria intricada de tempo e espaço; neste intricado emaranhado, as histórias dos indivíduos se entrelaçam, tecendo um tecido social complexo onde sonhos se desdobram e destinos se entrelaçam, criando uma narrativa épica que transcende as fronteiras do tempo, desafiando a compreensão humana e convidando-nos a contemplar a beleza efêmera da vida, como se fôssemos observadores temporários de um espetáculo cósmico em constante evolução, onde cada escolha, cada suspiro, ecoa através das eras, deixando uma marca indelével na vastidão do infinito."
+      );
+      fireEvent.press(salvar);
+    });
+
+    await waitFor(() => {
+      const erroDescricao = getByText(
+        "A descrição deve ter no máximo 300 caracteres."
+      );
+      expect(erroDescricao).toBeTruthy();
+    });
+  });
+
+  it("Salvar hora com formato errado", async () => {
+    const { getByText, getByPlaceholderText, getByTestId } = render(
+      <EditarRotina />
+    );
+
+    const hora = getByPlaceholderText("Horário de início");
+    const salvar = getByText("Salvar");
+
+    await act(async () => {
+      fireEvent.changeText(hora, "201");
+      fireEvent.press(salvar);
+    });
+
+    await waitFor(() => {
+      const erroHora = getByTestId("Erro-hora");
+      expect(erroHora.props.children.props.text).toBe(
+        "Hora deve ser no formato hh:mm!"
+      );
+    });
+  });
+
+  it("Salvar sem hora", async () => {
+    const { getByText, getByPlaceholderText, getByTestId } = render(
+      <EditarRotina />
+    );
+
+    const hora = getByPlaceholderText("Horário de início");
+    const salvar = getByText("Salvar");
+
+    await act(async () => {
+      fireEvent.changeText(hora, "");
+      fireEvent.press(salvar);
+    });
+
+    await waitFor(() => {
+      const erroHora = getByTestId("Erro-hora");
+      expect(erroHora.props.children.props.text).toBe("Campo obrigatório!");
+    });
+  });
+
+  it("Salvar com título muito grande", async () => {
+    const { getByText, getByPlaceholderText } = render(<EditarRotina />);
+
+    const titulo = getByPlaceholderText("Adicionar título");
+    const salvar = getByText("Salvar");
+
+    await act(async () => {
+      fireEvent.changeText(
+        titulo,
+        "Por que o livro de matemática está sempre triste? Porque tem muitos problemas! hahahahahahhahahahahhahahaahahahahahahhahahahahahahahahahahahhahaahahahahahahahahah"
+      );
+      fireEvent.press(salvar);
+    });
+
+    await waitFor(() => {
+      const erroTitulo = getByText(
+        "O título deve ter no máximo 100 caractéres."
+      );
+      expect(erroTitulo).toBeTruthy();
+    });
+  });
+
 });
