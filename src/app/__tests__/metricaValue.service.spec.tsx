@@ -127,4 +127,18 @@ import { IValorMetricaBody, IMetricaValueFilter, IOrder } from "../interfaces/me
 
       expect(result).toEqual({ message: "Deletado com sucesso" });
     });
-});
+
+    it("deve lançar um erro se a resposta da API não for bem-sucedida", async () => {
+        const mockId = 1;
+        const mockToken = "token-exemplo";
+  
+        const mockResponse = {
+          status: 500,
+          json: jest.fn().mockResolvedValue({ message: "Erro ao deletar" }),
+        };
+  
+        global.fetch.mockResolvedValue(mockResponse);
+  
+        await expect(deleteMetricaValue(mockId, mockToken)).rejects.toThrow("Erro ao deletar");
+      });
+    });
