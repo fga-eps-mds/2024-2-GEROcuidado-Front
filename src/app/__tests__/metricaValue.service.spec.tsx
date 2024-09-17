@@ -38,5 +38,19 @@ import { IValorMetricaBody, IMetricaValueFilter, IOrder } from "../interfaces/me
         expect(result).toEqual({ data: [] });
       });
     });
+
+    it("deve lançar um erro se a resposta da API não for bem-sucedida", async () => {
+        const mockFilter: IMetricaValueFilter = {};
+        const mockOrder: IOrder = {};
+  
+        const mockResponse = {
+          status: 500,
+          json: jest.fn().mockResolvedValue({ message: "Erro na API" }),
+        };
+  
+        global.fetch.mockResolvedValue(mockResponse);
+  
+        await expect(getAllMetricaValues(mockFilter, mockOrder)).rejects.toThrow("Erro na API");
+    });
   });
   
