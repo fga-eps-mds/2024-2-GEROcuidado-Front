@@ -8,10 +8,9 @@ interface IProps {
   item: IPublicacaoUsuario;
 }
 
-export default function PublicacaoVisualizar({ item }: Readonly<IProps>) {
+export default function PublicacaoVisualizar({ item }: IProps) {
   const hasFoto = (foto: string | null | undefined) => {
     if (!foto) return false;
-
     const raw = foto.split("data:image/png;base64,")[1];
     return raw.length > 0;
   };
