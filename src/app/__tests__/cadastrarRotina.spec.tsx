@@ -4,19 +4,19 @@ import CadastrarRotina from '../private/pages/cadastrarRotina'; // Adjust path a
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Mocking Toast and AsyncStorage
+
 jest.mock('react-native-toast-message', () => ({
   show: jest.fn(),
 }));
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: jest.fn(() => Promise.resolve(null)), // Return a resolved promise
-  setItem: jest.fn(() => Promise.resolve()),     // Ensure setItem returns a Promise
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
 }));
 
 describe('CadastrarRotina Component', () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Clears mocks before each test
+    jest.clearAllMocks();
   });
 
   // Test for required title field
@@ -33,7 +33,7 @@ describe('CadastrarRotina Component', () => {
     });
   });
 
-  it("Mostra erro quando o título é muito longo", async () => {
+  it("should show error if title is too long", async () => {
     const { getByText, getByPlaceholderText, getByTestId } = render(<CadastrarRotina />);
 
     const titulo = getByPlaceholderText("Adicionar título");
@@ -77,7 +77,7 @@ describe('CadastrarRotina Component', () => {
   });
 
   // Test for wrong format "data" field validation
-  it("Mostra erro para o formato de data incorreta", async () => {
+  it("should show error if date has the wrong format", async () => {
     const { getByText, getByPlaceholderText, getByTestId } = render(<CadastrarRotina />);
 
     const data = getByPlaceholderText("Data da rotina");
@@ -93,27 +93,23 @@ describe('CadastrarRotina Component', () => {
   });
 
   // Test for empty "data" field validation
-  it('Mostra erro para campo de data vazio', async () => {
+  it('should show error if date is empty', async () => {
     render(<CadastrarRotina />);
   
-    // Get the data input field and the save button
     const dataInput = screen.getByPlaceholderText('Data da rotina');
     const saveButton = screen.getByText('Salvar');
   
-    // Trigger the change in data input and press the save button
-    fireEvent.changeText(dataInput, ''); // Leave the field empty
+    fireEvent.changeText(dataInput, '');
     fireEvent.press(saveButton);
   
-    // Wait for the error message to be displayed
     await waitFor(() => {
-      // Find the error message element and check its content
       const erroData = screen.getByTestId('Erro-data');
       expect(erroData.props.children.props.text).toBe('Campo obrigatório');
     });
   });
 
-  //Test for wrong time format
-  it("Mostra erro para o formato de tempo incorreto", async () => {
+  // Test for wrong format "hora" field validation
+  it("should show error if time has the wrong format", async () => {
     const { getByText, getByPlaceholderText, getByTestId } = render(<CadastrarRotina />);
 
     const hora = getByPlaceholderText("Horário de início");
@@ -128,8 +124,8 @@ describe('CadastrarRotina Component', () => {
     expect(erroHora.props.children.props.text).toBe("Hora deve ser no formato hh:mm!");
   });
 
-  //Test for empty time format
-  it("Mostra erro para o formato de tempo vazio", async () => {
+  // Test for empty "hora" field validation
+  it("should show error if time is empty", async () => {
     const { getByText, getByPlaceholderText, getByTestId } = render(<CadastrarRotina />);
 
     const hora = getByPlaceholderText("Horário de início");
@@ -144,8 +140,8 @@ describe('CadastrarRotina Component', () => {
     expect(erroHora.props.children.props.text).toBe("Campo obrigatório");
   });
 
-  //Test for long too description
-  it("Mostra erro quando descrição é muito longa", async () => {
+  // Test for too long "descrição" field validation
+  it("should show error if description is too long", async () => {
     const { getByText, getByPlaceholderText, getByTestId } = render(<CadastrarRotina />);
 
     const descricao = getByPlaceholderText("Descrição");

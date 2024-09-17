@@ -1,13 +1,13 @@
 <testExecutions version="1">
 <file path="src\app\__tests__\cadastrarRotina.spec.tsx">
-<testCase name="CadastrarRotina Component should show error if title is empty" duration="385" />
-<testCase name="CadastrarRotina Component Mostra erro quando o t&#xed;tulo &#xe9; muito longo" duration="73" />
-<testCase name="CadastrarRotina Component should render input fields and save button" duration="44" />
-<testCase name="CadastrarRotina Component should hide error message when input is corrected" duration="52" />
-<testCase name="CadastrarRotina Component Mostra erro para o formato de data incorreta" duration="42" />
-<testCase name="CadastrarRotina Component Mostra erro para campo de data vazio" duration="45" />
-<testCase name="CadastrarRotina Component Mostra erro para o formato de tempo incorreto" duration="40" />
-<testCase name="CadastrarRotina Component Mostra erro para o formato de tempo vazio" duration="43" />
-<testCase name="CadastrarRotina Component Mostra erro quando descri&#xe7;&#xe3;o &#xe9; muito longa" duration="37" />
+<testCase name="CadastrarRotina Component should show error if title is empty" duration="3270" />
+<testCase name="CadastrarRotina Component should show error if title is too long" duration="127" />
+<testCase name="CadastrarRotina Component should render input fields and save button" duration="26" />
+<testCase name="CadastrarRotina Component should hide error message when input is corrected" duration="75" />
+<testCase name="CadastrarRotina Component should show error if date has the wrong format" duration="35" />
+<testCase name="CadastrarRotina Component should show error if date is empty" duration="30" />
+<testCase name="CadastrarRotina Component should show error if time has the wrong format" duration="32" />
+<testCase name="CadastrarRotina Component should show error if time is empty" duration="29" />
+<testCase name="CadastrarRotina Component should show error if description is too long" duration="32" />
 </file>
 </testExecutions>
