@@ -102,19 +102,19 @@ export default function EditarRotina() {
     //   erros.titulo = "O nome completo deve ter pelo menos 5 caractéres.";
 
     if (!data) {
-      erros.data = "Campo obrigatório";
+      erros.data = "Campo obrigatório!";
     } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
       erros.data = "Data deve ser no formato dd/mm/yyyy!";
     }
 
     if (!hora) {
-      erros.hora = "Campo obrigatório";
+      erros.hora = "Campo obrigatório!";
     } else if (!/^\d{2}:\d{2}$/.test(hora)) {
       erros.hora = "Hora deve ser no formato hh:mm!";
     }
 
     if (!categoria) {
-      erros.categoria = "Campo obrigatório";
+      erros.categoria = "Campo obrigatório!";
     }
 
     if (descricao && descricao?.length > 300) {

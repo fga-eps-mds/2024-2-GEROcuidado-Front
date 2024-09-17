@@ -222,4 +222,24 @@ describe("EditarRotina Component", () => {
     fireEvent.changeText(screen.getByPlaceholderText('Descrição'), 'Nova Descrição');
     expect(screen.getByPlaceholderText('Descrição').props.value).toBe('Nova Descrição');
   });
+
+  test('deve exibir mensagens de erro corretamente', async () => {
+    render(<EditarRotina />);
+  
+    // Deixa os campos de título e data vazios para disparar erros
+    fireEvent.changeText(screen.getByPlaceholderText('Adicionar título'), '');
+    fireEvent.changeText(screen.getByPlaceholderText('Data da rotina'), '');
+    fireEvent.changeText(screen.getByPlaceholderText('Horário de início'), '');
+  
+    // Simula a validação
+    fireEvent.press(screen.getByText('Salvar'));
+  
+    // Espera os erros aparecerem
+    await waitFor(() => {
+      const errorMessages = screen.getAllByText('Campo obrigatório!');
+      expect(errorMessages.length).toBe(3); // Espera 3 mensagens de erro
+    });
+  });
+  
+  
 });
