@@ -319,7 +319,9 @@ export default function CadastrarRotina() {
               search={false}
             />
           </View>
-          <ErrorMessage show={showErrors} text={erros.categoria} />
+          <View testID="Erro-categoria">
+            <ErrorMessage show={showErrors} text={erros.categoria}/>
+          </View>
         </View>
 
         <View style={styles.repete}>

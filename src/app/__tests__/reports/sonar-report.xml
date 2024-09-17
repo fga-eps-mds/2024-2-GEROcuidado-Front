@@ -1,13 +1,14 @@
 <testExecutions version="1">
 <file path="src\app\__tests__\cadastrarRotina.spec.tsx">
-<testCase name="CadastrarRotina Component should show error if title is empty" duration="3270" />
-<testCase name="CadastrarRotina Component should show error if title is too long" duration="127" />
-<testCase name="CadastrarRotina Component should render input fields and save button" duration="26" />
-<testCase name="CadastrarRotina Component should hide error message when input is corrected" duration="75" />
-<testCase name="CadastrarRotina Component should show error if date has the wrong format" duration="35" />
-<testCase name="CadastrarRotina Component should show error if date is empty" duration="30" />
-<testCase name="CadastrarRotina Component should show error if time has the wrong format" duration="32" />
-<testCase name="CadastrarRotina Component should show error if time is empty" duration="29" />
-<testCase name="CadastrarRotina Component should show error if description is too long" duration="32" />
+<testCase name="CadastrarRotina Component should show error if title is empty" duration="286" />
+<testCase name="CadastrarRotina Component should show error if title is too long" duration="53" />
+<testCase name="CadastrarRotina Component should render input fields and save button" duration="31" />
+<testCase name="CadastrarRotina Component should hide error message when input is corrected" duration="46" />
+<testCase name="CadastrarRotina Component should show error if date has the wrong format" duration="39" />
+<testCase name="CadastrarRotina Component should show error if date is empty" duration="36" />
+<testCase name="CadastrarRotina Component should show error if time has the wrong format" duration="30" />
+<testCase name="CadastrarRotina Component should show error if time is empty" duration="36" />
+<testCase name="CadastrarRotina Component should show error if description is too long" duration="28" />
+<testCase name="CadastrarRotina Component should show error if a category is not selected" duration="27" />
 </file>
 </testExecutions>

@@ -155,4 +155,19 @@ describe('CadastrarRotina Component', () => {
     const erroDescricao = getByTestId("Erro-descricao");
     expect(erroDescricao.props.children.props.text).toBe("A descrição deve ter no máximo 300 caracteres.");
   });
+
+  // Test for empty "categoria" field validation
+  it("should show error if a category is not selected", async () => {
+    const { getByText, getByTestId } = render(<CadastrarRotina />);
+  
+    const salvar = getByText("Salvar");
+  
+    act(() => {
+      fireEvent.press(salvar);
+    });
+  
+    const erroCategoria = getByTestId("Erro-categoria");
+    expect(erroCategoria.props.children.props.text).toBe("Campo obrigatório");
+  });
+
 });
