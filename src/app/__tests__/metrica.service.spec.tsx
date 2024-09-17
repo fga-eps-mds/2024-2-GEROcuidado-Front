@@ -155,3 +155,33 @@ describe("updateMetrica", () => {
     await expect(updateMetrica(mockId, mockBody, mockToken)).rejects.toThrow("Erro na API");
   });
 }); 
+
+describe("getSomaHidratacao", () => {
+  it("deve chamar a API corretamente ao obter a soma de hidratação", async () => {
+    const mockId = 1;
+    const mockToken = "seu-token-de-exemplo";
+
+    const mockResponse = {
+      status: 200,
+      json: jest.fn().mockResolvedValue({ data: 100 }),
+    };
+
+    global.fetch.mockResolvedValue(mockResponse);
+
+    const result = await getSomaHidratacao(mockId, mockToken);
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      `${BASE_URL}/soma-hidratacao/${mockId}`,
+      expect.objectContaining({
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${mockToken}`,
+        },
+      }),
+    );
+
+    expect(result).toBe(100);
+  });
+});
