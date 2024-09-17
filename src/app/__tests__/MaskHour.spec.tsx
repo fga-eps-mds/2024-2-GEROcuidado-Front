@@ -119,4 +119,20 @@ describe("MaskInput Component", () => {
     fireEvent.changeText(input, "123456");
     expect(mockInputMaskChange).toHaveBeenCalledWith("12:3456");
   });
+
+  it("should reset the input if the first digit of the hour is greater than 2", () => {
+    const mockInputMaskChange = jest.fn();
+    const { getByPlaceholderText } = render(
+      <MaskInput
+        inputMaskChange={mockInputMaskChange}
+        placeholder="Enter time"
+      />
+    );
+
+    const input = getByPlaceholderText("Enter time");
+
+    // Simulate invalid hour (first digit greater than 2)
+    fireEvent.changeText(input, "3923");
+    expect(mockInputMaskChange).toHaveBeenCalledWith("");
+  });
 });
