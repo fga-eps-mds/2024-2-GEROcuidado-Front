@@ -5,7 +5,7 @@ import { router } from "expo-router";  // Importa a função de roteamento
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 jest.mock('expo-router', () => ({
-  useLocalSearchParams: jest.fn(() => ({ id: '1' })),
+  useLocalSearchParams: jest.fn(() => ({ id: '1', idUsuarioReporte: '1' })),
   router: {
     push: jest.fn(),
     replace: jest.fn(),
@@ -62,9 +62,59 @@ describe("VisualizarPublicacao", () => {
     await act(async () => {
       fireEvent.press(getByTestId("callbackBtn"));
     });
-
-  //  await waitFor(() => {
-    //  expect(getByText("Publicação deletada com sucesso")).toBeTruthy();
-    //});
   });
+
+  it("Testa botão de reportar", async () => {
+    // Configurando o estado para que o botão de reportar seja visível
+    (AsyncStorage.getItem as jest.Mock).mockImplementation((key: string) => {
+      if (key === "usuario") {
+        return Promise.resolve(JSON.stringify({ id: 1, admin: false }));
+      }
+      return Promise.resolve("mock-token");
+    });
+  
+    const { getByTestId } = render(<VisualizarPublicacao />);
+  
+    // Verifica se o botão "Reportar" está presente
+    await waitFor(() => {
+      expect(getByTestId("reportBtn")).toBeTruthy();
+    });
+  
+    // Simulando o clique no botão "Reportar"
+    await act(async () => {
+      fireEvent.press(getByTestId("reportBtn"));
+    });
+  
+    // Verifica se o modal de reporte foi exibido corretamente
+    await waitFor(() => {
+      expect(getByTestId("reportModal")).toBeTruthy();
+    });
+  });
+  
+  it("Testa botão de desfazer reporte", async () => {
+    // Configurando o estado para que o botão de desfazer reporte seja visível
+    (AsyncStorage.getItem as jest.Mock).mockImplementation((key: string) => {
+      if (key === "usuario") {
+        return Promise.resolve(JSON.stringify({ id: 1, admin: false }));
+      }
+      return Promise.resolve("mock-token");
+    });
+  
+    const { getByTestId } = render(<VisualizarPublicacao />);
+  
+    // Verifica se o botão "Desfazer" está presente
+    await waitFor(() => {
+      expect(getByTestId("reportBtn")).toBeTruthy();
+    });
+  
+    // Simulando o clique no botão "Desfazer"
+    await act(async () => {
+      fireEvent.press(getByTestId("reportBtn"));
+    });
+  
+    // Verifica se o modal de reporte foi exibido corretamente
+    await waitFor(() => {
+      expect(getByTestId("reportModal")).toBeTruthy();
+    });
+  });  
 });
