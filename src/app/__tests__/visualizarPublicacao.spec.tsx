@@ -117,4 +117,54 @@ describe("VisualizarPublicacao", () => {
       expect(getByTestId("reportModal")).toBeTruthy();
     });
   });  
+
+it("Testa a navegação para a tela de edição", async () => {
+  // Mock do AsyncStorage
+  (AsyncStorage.getItem as jest.Mock).mockImplementation((key: string) => {
+    if (key === "usuario") {
+      return Promise.resolve(JSON.stringify({ id: 1, admin: true }));
+    }
+    return Promise.resolve("mock-token");
+  });
+
+  // Mock dos parâmetros necessários
+  const params = {
+    id: 1,
+    titulo: 'Título da Publicação',
+    descricao: 'Descrição da Publicação',
+    dataHora: new Date().toISOString(),
+    categoria: 'GERAL',
+    idUsuario: 1,
+    idUsuarioReporte: '',
+  };
+
+  // Mock da função useLocalSearchParams
+  jest.spyOn(require('expo-router'), 'useLocalSearchParams').mockReturnValue(params);
+
+  // Renderiza o componente com parâmetros simulados
+  const { getByTestId } = render(<VisualizarPublicacao />);
+
+  // Aguarda a renderização completa do botão de editar
+  await waitFor(() => {
+    expect(getByTestId("editBtn")).toBeTruthy();
+  });
+
+  // Simulando o clique no botão "Editar"
+  await act(async () => {
+    fireEvent.press(getByTestId("editBtn"));
+  });
+
+  // Verifica se a função de navegação foi chamada com os parâmetros esperados
+  expect(router.push).toHaveBeenCalledWith(expect.objectContaining({
+    pathname: "/private/pages/editarPublicacao",
+    params: expect.objectContaining({
+      id: 1,
+      titulo: 'Título da Publicação',
+      descricao: 'Descrição da Publicação',
+      categoria: 'GERAL',
+      idUsuario: 1,
+      idUsuarioReporte: '',
+    }),
+  }));
+});
 });
