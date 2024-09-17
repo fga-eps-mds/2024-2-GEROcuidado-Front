@@ -139,5 +139,19 @@ describe("updateMetrica", () => {
       }),
     );
   });
-});
 
+  it("deve lançar um erro se a resposta da API não for bem-sucedida", async () => {
+    const mockId = 1;
+    const mockBody = {};
+    const mockToken = "seu-token-de-exemplo";
+
+    const mockResponse = {
+      status: 500,
+      json: jest.fn().mockResolvedValue({ message: "Erro na API" }),
+    };
+
+    global.fetch.mockResolvedValue(mockResponse);
+
+    await expect(updateMetrica(mockId, mockBody, mockToken)).rejects.toThrow("Erro na API");
+  });
+}); 
