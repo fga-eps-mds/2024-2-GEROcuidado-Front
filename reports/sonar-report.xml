@@ -1,4 +1,5 @@
 <testExecutions version="1">
+<<<<<<< Updated upstream
 <file path="src\app\__tests__\editarRotina.spec.tsx">
 <testCase name="EditarRotina Component deve renderizar todos os componentes" duration="972" />
 <testCase name="EditarRotina Component deve atualizar os valores dos inputs corretamente" duration="479" />
@@ -8,5 +9,385 @@
 <testCase name="EditarRotina Component Salvar hora com formato errado" duration="117" />
 <testCase name="EditarRotina Component Salvar sem hora" duration="144" />
 <testCase name="EditarRotina Component Salvar com t&#xed;tulo muito grande" duration="99" />
+=======
+<file path="src/app/__tests__/user.service.spec.tsx">
+<testCase name="postUser deve fazer uma chamada de API bem-sucedida" duration="4" />
+<testCase name="postUser deve lidar com uma chamada de API com erro" duration="2" />
+<testCase name="updateUser deve fazer uma chamada de API bem-sucedida" duration="4" />
+<testCase name="updateUser deve lidar com uma chamada de API com erro" duration="3" />
+<testCase name="getUserById deve fazer uma chamada de API bem-sucedida" duration="10" />
+<testCase name="getUserById deve lidar com uma chamada de API com erro" duration="5" />
+<testCase name="deleteUserById deve fazer uma chamada de API bem-sucedida" duration="11" />
+<testCase name="deleteUserById deve lidar com uma chamada de API com erro" duration="3" />
+<testCase name="loginUser deve fazer uma chamada de API bem-sucedida" duration="12" />
+<testCase name="loginUser deve lidar com uma chamada de API com erro" duration="7" />
+</file>
+<file path="src/app/__tests__/modalmetrica.spec.tsx">
+<testCase name="ModalMetrica Component renderiza sem erros" duration="13147" />
+<testCase name="ModalMetrica Component exibe as unidades corretas" duration="18" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 1" duration="28" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 2" duration="15" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 3" duration="13" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 4" duration="32" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 5" duration="14" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 6" duration="20" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 7" duration="30" />
+<testCase name="ModalMetrica Component exibe as unidades corretas 8" duration="30" />
+<testCase name="ModalMetrica Component Exibe mensagem de erro para valor vazio" duration="20" />
+<testCase name="ModalMetrica Component fecha o modal ao pressionar o bot&#xe3;o Cancelar" duration="24" />
+<testCase name="ModalMetrica Component exibe mensagem de erro ao tentar salvar com valor inv&#xe1;lido" duration="20" />
+</file>
+<file path="src/app/__tests__/cadastrarIdoso.spec.tsx">
+<testCase name="CadastrarIdoso component renders correctly" duration="349" />
+<testCase name="CadastrarIdoso component Salvar sem nome" duration="72" />
+<testCase name="CadastrarIdoso component Salvar com nome muito grande" duration="75" />
+<testCase name="CadastrarIdoso component Salvar com nome curto" duration="88" />
+<testCase name="CadastrarIdoso component Salvar data com formato errado" duration="76" />
+<testCase name="CadastrarIdoso component Salvar com telefone errado" duration="84" />
+<testCase name="CadastrarIdoso component Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="98" />
+<testCase name="CadastrarIdoso component Cadastra um idoso com sucesso quando todos os dados est&#xe3;o v&#xe1;lidos" duration="341" />
+<testCase name="CadastrarIdoso component Navega para a tela anterior ao clicar no bot&#xe3;o de voltar quando canGoBack &#xe9; falso" duration="49" />
+<testCase name="CadastrarIdoso component Exibe mensagem de erro ao deixar campos obrigat&#xf3;rios em branco" duration="72" />
+</file>
+<file path="src/app/__tests__/forum.service.spec.tsx">
+<testCase name="getAllPublicacao Get: deve fazer uma chamada de API bem-sucedida" duration="2" />
+<testCase name="getAllPublicacao deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="postPublicacao Post: deve fazer uma chamada de API bem-sucedida" duration="3" />
+<testCase name="postPublicacao deve lidar com uma chamada de API com erro" duration="2" />
+<testCase name="updatePublicacao deve fazer uma chamada de API bem-sucedida" duration="3" />
+<testCase name="updatePublicacao deve lidar com uma chamada de API com erro" duration="2" />
+<testCase name="deletePublicacaoById deve fazer uma chamada de API bem-sucedida" duration="3" />
+<testCase name="deletePublicacaoById deve lidar com uma chamada de API com erro" duration="4" />
+</file>
+<file path="src/app/__tests__/idoso.service.spec.tsx">
+<testCase name="postIdoso deve fazer uma chamada de API bem-sucedida" duration="3" />
+<testCase name="postIdoso deve lidar com uma chamada de API com erro" duration="2" />
+<testCase name="updateIdoso deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="updateIdoso deve lidar com uma chamada de API com erro" duration="1" />
+<testCase name="getAllIdoso Get: deve fazer uma chamada de API bem-sucedida" duration="3" />
+<testCase name="getAllIdoso deve lidar com uma chamada de API com erro" duration="17" />
+<testCase name="deleteIdoso deve fazer uma chamada de API bem-sucedida" duration="4" />
+<testCase name="deleteIdoso deve lidar com uma chamada de API com erro" duration="6" />
+</file>
+<file path="src/app/__tests__/editarPerfil.spec.tsx">
+<testCase name="EditarPerfil component Atualiza nome com o input" duration="134" />
+<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome vazio" duration="64" />
+<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome muito curto" duration="60" />
+<testCase name="EditarPerfil component Exibe mensagem de erro ao tentar salvar com nome muito longo" duration="59" />
+<testCase name="EditarPerfil component N&#xe3;o exibe mensagem de erro ao salvar com nome v&#xe1;lido" duration="87" />
+<testCase name="EditarPerfil component Exibe mensagem de confirma&#xe7;&#xe3;o ao apagar conta" duration="57" />
+<testCase name="EditarPerfil component Apaga a conta corretamente ap&#xf3;s confirma&#xe7;&#xe3;o" duration="58" />
+<testCase name="EditarPerfil component Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="32" />
+<testCase name="EditarPerfil component Atualiza foto de perfil corretamente" duration="1053">
+<failure message="Error"><![CDATA[Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+@@ -4,6 +4,7 @@
+      1,
+      1,
+    ],
+    &quot;base64&quot;: true,
+    &quot;mediaTypes&quot;: &quot;Images&quot;,
++   &quot;quality&quot;: 0,
+  },
+
+Number of calls: 1
+    at Object.&lt;anonymous&gt; (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/src/app/__tests__/editarPerfil.spec.tsx:159:18)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+</file>
+<file path="src/app/__tests__/rotina.service.spec.tsx">
+<testCase name="postRotina deve fazer uma chamada de API bem-sucedida" duration="6" />
+<testCase name="postRotina deve lidar com uma chamada de API com erro" duration="2" />
+<testCase name="updateRotina deve fazer uma chamada de API bem-sucedida" duration="1" />
+<testCase name="updateRotina deve lidar com uma chamada de API com erro" duration="2" />
+<testCase name="getAllRotina Get: deve fazer uma chamada de API bem-sucedida" duration="3" />
+<testCase name="getAllRotina deve lidar com uma chamada de API com erro" duration="4" />
+<testCase name="deleteRotina deve fazer uma chamada de API bem-sucedida" duration="5" />
+<testCase name="deleteRotina deve lidar com uma chamada de API com erro" duration="2" />
+</file>
+<file path="src/app/__tests__/editarIdoso.spec.tsx">
+<testCase name="EditarIdoso deve renderizar o componente corretamente" duration="98" />
+<testCase name="EditarIdoso deve exibir erro quando Nome estiver vazio" duration="96" />
+<testCase name="EditarIdoso deve exibir erro quando Telefone Respons&#xe1;vel estiver vazio" duration="110" />
+<testCase name="EditarIdoso deve exibir erro quando Data de Nascimento estiver vazio" duration="79" />
+<testCase name="EditarIdoso deve exibir um modal de confirma&#xe7;&#xe3;o ao tentar apagar um idoso" duration="55" />
+<testCase name="EditarIdoso Mensagem de erro recebida ao editar Idoso:" duration="81" />
+<testCase name="EditarIdoso Mensagem de erro ao apagar Idoso" duration="63" />
+</file>
+<file path="src/app/__tests__/cadastro.spec.tsx">
+<testCase name="Cadastro Component renderiza corretamente" duration="141" />
+<testCase name="Cadastro Component deve chamar a fun&#xe7;&#xe3;o &apos;postUser&apos; quando n&#xe3;o h&#xe1; erros nos campos" duration="171" />
+<testCase name="Cadastro Component n&#xe3;o deve chamar a fun&#xe7;&#xe3;o &apos;postUser&apos; quando h&#xe1; espec&#xed;ficos erros nos campos" duration="157" />
+<testCase name="Cadastro Component n&#xe3;o deve chamar a fun&#xe7;&#xe3;o &apos;postUser&apos; quando h&#xe1; erros nos campos" duration="56" />
+<testCase name="Cadastro Component n&#xe3;o deve chamar a fun&#xe7;&#xe3;o &apos;postUser&apos; quando h&#xe1; erros espec&#xed;ficos de nome nos campos" duration="70" />
+<testCase name="Cadastro Component deve exibir o Toast de erro" duration="93" />
+<testCase name="Cadastro Component deve alterar o estado do escondeSenha" duration="49" />
+</file>
+<file path="src/app/__tests__/cardMetrica.spec.tsx">
+<testCase name="CardMetricas Component renderiza sem erros" duration="94" />
+<testCase name="CardMetricas Component exibe as unidades corretas" duration="22" />
+<testCase name="CardMetricas Component exibe as unidades corretas 1" duration="20" />
+<testCase name="CardMetricas Component exibe as unidades corretas 2" duration="15" />
+<testCase name="CardMetricas Component exibe as unidades corretas 3" duration="13" />
+<testCase name="CardMetricas Component exibe as unidades corretas 4" duration="17" />
+<testCase name="CardMetricas Component exibe as unidades corretas 5" duration="19" />
+<testCase name="CardMetricas Component exibe as unidades corretas 6" duration="19" />
+<testCase name="CardMetricas Component exibe as unidades corretas 7" duration="23" />
+<testCase name="CardMetricas Component exibe as unidades corretas 8" duration="17" />
+<testCase name="CardMetricas Component Deve retornar se n&#xe3;o houver dataHora" duration="12" />
+</file>
+<file path="src/app/__tests__/editarRotina.spec.tsx">
+<testCase name="EditarRotina Component Does nothing" duration="1" />
+</file>
+<file path="src/app/__tests__/cardValorMetrica.spec.tsx">
+<testCase name="CardValorMetrica Component renderiza corretamente" duration="64" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 1" duration="17" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 2" duration="37" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 3" duration="33" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 4" duration="19" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 5" duration="26" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 6" duration="48" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 7" duration="24" />
+<testCase name="CardValorMetrica Component exibe as unidades corretas 8" duration="33" />
+</file>
+<file path="src/app/__tests__/image.helper.spec.tsx">
+<testCase name="getImageUri deve retornar uma URI de imagem v&#xe1;lida para um Buffer fornecido" duration="1" />
+<testCase name="getImageUri Imagem ja esta codificada" duration="1" />
+<testCase name="getImageUri Imagem vazia" duration="11" />
+</file>
+<file path="src/app/__tests__/criaPublicacao.spec.tsx">
+<testCase name="CriaPublicacao deve exibir erros de valida&#xe7;&#xe3;o quando T&#xed;tulo estiver vazio" duration="407" />
+<testCase name="CriaPublicacao deve exibir erros de valida&#xe7;&#xe3;o quando Descri&#xe7;&#xe3;o estiver vazio" duration="245" />
+<testCase name="CriaPublicacao n&#xe3;o deve exibir erros de valida&#xe7;&#xe3;o quando T&#xed;tulo, Descri&#xe7;&#xe3;o e Categoria est&#xe3;o preenchidos" duration="242" />
+<testCase name="CriaPublicacao deve exibir mensagem de erro para publica&#xe7;&#xe3;o" duration="177" />
+</file>
+<file path="src/app/__tests__/MaskHour.spec.tsx">
+<testCase name="MaskInput Component should apply mask correctly for valid times" duration="81" />
+<testCase name="MaskInput Component should clear the input correctly" duration="9" />
+<testCase name="MaskInput Component should handle different lengths of input" duration="16" />
+<testCase name="MaskInput Component should ignore non-numeric characters" duration="24" />
+<testCase name="MaskInput Component should not call inputMaskChange if the value does not change" duration="15" />
+<testCase name="MaskInput Component should apply mask correctly for inputs longer than required" duration="14" />
+</file>
+<file path="src/app/__tests__/ModalMeta.spec.tsx">
+<testCase name="ModalMeta Component should render modal when visible prop is true" duration="77" />
+<testCase name="ModalMeta Component should not render modal when visible prop is false" duration="4" />
+<testCase name="ModalMeta Component should show error message when input is empty and Save button is pressed" duration="36" />
+<testCase name="ModalMeta Component should show error message when input is invalid format and Save button is pressed" duration="42" />
+<testCase name="ModalMeta Component should call callbackFn with input value when input is valid and Save button is pressed" duration="20" />
+<testCase name="ModalMeta Component should call closeModal when Cancel button is pressed" duration="32" />
+</file>
+<file path="src/app/__tests__/listarIdosos.spec.tsx">
+<testCase name="ListarIdosos deve exibir a lista de idosos ap&#xf3;s a conclus&#xe3;o da chamada da API" duration="1442">
+<failure message="Error"><![CDATA[Error: expect(jest.fn()).toHaveBeenCalled()
+
+Expected number of calls: &gt;= 1
+Received number of calls:    0
+    at Object.&lt;anonymous&gt; (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/src/app/__tests__/listarIdosos.spec.tsx:53:18)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
+    at _next (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
+    at /home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:27:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/@babel/runtime/helpers/asyncToGenerator.js:19:12)
+    at Promise.then.completed (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:121:9)
+    at run (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="ListarIdosos deve exibir uma mensagem de erro se a chamada da API falhar" duration="5004">
+<failure message="Error"><![CDATA[Error: thrown: &quot;Exceeded timeout of 5000 ms for a test.
+Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.&quot;
+    at it (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/src/app/__tests__/listarIdosos.spec.tsx:60:3)
+    at _dispatchDescribe (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/index.js:91:26)
+    at describe (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/index.js:55:5)
+    at Object.describe (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/src/app/__tests__/listarIdosos.spec.tsx:30:1)
+    at Runtime._execModule (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runtime/build/index.js:1439:24)
+    at Runtime._loadModule (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runtime/build/index.js:1022:12)
+    at Runtime.requireModule (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runtime/build/index.js:882:12)
+    at jestAdapter (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:77:13)
+    at runTestInternal (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/home/jessica-luiza/Documentos/2024-1-GEROcuidado-Front/node_modules/jest-runner/build/runTest.js:444:34)]]></failure>
+</testCase>
+<testCase name="ListarIdosos Navega para a tela anterior ao clicar no bot&#xe3;o de voltar" duration="63" />
+</file>
+<file path="src/app/__tests__/login.spec.tsx">
+<testCase name="Login deve exibir mensagem de erro se o login falhar" duration="318" />
+<testCase name="Login deve realizar login com sucesso" duration="90" />
+</file>
+<file path="src/app/__tests__/metrica.service.spec.tsx">
+<testCase name="metricas.service postMetrica deve chamar a API corretamente ao criar uma m&#xe9;trica" duration="3" />
+<testCase name="metricas.service postMetrica deve lan&#xe7;ar um erro se a resposta da API n&#xe3;o for bem-sucedida" duration="9" />
+<testCase name="metricas.service getAllMetrica deve chamar a API corretamente ao obter todas as m&#xe9;tricas" duration="11" />
+<testCase name="metricas.service getAllMetrica deve lan&#xe7;ar um erro se a resposta da API n&#xe3;o for bem-sucedida" duration="5" />
+</file>
+<file path="src/app/__tests__/BarraPesquisa.spec.tsx">
+<testCase name="BarraPesquisa deve renderizar corretamente" duration="62" />
+<testCase name="BarraPesquisa deve chamar a fun&#xe7;&#xe3;o de retorno (callbackFn) com o valor do campo de pesquisa" duration="5" />
+<testCase name="BarraPesquisa deve limpar o campo de pesquisa quando o texto for apagado" duration="12" />
+<testCase name="BarraPesquisa deve chamar a fun&#xe7;&#xe3;o de retorno (callbackFn) quando o usu&#xe1;rio pressionar Enter" duration="15" />
+</file>
+<file path="src/app/__tests__/cardRotina.spec.tsx">
+<testCase name="Teste Componente Card Rotina Renderiza corretamente" duration="89" />
+<testCase name="Teste Componente Card Rotina Renderiza corretamente Card de exercicios" duration="29" />
+<testCase name="Teste Componente Card Rotina Renderiza corretamente Card de Medicamentos" duration="25" />
+</file>
+<file path="src/app/__tests__/CardIdoso.spec.tsx">
+<testCase name="CardIdoso renderiza o componente CardIdoso com o nome correto" duration="74" />
+<testCase name="CardIdoso navega para a edi&#xe7;&#xe3;o do Idoso ao pressionar o &#xed;cone de l&#xe1;pis" duration="4" />
+<testCase name="CardIdoso seleciona o Idoso ao pressionar o componente CardIdoso" duration="15" />
+</file>
+<file path="src/app/__tests__/login-success.spec.tsx">
+<testCase name="Login Component - Sucesso deve lidar com campos vazios e inv&#xe1;lidos" duration="273" />
+<testCase name="Login Component - Sucesso deve lidar com senha inv&#xe1;lida" duration="39" />
+</file>
+<file path="src/app/__tests__/tutorial.spec.tsx">
+<testCase name="O componente Tutorial deve renderizar corretamente" duration="339" />
+<testCase name="O bot&#xe3;o &quot;Pular&quot; deve chamar a fun&#xe7;&#xe3;o &quot;router.replace&quot; com o caminho correto" duration="44" />
+<testCase name="O bot&#xe3;o &quot;Avan&#xe7;ar&quot; deve permitir navegar entre os slides" duration="57" />
+<testCase name="O bot&#xe3;o &quot;Avan&#xe7;ar&quot; deve permitir navegar entre os slides" duration="33" />
+</file>
+<file path="src/app/__tests__/visualizarPublicacao.spec.tsx">
+<testCase name="VisualizarPublicacao Renderiza sem quebrar" duration="81" />
+<testCase name="VisualizarPublicacao Exibe a&#xe7;&#xf5;es corretamente para admin" duration="20" />
+<testCase name="VisualizarPublicacao Testa bot&#xe3;o de apagar" duration="61" />
+</file>
+<file path="src/app/__tests__/perfil.spec.tsx">
+<testCase name="Perfil renderiza corretamente" duration="75" />
+<testCase name="Perfil renderiza corretamente com user id" duration="38" />
+<testCase name="Perfil renderiza corretamente com user id e foto" duration="23" />
+<testCase name="Perfil deve chamar logout" duration="122" />
+<testCase name="Perfil deve chamar navigate" duration="106" />
+</file>
+<file path="src/app/__tests__/cadastrarRotina.spec.tsx">
+<testCase name="CadastrarRotina Component should show error if title is empty" duration="82" />
+<testCase name="CadastrarRotina Component should render input field and save button" duration="76" />
+<testCase name="CadastrarRotina Component should hide error message when input is corrected" duration="114" />
+</file>
+<file path="src/app/__tests__/ModalConfirmation.spec.tsx">
+<testCase name="ModalConfirmation deve renderizar corretamente quando vis&#xed;vel" duration="65" />
+<testCase name="ModalConfirmation deve chamar a fun&#xe7;&#xe3;o de fechamento do modal ao pressionar &quot;Cancelar&quot;" duration="4" />
+<testCase name="ModalConfirmation n&#xe3;o deve renderizar quando n&#xe3;o vis&#xed;vel" duration="4" />
+</file>
+<file path="src/app/__tests__/rotinas.spec.tsx">
+<testCase name="Rotinas renderiza corretamente" duration="18" />
+<testCase name="Rotinas renderiza corretamente com user id" duration="36" />
+<testCase name="Rotinas renderiza corretamente quando o idoso n&#xe3;o est&#xe1; selecionado" duration="58" />
+<testCase name="Rotinas renderiza corretamente quando todas as condi&#xe7;&#xf5;es s&#xe3;o atendidas" duration="119" />
+</file>
+<file path="src/app/__tests__/LinkButton.spec.tsx">
+<testCase name="LinkButton deve renderizar corretamente" duration="36" />
+<testCase name="LinkButton deve usar a cor de fundo personalizada" duration="3" />
+<testCase name="LinkButton deve chamar a fun&#xe7;&#xe3;o de navega&#xe7;&#xe3;o corretamente" duration="5" />
+</file>
+<file path="src/app/__tests__/FiltroDropdown.spec.tsx">
+<testCase name="FiltroDropdown Component should render the dropdown with default label" duration="68" />
+<testCase name="FiltroDropdown Component should display options when dropdown is clicked" duration="55" />
+<testCase name="FiltroDropdown Component should toggle dropdown visibility when dropdown button is clicked" duration="26" />
+<testCase name="FiltroDropdown Component should show selected option when a filter is provided" duration="12" />
+</file>
+<file path="src/app/__tests__/UploadImage.spec.tsx">
+<testCase name="UploadImage renderiza corretamente sem imagem inicial" duration="67" />
+<testCase name="UploadImage deve renderizar corretamente" duration="14" />
+<testCase name="UploadImage escolher imagem e chamar setFoto corretamente" duration="65" />
+</file>
+<file path="src/app/__tests__/Publicacao.spec.tsx">
+<testCase name="Publicacao deve formatar o nome corretamente com crop ativado" duration="32" />
+</file>
+<file path="src/app/__tests__/BackButton.spec.tsx">
+<testCase name="BackButton chama router.back() quando pressionado" duration="61" />
+<testCase name="BackButton chama router.push() com a rota correta quando route &#xe9; fornecido" duration="4" />
+</file>
+<file path="src/app/__tests__/PublicacaoVisualizar.spec.tsx">
+<testCase name="PublicacaoVisualizar n&#xe3;o deve renderizar a imagem do usu&#xe1;rio quando n&#xe3;o h&#xe1; foto" duration="60" />
+<testCase name="PublicacaoVisualizar deve formatar a data corretamente" duration="4" />
+</file>
+<file path="src/app/__tests__/UploadImageV2.spec.tsx">
+<testCase name="UploadImageV2 deve renderizar corretamente e chamar a fun&#xe7;&#xe3;o de callback ao selecionar uma imagem" duration="72" />
+</file>
+<file path="src/app/__tests__/cadastrarMetrica.spec.tsx">
+<testCase name="criarMetrica Component renderiza corretamente e interage com as m&#xe9;tricas" duration="106" />
+</file>
+<file path="src/app/__tests__/visualizarValoresMedidos.spec.tsx">
+<testCase name="VisualizarValoresMedidos The component rendered" duration="46" />
+</file>
+<file path="src/app/__tests__/Loading.spec.tsx">
+<testCase name="Loading deve renderizar o componente de carregamento corretamente" duration="230" />
+</file>
+<file path="src/app/__tests__/index.spec.tsx">
+<testCase name="Home renderiza corretamente" duration="59" />
+<testCase name="Home deve conter um t&#xed;tulo" duration="4" />
+<testCase name="Home deve conter bot&#xf5;es de a&#xe7;&#xe3;o" duration="18" />
+</file>
+<file path="src/app/__tests__/editarValorMetrica.spec.tsx">
+<testCase name="EditarMetrica Component The component rendered" duration="39" />
+</file>
+<file path="src/app/components/__tests__/ModalConfirmation.spec.tsx">
+<testCase name="ModalConfirmation Component renderiza corretamente" duration="68" />
+</file>
+<file path="src/app/__tests__/weekDay.spec.tsx">
+<testCase name="Testes para WeekDays deve renderizar corretamente" duration="73" />
+<testCase name="Testes para WeekDays deve chamar a fun&#xe7;&#xe3;o de callback corretamente ao pressionar um dia" duration="16" />
+</file>
+<file path="src/app/__tests__/CustomButton.spec.tsx">
+<testCase name="CustomButton renderiza corretamente" duration="70" />
+<testCase name="CustomButton Chama a fun&#xe7;&#xe3;o de callback quando pressionado" duration="3" />
+</file>
+<file path="src/app/__tests__/NaoAutenticado.spec.tsx">
+<testCase name="NaoAutenticado deve renderizar o componente &apos;NaoAutenticado&apos; corretamente" duration="31" />
+</file>
+<file path="src/app/__tests__/EmConstrucao.spec.tsx">
+<testCase name="EmConstrucao component renders correctly" duration="62" />
+</file>
+<file path="src/app/__tests__/response.interface.spec.tsx">
+<testCase name="IResponse Interface deve ser uma interface com as propriedades data e message" duration="1" />
+</file>
+<file path="src/app/__tests__/event.spec.tsx">
+<testCase name="Event component renders correctly with given props" duration="60" />
+</file>
+<file path="src/app/__tests__/registros.spec.tsx">
+<testCase name="Registros renderiza corretamente" duration="43" />
+<testCase name="Registros renderiza corretamente com user id" duration="35" />
+</file>
+<file path="src/app/__tests__/ItemTutorial.spec.tsx">
+<testCase name="ItemTutorial renderiza corretamente" duration="62" />
+</file>
+<file path="src/app/__tests__/ErrorMessage.spec.tsx">
+<testCase name="ErrorMessage renderiza corretamente" duration="60" />
+</file>
+<file path="src/app/__tests__/editarPublicacao.spec.tsx">
+<testCase name="&lt;EditarPublicacao /&gt; renders without crashing" duration="43" />
+</file>
+<file path="src/app/__tests__/forum.spec.tsx">
+<testCase name="Forum renderiza corretamente" duration="44" />
+>>>>>>> Stashed changes
 </file>
 </testExecutions>

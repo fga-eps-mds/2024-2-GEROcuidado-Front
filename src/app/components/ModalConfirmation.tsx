@@ -3,10 +3,11 @@ import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
 
 interface IProps {
   visible: boolean;
-  callbackFn: () => unknown;
-  closeModal: () => unknown;
+  callbackFn: () => void;  // Atualizado para void
+  closeModal: () => void;  // Atualizado para void
   message: string;
   messageButton: string;
+  testID?: string;  // Adicione esta linha para suportar o testID
 }
 
 export default function ModalConfirmation({
@@ -15,9 +16,10 @@ export default function ModalConfirmation({
   closeModal,
   message,
   messageButton,
+  testID, // Receba o testID
 }: Readonly<IProps>) {
   return (
-    <Modal animationType="fade" transparent={true} visible={visible}>
+    <Modal animationType="fade" transparent={true} visible={visible} testID={testID}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.modalText}>{message}</Text>
