@@ -167,4 +167,19 @@ it("Testa a navegação para a tela de edição", async () => {
     }),
   }));
 });
+it("Não exibe ações para usuários não autorizados", async () => {
+  (AsyncStorage.getItem as jest.Mock).mockImplementation((key: string) => {
+    if (key === "usuario") {
+      return Promise.resolve(JSON.stringify({ id: 1, admin: false }));
+    }
+    return Promise.resolve("mock-token");
+  });
+
+  const { queryByTestId } = render(<VisualizarPublicacao />);
+
+  await waitFor(() => {
+    expect(queryByTestId("deleteBtn")).toBeNull();
+    expect(queryByTestId("editBtn")).toBeNull();
+  });
+});
 });
