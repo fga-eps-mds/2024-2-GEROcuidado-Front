@@ -136,7 +136,7 @@
 // });
 
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
+import { within, render, fireEvent, screen } from '@testing-library/react-native';
 import React from 'react';
 import EditarRotina from "../private/pages/editarRotina";
 import { useLocalSearchParams } from 'expo-router';
@@ -206,7 +206,18 @@ describe("EditarRotina Component", () => {
     // Atualiza a hora
     fireEvent.changeText(screen.getByPlaceholderText('Horário de início'), '10:00');
     expect(screen.getByPlaceholderText('Horário de início').props.value).toBe('10:00');
-  
+
+    // Atualiza a categoria
+    fireEvent.press(screen.getByText('GERAL'));
+    fireEvent.press(screen.getByText('Medicamentos'));
+
+    const options = screen.getAllByText('Medicamentos');
+
+    // Verifique o primeiro ou o correto com base em sua ordem ou alguma condição
+    fireEvent.press(options[0]);
+
+    expect(options[0]).toBeTruthy();
+
     // Atualiza a descrição
     fireEvent.changeText(screen.getByPlaceholderText('Descrição'), 'Nova Descrição');
     expect(screen.getByPlaceholderText('Descrição').props.value).toBe('Nova Descrição');
