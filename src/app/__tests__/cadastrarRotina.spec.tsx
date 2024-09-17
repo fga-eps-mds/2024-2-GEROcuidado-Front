@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent, act, screen, waitFor } from '@testing-library/react-native';
 import CadastrarRotina from '../private/pages/cadastrarRotina'; // Adjust path as needed
 import Toast from 'react-native-toast-message';
+import * as router from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -9,15 +10,49 @@ jest.mock('react-native-toast-message', () => ({
   show: jest.fn(),
 }));
 
+jest.mock('expo-router', () => ({
+  router: {
+    replace: jest.fn(),
+  },
+}));
+
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: jest.fn(() => Promise.resolve(null)),
-  setItem: jest.fn(() => Promise.resolve()),
+  getItem: jest.fn().mockResolvedValue(JSON.stringify({ id: '1', nome: 'Idoso Teste' })),
 }));
 
 describe('CadastrarRotina Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  // Test for succesfull register of routine
+  it('registers a routine if all values are valid', async () => {
+    const { getByPlaceholderText, getByText, queryByText } = render(<CadastrarRotina />);
+  
+    fireEvent.changeText(getByPlaceholderText('Adicionar título'), 'Minha Rotina');
+    fireEvent.changeText(getByPlaceholderText('Data da rotina'), '25/09/2024');
+    fireEvent.changeText(getByPlaceholderText('Horário de início'), '10:30');
+
+    fireEvent.press(getByText('Categoria'));
+  
+    fireEvent.press(getByText('Medicamentos'));
+  
+    fireEvent.changeText(getByPlaceholderText('Descrição'), 'Descrição da rotina');
+    fireEvent.press(getByText('Salvar'));
+  
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'success',
+        text1: 'Sucesso!',
+        text2: 'Rotina criada',
+      });
+    });
+  
+    expect(router.router.replace).toHaveBeenCalledWith({
+      pathname: 'private/tabs/rotinas',
+    });
+  });
+
 
   // Test for required title field
   test('should show error if title is empty', async () => {
