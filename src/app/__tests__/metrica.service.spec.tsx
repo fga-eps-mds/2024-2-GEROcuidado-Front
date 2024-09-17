@@ -6,7 +6,8 @@ declare global {
   }
 }
 
-import { postMetrica, getAllMetrica } from "../services/metrica.service";
+import { postMetrica, getAllMetrica, updateMetrica, getSomaHidratacao } from "../services/metrica.service";
+const BASE_URL = `${process.env.EXPO_PUBLIC_API_URL}:${process.env.EXPO_PUBLIC_API_SAUDE_PORT}/api/saude/metrica`;
 
 global.fetch = jest.fn();
 
@@ -107,3 +108,36 @@ describe("metricas.service", () => {
     });
   });
 });
+
+describe("updateMetrica", () => {
+  it("deve chamar a API corretamente ao atualizar uma métrica", async () => {
+    const mockId = 1;
+    const mockBody = { /* corpo da atualização */ };
+    const mockToken = "seu-token-de-exemplo";
+
+    const mockResponse = {
+      status: 200,
+      json: jest.fn().mockResolvedValue({
+        /* resposta esperada aqui */
+      }),
+    };
+
+    global.fetch.mockResolvedValue(mockResponse);
+
+    await updateMetrica(mockId, mockBody, mockToken);
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      `${BASE_URL}/${mockId}`,
+      expect.objectContaining({
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${mockToken}`,
+        },
+        body: JSON.stringify(mockBody),
+      }),
+    );
+  });
+});
+
