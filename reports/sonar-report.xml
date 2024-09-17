@@ -1,6 +1,7 @@
 <testExecutions version="1">
 <file path="src\app\__tests__\editarRotina.spec.tsx">
-<testCase name="EditarRotina Component deve renderizar todos os componentes" duration="970" />
-<testCase name="EditarRotina Component deve atualizar os valores dos inputs corretamente" duration="256" />
+<testCase name="EditarRotina Component deve renderizar todos os componentes" duration="1037" />
+<testCase name="EditarRotina Component deve atualizar os valores dos inputs corretamente" duration="246" />
+<testCase name="EditarRotina Component deve exibir mensagens de erro corretamente" duration="139" />
 </file>
 </testExecutions>
