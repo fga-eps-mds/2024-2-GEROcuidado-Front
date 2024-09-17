@@ -1,12 +1,14 @@
-import React from "react";
-import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
-import EditarRotina from "../private/pages/editarRotina";
+// import React from "react";
+// import { render, fireEvent, waitFor, act, screen } from "@testing-library/react-native";
+// import EditarRotina from "../private/pages/editarRotina";
+// import { useLocalSearchParams } from 'expo-router';
 
-// Pending correction
-describe("EditarRotina Component", () => {
-  it("Does nothing", async () => {
-    // ...
-  });
+
+// // Pending correction
+// describe("EditarRotina Component", () => {
+//   it("Does nothing", async () => {
+//     // ...
+//   });
 
   // it("Salvar sem título", async () => {
   //   const { getByText, getByPlaceholderText, getByTestId } = render(
@@ -131,4 +133,82 @@ describe("EditarRotina Component", () => {
   //     expect(erroDescricao).toBeTruthy();
   //   });
   // });
+// });
+
+
+import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
+import React from 'react';
+import EditarRotina from "../private/pages/editarRotina";
+import { useLocalSearchParams } from 'expo-router';
+import * as Notifications from 'expo-notifications';
+jest.mock('expo-notifications', () => require("../../../__mocks__/expo-notifications"));
+
+// Mock para useLocalSearchParams
+jest.mock('expo-router', () => ({
+  ...jest.requireActual('expo-router'),
+  useLocalSearchParams: jest.fn(),
+}));
+
+// Mock para expo-notifications
+jest.mock('expo-notifications', () => ({
+  getPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
+  requestPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
+  getExpoPushTokenAsync: jest.fn().mockResolvedValue({ data: 'mockToken' }),
+  setNotificationChannelAsync: jest.fn(),
+}));
+
+
+describe("EditarRotina Component", () => {
+  beforeEach(() => {
+    (useLocalSearchParams as jest.Mock).mockReturnValue({
+      rotina: JSON.stringify({
+        titulo: 'Rotina Teste',
+        descricao: 'Descrição Teste',
+        categoria: 'GERAL',
+        dias: [1, 2, 3],
+        dataHora: new Date().toISOString(),
+        notificacao: 'true',
+        token: 'mockToken',
+      }),
+    });
+  });
+
+  test('deve renderizar todos os componentes', () => {
+    render(<EditarRotina />);
+    
+    // Verifica se o título está sendo exibido
+    expect(screen.getByText('Detalhes da rotina')).toBeTruthy();
+    
+    // Verifica se os campos estão sendo renderizados
+    expect(screen.getByPlaceholderText('Adicionar título')).toBeTruthy();
+    expect(screen.getByPlaceholderText('Data da rotina')).toBeTruthy();
+    expect(screen.getByPlaceholderText('Horário de início')).toBeTruthy();
+    expect(screen.getByPlaceholderText('Descrição')).toBeTruthy();
+    
+    // Verifica se o botão de salvar está presente
+    expect(screen.getByText('Salvar')).toBeTruthy();
+    
+    // Verifica se o botão para apagar rotina está presente
+    expect(screen.getByText('Apagar Rotina')).toBeTruthy();
+  });
+
+  test('deve atualizar os valores dos inputs corretamente', () => {
+    render(<EditarRotina />);
+  
+    // Atualiza o título
+    fireEvent.changeText(screen.getByPlaceholderText('Adicionar título'), 'Novo Título');
+    expect(screen.getByPlaceholderText('Adicionar título').props.value).toBe('Novo Título');
+  
+    // Atualiza a data
+    fireEvent.changeText(screen.getByPlaceholderText('Data da rotina'), '20/09/2024');
+    expect(screen.getByPlaceholderText('Data da rotina').props.value).toBe('20/09/2024');
+  
+    // Atualiza a hora
+    fireEvent.changeText(screen.getByPlaceholderText('Horário de início'), '10:00');
+    expect(screen.getByPlaceholderText('Horário de início').props.value).toBe('10:00');
+  
+    // Atualiza a descrição
+    fireEvent.changeText(screen.getByPlaceholderText('Descrição'), 'Nova Descrição');
+    expect(screen.getByPlaceholderText('Descrição').props.value).toBe('Nova Descrição');
+  });
 });
