@@ -184,4 +184,18 @@ describe("getSomaHidratacao", () => {
 
     expect(result).toBe(100);
   });
+
+  it("deve lançar um erro se a resposta da API não for bem-sucedida", async () => {
+    const mockId = 1;
+    const mockToken = "seu-token-de-exemplo";
+
+    const mockResponse = {
+      status: 500,
+      json: jest.fn().mockResolvedValue({ message: "Erro na API" }),
+    };
+
+    global.fetch.mockResolvedValue(mockResponse);
+
+    await expect(getSomaHidratacao(mockId, mockToken)).rejects.toThrow("Erro na API");
+  });
 });
