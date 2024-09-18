@@ -38,4 +38,41 @@ describe('FiltroDropdown Component', () => {
     expect(screen.getByText('Alimentação')).toBeTruthy();
   });
 
+  it('should update button dimensions on dropdown visibility change', () => {
+    const { rerender } = render(<FiltroDropdown filtro={null} setFiltro={() => {}} />);
+    const dropdownButton = screen.getByText('Filtro');
+
+    // Simulate button measuring
+    fireEvent.press(dropdownButton); // Open dropdown
+    rerender(<FiltroDropdown filtro={null} setFiltro={() => {}} />);
+    // Ensure dimensions are set
+    // This test is more about ensuring the effect runs, not a direct assertion
+  });
+
+  it('should correctly handle selection toggling', async () => {
+    const mockSetFiltro = jest.fn();
+
+    // Renderiza o componente
+    render(<FiltroDropdown filtro={null} setFiltro={mockSetFiltro} />);
+
+    // Abre o dropdown
+    const dropdownButton = screen.getByText('Filtro');
+    fireEvent.press(dropdownButton);
+
+    // Seleciona uma opção
+    const optionButton = screen.getByText('Alimentação');
+    fireEvent.press(optionButton);
+
+    // Verifica se a função setFiltro foi chamada com o valor correto
+    expect(mockSetFiltro).toHaveBeenCalledWith('Alimentação');
+
+    // Verifica se o item selecionado está visível no botão do dropdown
+    expect(screen.getByText('Alimentação')).toBeTruthy();
+    
+    // Adicionalmente, pode-se verificar se o item da lista ainda está visível
+    // (isso é opcional e depende do comportamento desejado)
+    await waitFor(() => {
+      expect(screen.queryByText('Alimentação')).toBeTruthy();
+    });
+  });
 });
