@@ -57,22 +57,7 @@ describe("ListarIdosos", () => {
     await waitFor(() => expect(getByText("Idoso 1")).toBeTruthy());
     expect(getByText("Idoso 2")).toBeTruthy();
   });
-
-  // it("deve exibir uma mensagem de erro se a chamada da API falhar", async () => {
-  //   const errorMessage = "Erro ao buscar idosos";
-  
-  //   // Simula um erro na chamada da API
-  //   (getAllIdoso as jest.Mock).mockRejectedValueOnce({ message: errorMessage });
-  
-  //   const { queryByText } = render(<ListarIdosos />);
-  
-  //   // Aguarda a resolução da promessa
-  //   await waitFor(() => expect(getAllIdoso).toHaveBeenCalled(), { timeout: 5000 });
-  
-  //   // Verifica se a mensagem de erro é exibida
-  //   expect(queryByText(errorMessage)).toBeNull(); // Ajuste se a mensagem de erro é realmente exibida
-  // });
-
+ 
   test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
     // Renderiza o componente ListarIdosos
     const { getByTestId } = render(<ListarIdosos />);
