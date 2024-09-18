@@ -92,6 +92,14 @@ describe('CardMetrica Component', () => {
     });
   });
 
+  it('renderiza corretamente com um valor de métrica SATURACAO_OXIGENIO', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemSaturacao} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da saturação é exibido
+      expect(getByText('%')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
+  });
 
   it('mostra a data e a hora corretas', async () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
