@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react-native";
 import AppLayout from "../_layout";
+import TabsLayout from "../private/tabs/_layout";
 import Toast from "react-native-toast-message";
 import * as Notifications from "expo-notifications";
 
@@ -39,4 +40,20 @@ describe("AppLayout Component", () => {
     const layoutView = getByTestId("layout-view");
     expect(layoutView).toBeTruthy();
   });
+});
+
+describe("TabsLayout", () => {
+  it("deve importar o componente TabsLayout corretamente", () => {
+    expect(TabsLayout).toBeDefined();
+    expect(typeof TabsLayout).toBe('function');
+  });
+
+  /*
+  it('deve renderizar o componente Tabs e seus filhos', () => {
+    const { getByTestId } = render(<TabsLayout />);
+    
+    // Verifique a presença de um elemento específico no DOM
+    expect(getByTestId('tabs-mock')).toBeTruthy();
+  });
+  */ 
 });
