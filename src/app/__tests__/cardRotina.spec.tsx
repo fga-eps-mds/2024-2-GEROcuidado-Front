@@ -12,9 +12,9 @@ jest.mock("expo-router", () => ({
 }));
 
 const rotina = {
-  id: 1,
+  id: "1",
   titulo: "Título de Exemplo",
-  idIdoso: 123,
+  idIdoso: "123",
   categoria: ECategoriaRotina.ALIMENTACAO,
   descricao: "Descrição de Exemplo",
   dataHoraConcluidos: [],
@@ -24,9 +24,9 @@ const rotina = {
 };
 
 const rotina_exercicios = {
-  id: 2,
+  id: "2",
   titulo: "Card exercicio",
-  idIdoso: 456,
+  idIdoso: "456",
   categoria: ECategoriaRotina.EXERCICIOS,
   descricao: "caminhada",
   dataHoraConcluidos: [],
@@ -36,9 +36,9 @@ const rotina_exercicios = {
 };
 
 const rotina_medicamentos = {
-  id: 3,
+  id: "3",
   titulo: "Card medicamento",
-  idIdoso: 789,
+  idIdoso: "789",
   categoria: ECategoriaRotina.MEDICAMENTO,
   descricao: "dipirona",
   dataHoraConcluidos: [],
