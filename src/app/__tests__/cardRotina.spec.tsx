@@ -11,6 +11,9 @@ jest.mock("expo-router", () => ({
   },
 }));
 
+// Usando timers falsos para simular a passagem do tempo
+jest.useFakeTimers();
+
 const rotina = {
   id: "1",
   titulo: "Título de Exemplo",
@@ -72,17 +75,23 @@ describe("Teste Componente Card Rotina", () => {
     });
 
     test("Verifica se debounceConcluido funciona corretamente", () => {
+
       const { getByTestId, queryByTestId } = render(
         <CardRotina item={rotina} index={0} date={new Date()} />
       );
   
       const checkbox = getByTestId("checkbox");
-      
+
       // Inicialmente, o ícone de check não deve estar visível
       expect(queryByTestId("check-icon")).toBeNull();
   
-      // Simula o clique no Pressable
+      // Simulando o clique no Pressable
       fireEvent.press(checkbox);
+  
+      // Avança o tempo para que o debounce seja executado
+      act(() => {
+        jest.runAllTimers();
+      });
   
       // Após o clique, o ícone de check deve aparecer
       expect(queryByTestId("check-icon")).toBeTruthy();
