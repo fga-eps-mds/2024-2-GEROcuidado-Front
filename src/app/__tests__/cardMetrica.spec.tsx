@@ -56,6 +56,13 @@ describe('CardMetrica Component', () => {
     // outras propriedades que o item pode ter
   };
 
+  const mockItemHoras: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.HORAS_DORMIDAS,
+    // outras propriedades que o item pode ter
+  };
+
   it('renderiza corretamente com um valor de métrica FREQ_CARDIACA', async () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
     
@@ -107,6 +114,15 @@ describe('CardMetrica Component', () => {
     await waitFor(() => {
       expect(getByText('80')).toBeTruthy(); // Verifica se o valor da temperatura é exibido
       expect(getByText('°C')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
+  });
+
+  it('renderiza corretamente com um valor de métrica HORAS_DORMIDAS', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemHoras} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da temperatura é exibido
+      expect(getByText('h')).toBeTruthy(); // Verifica se a unidade de medida está correta
     });
   });
 
