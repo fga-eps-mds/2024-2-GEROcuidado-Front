@@ -87,14 +87,12 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
       </View>
       <Text style={styles.postContent}>{getDescricao(item.descricao)}</Text>
       <View style={styles.underInfo}>
-        {item.idUsuarioReporte.length > 0 && (
-          <View style={styles.reports}>
-            <AntDesing name="warning" size={18} color="#FFCC00" />
-            <Text style={styles.reportsText}>
-              {item.idUsuarioReporte.length}
-            </Text>
-          </View>
-        )}
+      {item.idUsuarioReporte && item.idUsuarioReporte.length > 0 && (
+        <View style={styles.reports}>
+          <AntDesing name="warning" size={18} color="#FFCC00" />
+          <Text style={styles.reportsText}>Usuários reportaram</Text>
+        </View>
+      )}
       </View>
     </Pressable>
   );
