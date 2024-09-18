@@ -77,6 +77,13 @@ describe('CardMetrica Component', () => {
     // outras propriedades que o item pode ter
   };
 
+  const mockItemHidratacao: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.HIDRATACAO,
+    // outras propriedades que o item pode ter
+  };
+
   it('renderiza corretamente com um valor de métrica FREQ_CARDIACA', async () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
     
@@ -155,6 +162,15 @@ describe('CardMetrica Component', () => {
     await waitFor(() => {
       expect(getByText('80')).toBeTruthy(); // Verifica se o valor da temperatura é exibido
       expect(getByText('kg/m²')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
+  });
+
+  it('renderiza corretamente com um valor de métrica HIDRATACAO', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemHidratacao} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da temperatura é exibido
+      expect(getByText('ml')).toBeTruthy(); // Verifica se a unidade de medida está correta
     });
   });
 
