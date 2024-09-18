@@ -88,4 +88,42 @@ describe('Login', () => {
       expect(router.push).toHaveBeenCalledWith('/private/pages/listarIdosos');
     });
   });
+
+  it('deve exibir mensagem de erro quando os campos estão vazios', async () => {
+    const { getByText } = render(<Login />);
+    fireEvent.press(getByText('Entrar'));
+  
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'O campo de email é obrigatório!',
+      });
+  
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'O campo de senha é obrigatório!',
+      });
+    });
+  });
+  
+  it('deve exibir mensagem de erro se o email estiver no formato inválido', async () => {
+    const invalidEmail = 'usuario#email.com';
+  
+    const { getByPlaceholderText, getByText } = render(<Login />);
+  
+    fireEvent.changeText(getByPlaceholderText('Email'), invalidEmail);
+    fireEvent.changeText(getByPlaceholderText('Senha'), 'teste123');
+    fireEvent.press(getByText('Entrar'));
+  
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'Formato de email inválido!',
+      });
+    });
+  });  
+
 });

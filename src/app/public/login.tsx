@@ -63,23 +63,50 @@ export default function Login() {
     }
   };
 
-  useEffect(() => handleErrors(), [email, senha]);
-
   const handleErrors = () => {
     const erros: IErrors = {};
-
+    let hasErrors = false;
+  
+    // Verifica o campo de email
     if (!email) {
       erros.email = "Campo Obrigatório!";
+      hasErrors = true;
+      Toast.show({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'O campo de email é obrigatório!',
+      });
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       erros.email = "Email inválido!";
+      hasErrors = true;
+      Toast.show({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'Formato de email inválido!',
+      });
     }
-
+  
+    // Verifica o campo de senha
     if (!senha) {
       erros.senha = "Campo Obrigatório!";
+      hasErrors = true;
+      Toast.show({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'O campo de senha é obrigatório!',
+      });
     }
-
+  
     setErros(erros);
+  
+    // Retorna se há erros para interromper a submissão
+    return hasErrors;
   };
+  
+  useEffect(() => {
+    handleErrors();
+  }, [email, senha]);
+  
 
   const handleUser = async (token: string) => {
     try {
