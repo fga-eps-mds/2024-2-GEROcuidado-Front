@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render } from "@testing-library/react-native";
+import { act, render, fireEvent } from "@testing-library/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "@react-native-async-storage/async-storage/jest/async-storage-mock";
 import CardRotina from "../components/CardRotina";
@@ -70,5 +70,23 @@ describe("Teste Componente Card Rotina", () => {
       expect(getByText("Card medicamento")).toBeTruthy();
       expect(getByText("dipirona")).toBeTruthy();
     });
+
+    test("Verifica se debounceConcluido funciona corretamente", () => {
+      const { getByTestId, queryByTestId } = render(
+        <CardRotina item={rotina} index={0} date={new Date()} />
+      );
+  
+      const checkbox = getByTestId("checkbox");
+      
+      // Inicialmente, o ícone de check não deve estar visível
+      expect(queryByTestId("check-icon")).toBeNull();
+  
+      // Simula o clique no Pressable
+      fireEvent.press(checkbox);
+  
+      // Após o clique, o ícone de check deve aparecer
+      expect(queryByTestId("check-icon")).toBeTruthy();
+    });
+
   });
 });
