@@ -63,6 +63,13 @@ describe('CardMetrica Component', () => {
     // outras propriedades que o item pode ter
   };
 
+  const mockItemAltura: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.ALTURA,
+    // outras propriedades que o item pode ter
+  };
+
   it('renderiza corretamente com um valor de métrica FREQ_CARDIACA', async () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
     
@@ -123,6 +130,15 @@ describe('CardMetrica Component', () => {
     await waitFor(() => {
       expect(getByText('80')).toBeTruthy(); // Verifica se o valor da temperatura é exibido
       expect(getByText('h')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
+  });
+
+  it('renderiza corretamente com um valor de métrica ALTURA', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemAltura} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da temperatura é exibido
+      expect(getByText('cm')).toBeTruthy(); // Verifica se a unidade de medida está correta
     });
   });
 
