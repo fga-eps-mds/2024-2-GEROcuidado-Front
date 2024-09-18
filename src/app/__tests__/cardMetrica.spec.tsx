@@ -83,6 +83,16 @@ describe('CardMetrica Component', () => {
     });
   });
 
+  it('renderiza corretamente com um valor de métrica PRESSAO_SANGUINEA', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemPressao} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da pressão é exibido
+      expect(getByText('mmHg')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
+  });
+
+
   it('mostra a data e a hora corretas', async () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
 
