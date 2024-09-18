@@ -52,4 +52,18 @@ describe("Forum", () => {
     });
   });
 
+  it("exibe mensagem de erro quando falha ao carregar publicações", async () => {
+    (getAllPublicacao as jest.Mock).mockRejectedValueOnce({
+      message: "Erro ao carregar publicações",
+    });
+
+    const { getByText } = render(<Forum />);
+
+    await waitFor(() => expect(Toast.show).toHaveBeenCalledWith({
+      type: "error",
+      text1: "Erro!",
+      text2: "Erro ao carregar publicações",
+    }));
+  });
+
 });
