@@ -88,4 +88,23 @@ describe('Login', () => {
       expect(router.push).toHaveBeenCalledWith('/private/pages/listarIdosos');
     });
   });
+
+  it('deve exibir mensagem de erro quando os campos estão vazios', async () => {
+    const { getByText } = render(<Login />);
+    fireEvent.press(getByText('Entrar'));
+  
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'O campo de email é obrigatório!',
+      });
+  
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'O campo de senha é obrigatório!',
+      });
+    });
+  });
 });
