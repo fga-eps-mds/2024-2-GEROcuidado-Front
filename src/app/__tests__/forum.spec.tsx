@@ -33,7 +33,23 @@ const mockPublicacoes = [
 ];
 
 describe("Forum", () => {
+
+  beforeEach(() => {
+    (getAllPublicacao as jest.Mock).mockResolvedValue({
+      data: mockPublicacoes,
+    });
+  });
+
   it("renderiza corretamente", async () => {
     await waitFor(() => render(<Forum />));
   });
+
+  it("carrega e exibe publicações", async () => {
+    const { getByText } = render(<Forum />);
+    await waitFor(() => {
+      expect(getByText("Publicação 1")).toBeTruthy();
+      expect(getByText("Publicação 2")).toBeTruthy();
+    });
+  });
+
 });
