@@ -65,6 +65,15 @@ describe('CardMetrica Component', () => {
     });
   });
 
+  it('renderiza corretamente com um valor de métrica GLICEMIA', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemGlicemia} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da métrica é exibido
+      expect(getByText('mg/dL')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
+  });
+
   it('mostra a data e a hora corretas', async () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
 
