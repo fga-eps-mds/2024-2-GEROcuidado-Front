@@ -39,15 +39,15 @@ export default function AppLayout() {
 
   return (
     <>
-      <View style={{ zIndex: 9999 }}>
+      <View style={{ zIndex: 9999 }}  testID="toast-view">
         <Toast />
       </View>
       <Stack
         screenOptions={{
-          header: () => <View style={{ height: 50 }} />,
+          header: () => <View style={{ height: 50 }} testID="stack-header"/>,
         }}
       />
-      <View style={{ height: 25 }} />
+      <View style={{ height: 25 }} testID="layout-view"/>
     </>
   );
 }
