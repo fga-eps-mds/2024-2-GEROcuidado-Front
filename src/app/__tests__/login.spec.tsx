@@ -107,4 +107,23 @@ describe('Login', () => {
       });
     });
   });
+  
+  it('deve exibir mensagem de erro se o email estiver no formato inválido', async () => {
+    const invalidEmail = 'usuario#email.com';
+  
+    const { getByPlaceholderText, getByText } = render(<Login />);
+  
+    fireEvent.changeText(getByPlaceholderText('Email'), invalidEmail);
+    fireEvent.changeText(getByPlaceholderText('Senha'), 'teste123');
+    fireEvent.press(getByText('Entrar'));
+  
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'Formato de email inválido!',
+      });
+    });
+  });  
+
 });
