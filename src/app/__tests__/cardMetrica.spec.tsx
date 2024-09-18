@@ -1,196 +1,75 @@
-import React from "react";
-import { render } from "@testing-library/react-native";
-import { ETipoSanguineo } from "../interfaces/idoso.interface";
-import { EMetricas } from "../interfaces/metricas.interface";
-import CardMetrica from "../components/CardMetrica";
+import React from 'react';
+import { render, waitFor } from '@testing-library/react-native';
+import CardMetrica from '../components/CardMetrica'; // ajuste o caminho se necessário
+import { EMetricas, IMetrica } from '../interfaces/metricas.interface';
+import database from '../db';
 
-const mockItem = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.FREQ_CARDIACA,
-  valor: 75,
-};
-
-const mockItem1 = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.GLICEMIA,
-  valor: 75,
-};
-
-const mockItem2 = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.PESO,
-  valor: 75,
-};
-
-const mockItem3 = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.PRESSAO_SANGUINEA,
-  valor: 75,
-};
-
-const mockItem4 = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.SATURACAO_OXIGENIO,
-  valor: 75,
-};
-
-const mockItem5 = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.TEMPERATURA,
-  valor: 75,
-};
-
-const mockItem6 = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.HORAS_DORMIDAS,
-  valor: 75,
-};
-
-const mockItem7 = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.ALTURA,
-  valor: 75,
-};
-
-const mockItem8 = {
-  id: 1,
-  idIdoso: 123,
-  nome: "João Silva",
-  dataNascimento: "1950-01-01",
-  idUsuario: 123,
-  foto: "url_da_foto.jpg",
-  tipoSanguineo: ETipoSanguineo.A_POSITIVO,
-  telefoneResponsavel: "123456789",
-  descricao: "Idoso com histórico de hipertensão",
-  dataHora: new Date(),
-  categoria: EMetricas.IMC,
-  valor: 75,
-};
-
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-    replace: jest.fn(),
-  },
+// Mock da função de consulta ao banco de dados
+jest.mock('../db', () => ({
+  get: jest.fn(() => ({
+    query: jest.fn().mockReturnValue({
+      fetch: jest.fn(() => Promise.resolve([{ valor: 80, dataHora: '2024-09-18T12:00:00Z' }])),
+    }),
+  })),
 }));
 
-describe("CardMetricas Component", () => {
-  it("renderiza sem erros", () => {
-    render(<CardMetrica item={mockItem} />);
-  });
-  it("exibe as unidades corretas", () => {
-    render(<CardMetrica item={mockItem} />);
-  });
-  it("exibe as unidades corretas 1", () => {
-    render(<CardMetrica item={mockItem1} />);
-  });
-  it("exibe as unidades corretas 2", () => {
-    render(<CardMetrica item={mockItem2} />);
-  });
-  it("exibe as unidades corretas 3", () => {
-    render(<CardMetrica item={mockItem3} />);
-  });
-  it("exibe as unidades corretas 4", () => {
-    render(<CardMetrica item={mockItem4} />);
+describe('CardMetrica Component', () => {
+  const mockItemFrequencia: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.FREQ_CARDIACA,
+    // outras propriedades que o item pode ter
+  };
+
+  const mockItemGlicemia: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.GLICEMIA,
+    // outras propriedades que o item pode ter
+  };
+
+  const mockItemPeso: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.PESO,
+    // outras propriedades que o item pode ter
+  };
+
+  const mockItemPressao: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.PRESSAO_SANGUINEA,
+    // outras propriedades que o item pode ter
+  };
+
+  const mockItemSaturacao: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.SATURACAO_OXIGENIO,
+    // outras propriedades que o item pode ter
+  };
+
+  const mockItemTemperatura: IMetrica = {
+    id: 1,
+    idIdoso: 123,
+    categoria: EMetricas.TEMPERATURA,
+    // outras propriedades que o item pode ter
+  };
+
+  it('renderiza corretamente com um valor de métrica FREQ_CARDIACA', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da métrica é exibido
+      expect(getByText('bpm')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
   });
 
-  it("exibe as unidades corretas 5", () => {
-    render(<CardMetrica item={mockItem5} />);
-  });
+  it('mostra a data e a hora corretas', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
 
-  it("exibe as unidades corretas 6", () => {
-    render(<CardMetrica item={mockItem6} />);
-  });
-
-  it("exibe as unidades corretas 7", () => {
-    render(<CardMetrica item={mockItem7} />);
-  });
-
-  it("exibe as unidades corretas 8", () => {
-    render(<CardMetrica item={mockItem8} />);
-  });
-
-  test("Deve retornar se não houver dataHora", () => {
-    // Configuração
-    const setDataHoraMock = jest.fn();
-    const setHoraMock = jest.fn();
-    const setDataMock = jest.fn();
-
-    // Verificação
-    expect(setDataHoraMock).not.toHaveBeenCalled();
-    expect(setHoraMock).not.toHaveBeenCalled();
-    expect(setDataMock).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(getByText('18/09/2024 às 09:00')).toBeTruthy(); // Verifica a formatação correta de data e hora
+    });
   });
 });
