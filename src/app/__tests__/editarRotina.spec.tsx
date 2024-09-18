@@ -115,6 +115,35 @@ describe("EditarRotina Component", () => {
     expect(screen.getByPlaceholderText('Descrição').props.value).toBe('Nova Descrição');
   });
 
+  test('deve editar a rotina com sucesso', async () => {
+    const { getByText, getByPlaceholderText } = render(<EditarRotina />);
+
+    const titulo = getByPlaceholderText("Adicionar título");
+    const data = getByPlaceholderText("Data da rotina");
+    const hora = getByPlaceholderText("Horário de início");
+    const descricao = getByPlaceholderText("Descrição");
+    const categoria = getByText('GERAL');
+    const salvar = getByText("Salvar");
+
+    await act(async () => {
+      fireEvent.changeText(titulo, 'Título Atualizado');
+      fireEvent.changeText(data, '25/09/2024');
+      fireEvent.changeText(hora, '14:30');
+      fireEvent.changeText(descricao, 'Descrição Atualizada');
+      fireEvent.press(categoria);
+      fireEvent.press(getByText('GERAL'));
+      fireEvent.press(salvar);
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByDisplayValue('Título Atualizado')).toBeTruthy();
+      expect(screen.queryByDisplayValue('25/09/2024')).toBeTruthy();
+      expect(screen.queryByDisplayValue('14:30')).toBeTruthy();
+      expect(screen.queryByDisplayValue('Descrição Atualizada')).toBeTruthy();
+      expect(screen.getByText('GERAL')).toBeTruthy();
+    });
+  });
+
   test('deve exibir mensagens de erro corretamente', async () => {
     render(<EditarRotina />);
   

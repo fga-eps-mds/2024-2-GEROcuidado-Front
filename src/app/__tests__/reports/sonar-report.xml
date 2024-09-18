@@ -1,41 +1,13 @@
 <testExecutions version="1">
-<file path="src\app\__tests__\layout_tabs.spec.tsx">
-<testCase name="TabsLayout Component renders the Tabs component" duration="880">
-<failure message="Error"><![CDATA[Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it&apos;s defined in, or you might have mixed up default and named imports.
-
-Check the render method of `TabsLayout`.
-    at createFiberFromTypeAndProps (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:17518:17)
-    at createFiberFromElement (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:17544:15)
-    at createChild (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:5202:28)
-    at reconcileChildrenArray (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:5492:25)
-    at reconcileChildFibers (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:5884:16)
-    at reconcileChildren (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:9096:28)
-    at mountIndeterminateComponent (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:9915:5)
-    at beginWork (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:11312:16)
-    at performUnitOfWork (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:15808:12)
-    at workLoopSync (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:15745:5)
-    at renderRootSync (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:15717:7)
-    at performSyncWorkOnRoot (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:15422:20)
-    at flushSyncCallbacks (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:2597:22)
-    at flushActQueue (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react\cjs\react.development.js:2667:24)
-    at Object.act (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\react\cjs\react.development.js:2521:11)
-    at act (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\@testing-library\react-native\src\render-act.ts:13:16)
-    at renderInternal (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\@testing-library\react-native\src\render.tsx:62:33)
-    at renderInternal (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\@testing-library\react-native\src\render.tsx:32:10)
-    at Object.&lt;anonymous&gt; (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\src\app\__tests__\layout_tabs.spec.tsx:13:33)
-    at Promise.then.completed (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\run.js:316:40)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at _runTest (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\run.js:121:9)
-    at run (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (D:\UnB\Ciclo 7\MDS\Repo front\2024-1-GEROcuidado-Front\node_modules\jest-runner\build\runTest.js:444:34)]]></failure>
-</testCase>
+<file path="src\app\__tests__\editarRotina.spec.tsx">
+<testCase name="EditarRotina Component deve renderizar todos os componentes" duration="317" />
+<testCase name="EditarRotina Component deve atualizar os valores dos inputs corretamente" duration="111" />
+<testCase name="EditarRotina Component deve editar a rotina com sucesso" duration="50" />
+<testCase name="EditarRotina Component deve exibir mensagens de erro corretamente" duration="50" />
+<testCase name="EditarRotina Component deve solicitar permiss&#xf5;es de notifica&#xe7;&#xf5;es e obter o token" duration="27" />
+<testCase name="EditarRotina Component Salvar com descri&#xe7;&#xe3;o muito grande" duration="34" />
+<testCase name="EditarRotina Component Salvar hora com formato errado" duration="24" />
+<testCase name="EditarRotina Component Salvar sem hora" duration="27" />
+<testCase name="EditarRotina Component Salvar com t&#xed;tulo muito grande" duration="29" />
 </file>
 </testExecutions>
