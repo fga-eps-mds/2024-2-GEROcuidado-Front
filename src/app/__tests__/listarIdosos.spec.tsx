@@ -24,8 +24,21 @@ jest.mock('expo-router', () => ({
   }),
 }));
 
-// Mockando o módulo dos serviços para substituir as implementações
-jest.mock("../services/idoso.service");
+// Mockando o banco de dados e a função getIdosos
+jest.mock("../db/index", () => ({
+  get: jest.fn().mockReturnValue({
+    query: jest.fn().mockReturnValue({
+      fetch: jest.fn().mockResolvedValueOnce([
+        { _raw: { id: 1, nome: "Idoso 1", foto: "foto1.jpg" } },
+        { _raw: { id: 2, nome: "Idoso 2", foto: "foto2.jpg" } },
+      ]),
+    }),
+  }),
+}));
+
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(),
+}));
 
 describe("ListarIdosos", () => {
 
