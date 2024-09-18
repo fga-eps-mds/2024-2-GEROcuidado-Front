@@ -101,6 +101,30 @@ describe('CardMetrica Component', () => {
     });
   });
 
+  it('renderiza corretamente com um valor de métrica TEMPERATURA', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemTemperatura} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da temperatura é exibido
+      expect(getByText('°C')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
+  });
+
+  it('renderiza corretamente quando não há valor de métrica', async () => {
+    // Simular o retorno vazio para não ter valores de métrica
+    (database.get as jest.Mock).mockReturnValueOnce({
+      query: jest.fn().mockReturnValue({
+        fetch: jest.fn(() => Promise.resolve([])),
+      }),
+    });
+
+    const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
+    
+    await waitFor(() => {
+      expect(getByText('Nenhum valor cadastrado')).toBeTruthy();
+    });
+  });
+
   it('mostra a data e a hora corretas', async () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
 
