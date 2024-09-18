@@ -126,4 +126,21 @@ describe('Login', () => {
     });
   });  
 
+  it('deve alternar a visibilidade da senha ao clicar no ícone de olho', () => {
+    const { getByPlaceholderText, getByTestId } = render(<Login />);
+  
+    const senhaInput = getByPlaceholderText('Senha');
+    const eyeIcon = getByTestId('escondeSenhaIcon');
+  
+    // Inicialmente, a senha deve estar escondida
+    expect(senhaInput.props.secureTextEntry).toBe(true);
+  
+    // Clica no ícone para mostrar a senha
+    fireEvent.press(eyeIcon);
+    expect(senhaInput.props.secureTextEntry).toBe(false);
+  
+    // Clica novamente para esconder a senha
+    fireEvent.press(eyeIcon);
+    expect(senhaInput.props.secureTextEntry).toBe(true);
+  });  
 });
