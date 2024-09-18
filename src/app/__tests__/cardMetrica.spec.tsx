@@ -74,6 +74,15 @@ describe('CardMetrica Component', () => {
     });
   });
 
+  it('renderiza corretamente com um valor de métrica PESO', async () => {
+    const { getByText } = render(<CardMetrica item={mockItemPeso} />);
+    
+    await waitFor(() => {
+      expect(getByText('80')).toBeTruthy(); // Verifica se o valor da métrica é exibido
+      expect(getByText('kg')).toBeTruthy(); // Verifica se a unidade de medida está correta
+    });
+  });
+
   it('mostra a data e a hora corretas', async () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
 
