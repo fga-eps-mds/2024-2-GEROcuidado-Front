@@ -7,7 +7,9 @@ import ValorMetrica from "../model/ValorMetrica";
 // Mock para AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
+  setItem: jest.fn(),
 }));
+
 
 // Mock para metrica.service
 jest.mock("../services/metrica.service", () => ({
@@ -72,6 +74,15 @@ describe("VisualizarMetrica component", () => {
     await waitFor(() => {
       const calcularButton = queryByText("Calcular automaticamente");
       expect(calcularButton).toBeNull();
+    });
+  });
+
+  test("handleUser - should handle empty AsyncStorage values", async () => {
+    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => Promise.resolve(null));
+    render(<VisualizarMetrica />);
+    await waitFor(() => {
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith("usuario");
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith("token");
     });
   });
 });
