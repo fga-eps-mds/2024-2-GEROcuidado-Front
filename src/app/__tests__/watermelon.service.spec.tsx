@@ -56,5 +56,15 @@ describe('syncDatabaseWithServer', () => {
         })
       })
     );
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringMatching(/\/api\/usuario\/sync\/pull_users\?lastPulledAt=0&schemaVersion=1&migration=1/),
+      expect.objectContaining({
+        method: 'GET',
+        headers: expect.objectContaining({
+          Authorization: `Bearer ${mockToken}`
+        })
+      })
+    );
   });
 });
