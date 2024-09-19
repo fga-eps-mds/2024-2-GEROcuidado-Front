@@ -30,5 +30,31 @@ describe('syncDatabaseWithServer', () => {
         message: 'Success'
       })
     };
+    
+    const mockToken = 'mockToken';
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(mockToken);
+    (fetch as jest.Mock).mockResolvedValue(mockResponse);
+    
+    (synchronize as jest.Mock).mockImplementation(async ({ pullChanges }) => {
+      const result = await pullChanges({
+        lastPulledAt: 0,
+        schemaVersion: 1,
+        migration: 1
+      });
+      return { changes: mockChanges, timestamp: mockTimestamp };
+    });
+
+    await syncDatabaseWithServer();
+
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith('token');
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/api/usuario/sync/pull_users'),
+      expect.objectContaining({
+        method: 'GET',
+        headers: expect.objectContaining({
+          Authorization: `Bearer ${mockToken}`
+        })
+      })
+    );
   });
 });
