@@ -62,19 +62,34 @@ export default function Registros() {
   const visualizarMetrica = (item: IMetrica) => {
     router.push({
       pathname: "private/pages/visualizarMetrica",
-      params: item._raw,
+      params: {
+        id: item.id,
+        idIdoso: item.idIdoso,
+        categoria: item.categoria,
+        valorMaximo: item.valorMaximo,
+      },
     });
   };
+  
 
   const getMetricas = async () => {
-    if (idoso == undefined) return;
-
+    if (!idoso) return;
+  
     const metricasCollection = database.get('metrica');
-
+  
     try {
       setLoading(true);
       const idosoMetricas = await metricasCollection.query(Q.where('idoso_id', idoso.id)).fetch();
-      setMetricas(idosoMetricas);
+      
+      // Map the WatermelonDB models to your IMetrica interface
+      const metricasData: IMetrica[] = idosoMetricas.map((metrica: any) => ({
+        id: metrica._raw.id,  // Assuming `id` is a field in the _raw object
+        idIdoso: metrica._raw.idoso_id,
+        categoria: metrica._raw.categoria,
+        valorMaximo: metrica._raw.valorMaximo,
+      }));
+  
+      setMetricas(metricasData);
     } catch (err) {
       console.log("Erro ao obter metricas do idoso:", err);
     } finally {
