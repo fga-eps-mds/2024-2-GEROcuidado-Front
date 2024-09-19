@@ -16,4 +16,19 @@ describe('syncDatabaseWithServer', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  it('should successfully synchronize database with server', async () => {
+    const mockChanges = { some: 'changes' };
+    const mockTimestamp = new Date().toISOString();
+    const mockResponse = {
+      ok: true,
+      json: jest.fn().mockResolvedValue({
+        data: {
+          changes: mockChanges,
+          timestamp: mockTimestamp
+        },
+        message: 'Success'
+      })
+    };
+  });
 });
