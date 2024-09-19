@@ -1,13 +1,6 @@
 <testExecutions version="1">
-<file path="src\app\__tests__\editarRotina.spec.tsx">
-<testCase name="EditarRotina Component deve renderizar todos os componentes" duration="317" />
-<testCase name="EditarRotina Component deve atualizar os valores dos inputs corretamente" duration="111" />
-<testCase name="EditarRotina Component deve editar a rotina com sucesso" duration="50" />
-<testCase name="EditarRotina Component deve exibir mensagens de erro corretamente" duration="50" />
-<testCase name="EditarRotina Component deve solicitar permiss&#xf5;es de notifica&#xe7;&#xf5;es e obter o token" duration="27" />
-<testCase name="EditarRotina Component Salvar com descri&#xe7;&#xe3;o muito grande" duration="34" />
-<testCase name="EditarRotina Component Salvar hora com formato errado" duration="24" />
-<testCase name="EditarRotina Component Salvar sem hora" duration="27" />
-<testCase name="EditarRotina Component Salvar com t&#xed;tulo muito grande" duration="29" />
+<file path="src\app\__tests__\cadastrarMetrica.spec.tsx">
+<testCase name="criarMetrica Component renderiza corretamente e interage com as m&#xe9;tricas" duration="805" />
+<testCase name="criarMetrica Component mostrar mensagem quando uma m&#xe9;trica &#xe9; registrada com sucesso" duration="146" />
 </file>
 </testExecutions>
