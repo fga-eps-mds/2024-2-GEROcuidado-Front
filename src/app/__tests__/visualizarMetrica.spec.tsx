@@ -85,4 +85,48 @@ describe("VisualizarMetrica component", () => {
       expect(AsyncStorage.getItem).toHaveBeenCalledWith("token");
     });
   });
+
+  test("closes the modal when 'Cancelar' is pressed", async () => {
+    const { getByText, queryByText } = render(<VisualizarMetrica />);
+
+    await waitFor(() => {
+      const addButton = getByText("Novo valor");
+      expect(addButton).toBeTruthy();
+    });
+
+    fireEvent.press(getByText("Novo valor"));
+
+    await waitFor(() => {
+      expect(getByText("Salvar")).toBeTruthy(); // Confirma que o modal está aberto
+    });
+
+    fireEvent.press(getByText("Cancelar")); // Supondo que exista um botão de cancelar
+
+    await waitFor(() => {
+      expect(queryByText("Salvar")).toBeFalsy(); // Verifica se o modal foi fechado
+    });
+  });
 });
+
+test("closes the modal when 'Cancelar' is pressed", async () => {
+  const { getByText, queryByText } = render(<VisualizarMetrica />);
+
+  await waitFor(() => {
+    const addButton = getByText("Novo valor");
+    expect(addButton).toBeTruthy();
+  });
+
+  fireEvent.press(getByText("Novo valor"));
+
+  await waitFor(() => {
+    expect(getByText("Salvar")).toBeTruthy(); // Confirma que o modal está aberto
+  });
+
+  fireEvent.press(getByText("Cancelar")); // Supondo que exista um botão de cancelar
+
+  await waitFor(() => {
+    expect(queryByText("Salvar")).toBeFalsy(); // Verifica se o modal foi fechado
+  });
+
+});
+
