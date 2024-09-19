@@ -67,4 +67,20 @@ describe('syncDatabaseWithServer', () => {
       })
     );
   });
+
+  it('should throw an error when sync fails', async () => {
+    const mockResponse = {
+      ok: false,
+      text: jest.fn().mockResolvedValue('Sync error')
+    };
+
+    const mockToken = 'mockToken';
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(mockToken);
+    (fetch as jest.Mock).mockResolvedValue(mockResponse);
+
+    await expect(syncDatabaseWithServer()).rejects.toThrow('Sync error');
+
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith('token');
+    expect(fetch).toHaveBeenCalled();
+  });
 });
