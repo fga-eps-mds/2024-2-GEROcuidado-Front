@@ -130,3 +130,22 @@ test("closes the modal when 'Cancelar' is pressed", async () => {
 
 });
 
+test("does not show 'Novo valor' button when categoria is different", async () => {
+  jest.mock("expo-router", () => ({
+    router: {
+      push: jest.fn(),
+      replace: jest.fn(),
+    },
+    useLocalSearchParams: jest.fn(() => ({
+      id: '123',
+      categoria: 'OUTRA_CATEGORIA',
+    })),
+  }));
+
+  const { queryByText } = render(<VisualizarMetrica />);
+
+  await waitFor(() => {
+    const addButton = queryByText("Novo valor");
+    expect(addButton).toBeNull();
+  });
+});
