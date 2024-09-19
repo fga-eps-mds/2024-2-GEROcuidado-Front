@@ -15,4 +15,16 @@ describe("Testes para WeekDays", () => {
     fireEvent.press(getByText("D"));
     expect(mockCallbackFn).toHaveBeenCalledWith([EDiasSemana.Domingo]);
   });
+
+  it("deve remover um dia já selecionado ao pressioná-lo novamente", () => {
+    const diasPredefinidos = [EDiasSemana.Domingo]; // Domingo já está selecionado
+    const mockCallbackFn = jest.fn();
+    const { getByText } = render(<WeekDays dias={diasPredefinidos} callbackFn={mockCallbackFn} />);
+  
+    // Pressione o dia 'D' (Domingo), que já está selecionado
+    fireEvent.press(getByText("D"));
+  
+    // Verifica se o callback foi chamado com o array vazio, removendo Domingo
+    expect(mockCallbackFn).toHaveBeenCalledWith([]);
+  });
 });
