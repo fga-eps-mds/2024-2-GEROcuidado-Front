@@ -24,4 +24,32 @@ describe("MaskInput", () => {
     // Verifica se inputMaskChange foi chamado com o valor mascarado correto
     expect(mockInputMaskChange).toHaveBeenCalledWith("12:34");
   });
+
+  test("não permite horas inválidas", () => {
+    const { getByTestId } = render(
+      <MaskInput inputMaskChange={mockInputMaskChange} testID="mask-input" />
+    );
+
+    const input = getByTestId("mask-input");
+
+    // Simula a mudança do texto
+    fireEvent.changeText(input, "9999");
+
+    // Verifica se inputMaskChange foi chamado com uma string vazia
+    expect(mockInputMaskChange).toHaveBeenCalledWith("");
+  });
+
+  test("verifica se o valor do input é atualizado corretamente", () => {
+    const { getByTestId } = render(
+      <MaskInput inputMaskChange={mockInputMaskChange} testID="mask-input" />
+    );
+
+    const input = getByTestId("mask-input");
+
+    // Simula a mudança do texto
+    fireEvent.changeText(input, "0959");
+
+    // Verifica se inputMaskChange foi chamado com o valor mascarado correto
+    expect(mockInputMaskChange).toHaveBeenCalledWith("09:59");
+  });
 });
