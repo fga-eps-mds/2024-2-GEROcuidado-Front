@@ -3,6 +3,7 @@ import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import VisualizarPublicacao from "../private/pages/visualizarPublicacao";
 import ModalConfirmation from "../components/ModalConfirmation";
 import PublicacaoVisualizar from "../components/PublicacaoVisualizar";
+import { IPublicacaoUsuario, ECategoriaPublicacao } from '../interfaces/forum.interface';
 import { router } from "expo-router";  // Importa a função de roteamento
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -35,6 +36,46 @@ describe("VisualizarPublicacao", () => {
     });
   });
 
+  it("Renderiza corretamente o componente com dados de publicação", async () => {
+    const mockPublicacao: IPublicacaoUsuario = {
+      id: 1,
+      idUsuario: 1,
+      admin: false,
+      email: "usuario@test.com",
+      nome: "Usuário Teste",
+      senha: "senhaFicticia",
+      foto: null,
+      titulo: "Título de Teste",
+      descricao: "Descrição de Teste",
+      dataHora: new Date().toISOString(),
+      categoria: ECategoriaPublicacao.SAUDE,
+      idUsuarioReporte: [],
+    };    
+
+    const { getByText } = render(<PublicacaoVisualizar item={mockPublicacao} />);
+   // Verifica se o título da publicação está sendo exibido
+   await waitFor(() => {
+     expect(getByText(mockPublicacao.titulo)).toBeTruthy();
+   });
+ });  
+
+  it("Obtém usuário e token ao carregar o componente", async () => {
+    render(<VisualizarPublicacao />);
+  
+    await waitFor(() => {
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith("usuario");
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith("token");
+    });
+  });  
+
+  it("Exibe ações corretamente para admin", async () => {
+    const { getByText } = render(<VisualizarPublicacao />);
+  
+    await waitFor(() => {
+      expect(getByText("Apagar")).toBeTruthy();
+    });
+  });  
+
   it("Exibe e interage com o modal de confirmação corretamente", async () => {
     const mockCloseModal = jest.fn();
     const mockCallbackFn = jest.fn();
@@ -65,23 +106,6 @@ describe("VisualizarPublicacao", () => {
   it("Renderiza sem quebrar", () => {
     render(<VisualizarPublicacao />);
   });
-
-  it("Obtém usuário e token ao carregar o componente", async () => {
-    render(<VisualizarPublicacao />);
-  
-    await waitFor(() => {
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith("usuario");
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith("token");
-    });
-  });  
-
-  it("Exibe ações corretamente para admin", async () => {
-    const { getByText } = render(<VisualizarPublicacao />);
-  
-    await waitFor(() => {
-      expect(getByText("Apagar")).toBeTruthy();
-    });
-  });  
 
   it("Confirma exclusão de publicação via modal", async () => {
     const { getByTestId } = render(<VisualizarPublicacao />);
