@@ -7,7 +7,9 @@ import * as Notifications from "expo-notifications";
 
 // Mock do Stack
 jest.mock("expo-router", () => ({
-  Stack: (props: any) => <>{props.children}</>, // Mock simples que renderiza os filhos
+  Stack: jest.fn(({ screenOptions }) => (
+    <>{screenOptions?.header?.()}</> // Renderiza o header se ele existir nas screenOptions
+  )),
 }));
 
 // Mock do Toast
@@ -26,6 +28,15 @@ jest.mock("expo-notifications", () => ({
 }));
 
 describe("AppLayout Component", () => {
+
+  beforeEach(() => {
+    jest.spyOn(console, "log").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks(); // Restaurar o comportamento original
+  });
+
   it("deve renderizar o layout com Toast e Stack", () => {
     const { getByTestId } = render(<AppLayout />);
 
