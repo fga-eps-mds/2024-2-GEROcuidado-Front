@@ -1,13 +1,30 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor} from '@testing-library/react-native';
 import Login from '../public/login'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
-import { loginUser} from '../services/user.service';
+import { loginUser, getUserById} from '../services/user.service';
 import JWT from 'expo-jwt';
+import database from "../db";
+import { syncDatabaseWithServer } from '../services/watermelon.service';
+import getUser  from '../public/login'; 
 
-jest.mock('../services/user.service');
+const mockUser = { id: 1, name: 'Usuário Teste' };
+
+// Mock do database e da função de sincronização
+jest.mock('../db', () => ({
+  get: jest.fn(),
+}));
+
+jest.mock('../services/watermelon.service', () => ({
+  syncDatabaseWithServer: jest.fn(),
+}));
+
+jest.mock('../services/user.service', () => ({
+  getUserById: jest.fn().mockResolvedValue({ data: mockUser }),
+  loginUser: jest.fn(),
+}));
 
 // Mock do Toast
 jest.mock('react-native-toast-message', () => ({
@@ -27,17 +44,16 @@ jest.mock('expo-router', () => ({
   },
 }));
 
-// Mock da função loginUser
-jest.mock('../services/user.service', () => ({
-  loginUser: jest.fn(),
-}));
-
 // Mock do JWT
 jest.mock('expo-jwt', () => ({
   decode: jest.fn(),
 }));
 
 describe('Login', () => {
+  const mockLoginResponse = {
+    data: 'mockToken',
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -206,6 +222,36 @@ describe('Login', () => {
         text1: 'Erro!',
         text2: 'Erro ao salvar o token',
       });
+    });
+  });
+
+  it('deve buscar o usuário no banco e salvar no AsyncStorage', async () => {
+    const mockUser = { id: 1, name: 'Usuário Teste' };
+    const mockId = 1;
+    const mockToken = 'mockToken';
+
+    // Mock do AsyncStorage
+    jest.spyOn(AsyncStorage, 'setItem');
+
+    // Simular a função getUserById
+    getUserById.mockResolvedValue({ data: mockUser });
+
+    // Renderizando o componente
+    const { getByText, getByPlaceholderText } = render(<Login />);
+
+    // Simular preenchimento do formulário
+    fireEvent.changeText(getByPlaceholderText('Email'), 'teste@teste.com');
+    fireEvent.changeText(getByPlaceholderText('Senha'), '123456');
+
+    // Simular o clique no botão de login
+    fireEvent.press(getByText('Entrar')); // Mudei para 'Entrar'
+
+    // Verificar se o AsyncStorage foi chamado com os valores corretos
+    await waitFor(() => {
+      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+        'token', // Altere para o token esperado
+        mockToken // Altere para o valor esperado do token
+      );
     });
   });
 });
