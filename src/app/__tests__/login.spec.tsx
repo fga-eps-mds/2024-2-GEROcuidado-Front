@@ -4,8 +4,10 @@ import Login from '../public/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
-import { loginUser } from '../services/user.service';
+import { loginUser} from '../services/user.service';
 import JWT from 'expo-jwt';
+
+jest.mock('../services/user.service');
 
 // Mock do Toast
 jest.mock('react-native-toast-message', () => ({
@@ -175,5 +177,35 @@ describe('Login', () => {
 
     // Limpa o spy
     consoleErrorSpy.mockRestore();
+  });
+
+  it('deve tratar erro ao processar o token', async () => {
+    const mockToken = 'mockToken';
+    
+    // Simula o retorno do loginUser
+    loginUser.mockResolvedValueOnce({ data: mockToken });
+    
+    // Simula o AsyncStorage.setItem para lançar um erro
+    AsyncStorage.setItem.mockImplementationOnce(() => {
+      throw new Error('Erro ao salvar o token');
+    });
+
+    const { getByPlaceholderText, getByText } = render(<Login />);
+
+    // Preenche os campos
+    fireEvent.changeText(getByPlaceholderText('Email'), 'u@gmail.com');
+    fireEvent.changeText(getByPlaceholderText('Senha'), 'teste1');
+
+    // Clica no botão de login
+    fireEvent.press(getByText('Entrar'));
+
+    // Verifica se o Toast foi chamado com a mensagem de erro
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'error',
+        text1: 'Erro!',
+        text2: 'Erro ao salvar o token',
+      });
+    });
   });
 });
