@@ -51,6 +51,13 @@ describe("AppLayout Component", () => {
     const layoutView = getByTestId("layout-view");
     expect(layoutView).toBeTruthy();
   });
+
+  it("deve renderizar o header do Stack corretamente", () => {
+    const { getByTestId } = render(<AppLayout />);
+    const headerView = getByTestId("stack-header");
+    expect(headerView).toBeTruthy();
+  });
+  
 });
 
 describe("TabsLayout", () => {
