@@ -3,8 +3,9 @@ import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import EditarPerfil from "../private/pages/editarPerfil";
 import { router, useLocalSearchParams } from "expo-router";
 import * as ImagePicker from 'expo-image-picker';
+import Toast from "react-native-toast-message";
 
-// Mock do expo-image-picker
+// Mock for expo-image-picker
 jest.mock('expo-image-picker', () => ({
   launchImageLibraryAsync: jest.fn().mockResolvedValue({
     canceled: false,
@@ -20,7 +21,7 @@ jest.mock('expo-image-picker', () => ({
   }
 }));
 
-// Substituindo o módulo real do expo-router por uma versão mockada
+// Mock for expo-router
 jest.mock('expo-router', () => ({
   useLocalSearchParams: jest.fn().mockReturnValue({
     id: "123",
@@ -29,10 +30,12 @@ jest.mock('expo-router', () => ({
   }),
   router: {
     push: jest.fn(),
-    back: jest.fn(),
-    canGoBack: jest.fn().mockReturnValue(true),
     replace: jest.fn(),
   },
+}));
+
+jest.mock('react-native-toast-message', () => ({
+  show: jest.fn(),
 }));
 
 describe("EditarPerfil component", () => {
@@ -56,39 +59,34 @@ describe("EditarPerfil component", () => {
 
     await waitFor(() => {
       expect(getByText("Campo obrigatório!")).toBeTruthy();
-    });
-
-    await waitFor(() => {
       expect(queryByText("O nome completo deve ter pelo menos 5 caractéres.")).toBeNull();
       expect(queryByText("O nome completo deve ter no máximo 60 caractéres.")).toBeNull();
     });
   });
 
   test("Exibe mensagem de erro ao tentar salvar com nome muito curto", async () => {
-    const { getByText, getByPlaceholderText, findByText } = render(<EditarPerfil />);
+    const { getByText, getByPlaceholderText } = render(<EditarPerfil />);
     const nameInput = getByPlaceholderText("Nome completo");
     fireEvent.changeText(nameInput, "Jo");
 
     const saveButton = getByText("Salvar");
     fireEvent.press(saveButton);
 
-    await waitFor(async () => {
-      const errorMessage = await findByText("O nome completo deve ter pelo menos 5 caractéres.");
-      expect(errorMessage).toBeTruthy();
+    await waitFor(() => {
+      expect(getByText("O nome completo deve ter pelo menos 5 caractéres.")).toBeTruthy();
     });
   });
 
   test("Exibe mensagem de erro ao tentar salvar com nome muito longo", async () => {
-    const { getByText, getByPlaceholderText, findByText } = render(<EditarPerfil />);
+    const { getByText, getByPlaceholderText } = render(<EditarPerfil />);
     const nameInput = getByPlaceholderText("Nome completo");
     fireEvent.changeText(nameInput, "Lorem Ipsum é apenas um texto fictício da indústria de impressão e composição tipográfica.");
 
     const saveButton = getByText("Salvar");
     fireEvent.press(saveButton);
 
-    await waitFor(async () => {
-      const errorMessage = await findByText("O nome completo deve ter no máximo 60 caractéres.");
-      expect(errorMessage).toBeTruthy();
+    await waitFor(() => {
+      expect(getByText("O nome completo deve ter no máximo 60 caractéres.")).toBeTruthy();
     });
   });
 
@@ -113,31 +111,26 @@ describe("EditarPerfil component", () => {
 
     fireEvent.press(apagarContaButton);
 
-    await waitFor(async () => {
-      const confirmationMessage = await findByText("Prosseguir com a exclusão da conta?");
-      expect(confirmationMessage).toBeTruthy();
+    await waitFor(() => {
+      expect(findByText("Prosseguir com a exclusão da conta?")).toBeTruthy();
     });
   });
 
   test("Apaga a conta corretamente após confirmação", async () => {
-    const { getByText, findByText } = render(<EditarPerfil />);
+    const { getByText } = render(<EditarPerfil />);
     const apagarContaButton = getByText("Apagar Conta");
 
     fireEvent.press(apagarContaButton);
+    const confirmButton = getByText("Apagar");
+    fireEvent.press(confirmButton);
 
-    await waitFor(async () => {
-      const confirmButton = getByText("Apagar");
-      fireEvent.press(confirmButton);
-    });
-
-    await waitFor(async () => {
+    await waitFor(() => {
       expect(router.replace).toHaveBeenCalledWith('/');
     });
   });
 
   test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
     const { getByTestId } = render(<EditarPerfil />);
-
     const backButton = getByTestId("back-button-pressable");
 
     fireEvent.press(backButton);
@@ -147,32 +140,62 @@ describe("EditarPerfil component", () => {
     });
   });
 
-  // Novo teste para verificar a atualização da foto de perfil
-  test("Atualiza foto de perfil corretamente", async () => {
-    const { getByTestId, findByText, getByText } = render(<EditarPerfil />);
+  test("Perfil editado com sucesso", async () => {
+    const { getByPlaceholderText, getByText, getByTestId } = render(<EditarPerfil />);
+    
+    const nameInput = getByPlaceholderText("Nome completo");
+    fireEvent.changeText(nameInput, "Gustavo A");
 
-    // Simula a seleção de uma nova foto
     const selectPhotoButton = getByTestId("upload-image-botao");
     fireEvent.press(selectPhotoButton);
-
-    // Espera a mudança de estado e a resposta do mock
+    
     await waitFor(() => {
       expect(ImagePicker.launchImageLibraryAsync).toHaveBeenCalledWith({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         base64: true,
+        quality: 0,
       });
     });
 
-    // Simula a confirmação de atualização da foto
     const saveButton = getByText("Salvar");
     fireEvent.press(saveButton);
 
-    // Verifica se a mensagem de sucesso é exibida após a atualização da foto
-    await waitFor(async () => {
-      const successMessage = await findByText("Foto atualizada com sucesso");
-      expect(successMessage).toBeTruthy();
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: "success",
+        text1: "Sucesso!",
+        text2: "Perfil atualizado com sucesso.",
+      });
+    });
+
+    expect(nameInput.props.value).toBe("Gustavo A");
+
+    await waitFor(() => {
+      expect(router.push).toHaveBeenCalledWith("/private/tabs/perfil");
+    });
+  });
+
+  test("Atualiza foto de perfil corretamente", async () => {
+    const { getByTestId, getByText } = render(<EditarPerfil />);
+
+    const selectPhotoButton = getByTestId("upload-image-botao");
+    fireEvent.press(selectPhotoButton);
+
+    await waitFor(() => {
+      expect(ImagePicker.launchImageLibraryAsync).toHaveBeenCalled();
+    });
+
+    const saveButton = getByText("Salvar");
+    fireEvent.press(saveButton);
+
+    await waitFor(() => {
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: "success",
+        text1: "Sucesso!",
+        text2: "Perfil atualizado com sucesso.",
+      });
     });
   });
 });
