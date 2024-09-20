@@ -1,15 +1,11 @@
 <testExecutions version="1">
-<file path="src/app/__tests__/visualizarPublicacao.spec.tsx">
-<testCase name="VisualizarPublicacao Testa a renderiza&#xe7;&#xe3;o da foto - v&#xe1;lida" duration="450" />
-<testCase name="VisualizarPublicacao Renderiza corretamente o componente com dados de publica&#xe7;&#xe3;o" duration="33" />
-<testCase name="VisualizarPublicacao Obt&#xe9;m usu&#xe1;rio e token ao carregar o componente" duration="82" />
-<testCase name="VisualizarPublicacao Exibe a&#xe7;&#xf5;es corretamente para admin" duration="60" />
-<testCase name="VisualizarPublicacao Exibe e interage com o modal de confirma&#xe7;&#xe3;o corretamente" duration="16" />
-<testCase name="VisualizarPublicacao Renderiza sem quebrar" duration="178" />
-<testCase name="VisualizarPublicacao Confirma exclus&#xe3;o de publica&#xe7;&#xe3;o via modal" duration="111" />
-<testCase name="VisualizarPublicacao Testa bot&#xe3;o de reportar" duration="64" />
-<testCase name="VisualizarPublicacao Testa bot&#xe3;o de desfazer reporte" duration="66" />
-<testCase name="VisualizarPublicacao Testa a navega&#xe7;&#xe3;o para a tela de edi&#xe7;&#xe3;o" duration="63" />
-<testCase name="VisualizarPublicacao N&#xe3;o exibe a&#xe7;&#xf5;es para usu&#xe1;rios n&#xe3;o autorizados" duration="22" />
+<file path="src\app\__tests__\forum.spec.tsx">
+<testCase name="Forum renderiza corretamente" duration="4629" />
+<testCase name="Forum carrega e exibe publica&#xe7;&#xf5;es" duration="73" />
+<testCase name="Forum exibe mensagem de erro quando falha ao carregar publica&#xe7;&#xf5;es" duration="65" />
+<testCase name="Forum deve realizar pesquisa com debounce" duration="22" />
+<testCase name="Forum Forum - Carregar Mais desativa o bot&#xe3;o &apos;Carregar Mais&apos; quando n&#xe3;o h&#xe1; novas publica&#xe7;&#xf5;es" duration="15" />
+<testCase name="Forum Forum - Sele&#xe7;&#xe3;o de categoria atualiza a categoria ao selecionar um item" duration="241" />
+<testCase name="Forum Forum Page - Error Handling deve exibir uma mensagem de erro quando a requisi&#xe7;&#xe3;o falha" duration="61" />
 </file>
 </testExecutions>

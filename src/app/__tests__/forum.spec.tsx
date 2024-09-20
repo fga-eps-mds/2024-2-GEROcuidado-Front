@@ -131,4 +131,24 @@ describe("Forum", () => {
       });
     });
   });
+
+  describe('Forum Page - Error Handling', () => {
+    it('deve exibir uma mensagem de erro quando a requisição falha', async () => {
+      const mockError = { message: 'Erro de conexão!' };
+  
+      // Forçando o serviço a rejeitar com um erro
+      (getAllPublicacao as jest.Mock).mockRejectedValueOnce(mockError);
+  
+      const { getByText } = render(<Forum />);
+  
+      // Espera o Toast ser chamado após o erro
+      await waitFor(() => {
+        expect(Toast.show).toHaveBeenCalledWith({
+          type: 'error',
+          text1: 'Erro!',
+          text2: mockError.message,
+        });
+      });
+    });
+  });
 });
