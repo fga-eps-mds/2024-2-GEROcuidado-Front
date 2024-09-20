@@ -5,6 +5,7 @@ import { getAllPublicacao } from "../services/forum.service";
 import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 import { useNavigation } from '@react-navigation/native';
+import { ECategoriaPesquisa } from "../interfaces/forum.interface";
 
 // Mockando as funções de serviço e navegação
 jest.mock("../services/forum.service");
@@ -101,4 +102,33 @@ describe("Forum", () => {
     });
   });
 
+  describe("Forum - Seleção de categoria", () => {
+    it("atualiza a categoria ao selecionar um item", async () => {
+      const { getByText, getByPlaceholderText } = render(<Forum />);
+  
+      // Supondo que o dropdown tenha um placeholder "Todas"
+      const dropdown = getByText("Todas");
+  
+      // Simula a abertura do dropdown
+      fireEvent.press(dropdown);
+  
+      // Verifica se o dropdown foi aberto e se a opção "Saúde" está visível
+      await waitFor(() => {
+        const dropdownOption = getByText(ECategoriaPesquisa.SAUDE);
+        expect(dropdownOption).toBeTruthy();
+        
+        // Simula a seleção da categoria "Saúde"
+        fireEvent.press(dropdownOption);
+      });
+  
+      // Verifica se a função setCategoria foi chamada corretamente
+      await waitFor(() => {
+        expect(getAllPublicacao).toHaveBeenCalledWith(
+          expect.any(Number),
+          { titulo: expect.any(String), isReported: expect.any(Boolean), categoria: ECategoriaPesquisa.SAUDE },
+          expect.any(Object)
+        );
+      });
+    });
+  });
 });
