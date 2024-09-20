@@ -275,4 +275,16 @@ describe("EditarRotina Component", () => {
     
     expect(screen.getByText('Ativar notificação')).toBeTruthy();
   });
+
+  test('deve chamar a função de salvar com os dados corretos', async () => {
+    render(<EditarRotina />);
+  
+    fireEvent.changeText(screen.getByPlaceholderText('Adicionar título'), 'Título Teste');
+    fireEvent.changeText(screen.getByPlaceholderText('Data da rotina'), '25/09/2024');
+    fireEvent.changeText(screen.getByPlaceholderText('Horário de início'), '14:30');
+    fireEvent.changeText(screen.getByPlaceholderText('Descrição'), 'Descrição Teste');
+  
+    fireEvent.press(screen.getByText('Salvar'));
+  });
+
 });
