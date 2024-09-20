@@ -143,4 +143,37 @@ describe('Login', () => {
     fireEvent.press(eyeIcon);
     expect(senhaInput.props.secureTextEntry).toBe(true);
   });  
+
+  it('deve tratar erro ao decodificar o token', async () => {
+    const token = 'mockToken';
+    const userResponse = { data: token };
+    const userInfo = { id: 1, email: 'u@gmail.com', senha: 'teste1' };
+
+    // Mock dos retornos das funções
+    (loginUser as jest.Mock).mockResolvedValue(userResponse);
+    (JWT.decode as jest.Mock).mockImplementation(() => {
+      throw new Error('Erro ao decodificar o token');
+    });
+    (AsyncStorage.setItem as jest.Mock).mockResolvedValue(undefined);
+    (router.push as jest.Mock).mockImplementation(() => {});
+
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { getByPlaceholderText, getByText } = render(<Login />);
+
+    fireEvent.changeText(getByPlaceholderText('Email'), 'u@gmail.com');
+    fireEvent.changeText(getByPlaceholderText('Senha'), 'teste1');
+    fireEvent.press(getByText('Entrar'));
+
+    // Aguarda que o loginUser seja chamado
+    await waitFor(() => {
+      expect(loginUser).toHaveBeenCalledWith({ email: 'u@gmail.com', senha: 'teste1' });
+    });
+
+    // Verifica se console.error foi chamado com a mensagem esperada
+    expect(consoleErrorSpy).toHaveBeenCalledWith("Erro ao decodificar o token:", expect.any(Error));
+
+    // Limpa o spy
+    consoleErrorSpy.mockRestore();
+  });
 });
