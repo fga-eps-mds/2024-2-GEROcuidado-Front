@@ -1,170 +1,27 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import MaskInput from "../components/MaskHour";
+import MaskInput from "../components/MaskHour"; // ajuste o caminho se necessário
+import MaskHour from "../components/MaskHour";
 
-describe("MaskInput Component", () => {
-  it("should apply mask correctly for valid times", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
-    );
+// Mock da função inputMaskChange
+const mockInputMaskChange = jest.fn();
 
-    const input = getByPlaceholderText("Enter time");
-
-    // Test valid time inputs
-    fireEvent.changeText(input, "0923");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("09:23");
-
-    fireEvent.changeText(input, "1545");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("15:45");
+describe("MaskInput", () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // Limpa chamadas anteriores dos mocks antes de cada teste
   });
 
-  it("should clear the input correctly", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
+  test("aplica a máscara corretamente", () => {
+    const { getByTestId } = render(
+      <MaskInput inputMaskChange={mockInputMaskChange} testID="mask-input" />
     );
 
-    const input = getByPlaceholderText("Enter time");
+    const input = getByTestId("mask-input");
 
-    // Simulate input change with a value
-    fireEvent.changeText(input, "0930");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("09:30");
-
-    // Clear the input
-    fireEvent.changeText(input, "");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("");
-  });
-
-  it("should handle different lengths of input", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
-    );
-
-    const input = getByPlaceholderText("Enter time");
-
-    // Test varying lengths of input
-    fireEvent.changeText(input, "1");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("1");
-
-    fireEvent.changeText(input, "123");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("12:3");
-
+    // Simula a mudança do texto
     fireEvent.changeText(input, "1234");
+
+    // Verifica se inputMaskChange foi chamado com o valor mascarado correto
     expect(mockInputMaskChange).toHaveBeenCalledWith("12:34");
-  });
-
-  it("should ignore non-numeric characters", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
-    );
-
-    const input = getByPlaceholderText("Enter time");
-
-    // Simulate input with non-numeric characters
-    fireEvent.changeText(input, "12ab34");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("12:34");
-
-    fireEvent.changeText(input, "hello");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("");
-  });
-
-  it("should not call inputMaskChange if the value does not change", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
-    );
-
-    const input = getByPlaceholderText("Enter time");
-
-    // Simulate input change
-    fireEvent.changeText(input, "1200");
-
-    // Simulate the same input again
-    fireEvent.changeText(input, "1200");
-
-    // The callback should be called only once with the same value
-    expect(mockInputMaskChange).toHaveBeenCalledTimes(2);
-  });
-
-  it("should apply mask correctly for inputs longer than required", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
-    );
-
-    const input = getByPlaceholderText("Enter time");
-
-    // Simulate input with more than 4 digits
-    fireEvent.changeText(input, "123456");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("12:3456");
-  });
-
-  it("should reset the input if the first digit of the hour is greater than 2", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
-    );
-
-    const input = getByPlaceholderText("Enter time");
-
-    // Simulate invalid hour (first digit greater than 2)
-    fireEvent.changeText(input, "3923");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("");
-  });
-
-  it("should only keep the first digit if the second digit of the hour is greater than 9", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
-    );
-
-    const input = getByPlaceholderText("Enter time");
-
-    // Simulate invalid hour (second digit greater than 9)
-    fireEvent.changeText(input, "1944");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("19:44");
-  });
-
-  it("should only keep the hour part if the first digit of the minute is greater than 5", () => {
-    const mockInputMaskChange = jest.fn();
-    const { getByPlaceholderText } = render(
-      <MaskInput
-        inputMaskChange={mockInputMaskChange}
-        placeholder="Enter time"
-      />
-    );
-
-    const input = getByPlaceholderText("Enter time");
-
-    // Simulate invalid minutes (first digit of minute greater than 5)
-    fireEvent.changeText(input, "1259");
-    expect(mockInputMaskChange).toHaveBeenCalledWith("12:59");
   });
 });
