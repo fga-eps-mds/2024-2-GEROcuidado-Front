@@ -70,7 +70,25 @@ describe("AppLayout Component", () => {
 
     expect(Notifications.addNotificationResponseReceivedListener).toHaveBeenCalled();
     expect(console.log).toHaveBeenCalledWith(response);
-  }); 
+  });
+
+  it("deve configurar o handler de notificação corretamente", async () => {
+    render(<AppLayout />);
+  
+    // Verifica se o setNotificationHandler foi chamado
+    expect(Notifications.setNotificationHandler).toHaveBeenCalled();
+  
+    // Extrai a configuração passada para setNotificationHandler
+    const handlerConfig = Notifications.setNotificationHandler.mock.calls[0][0];
+  
+    // Verifica se handleNotification retorna o objeto esperado
+    const result = await handlerConfig.handleNotification();
+    expect(result).toEqual({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    });
+  });  
 });
 
 describe("TabsLayout", () => {
