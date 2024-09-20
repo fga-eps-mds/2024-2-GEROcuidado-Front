@@ -29,9 +29,6 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "experiments": {
-      "typeRoutes": true
-    },
     "plugins": [
       "expo-router"
     ],
@@ -47,7 +44,7 @@
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/7028a81c-adee-41de-91a7-b7e80535a448"
+      "url": "https://u.expo.dev/7b777975-c65a-4ae3-ab23-93691fd81c12"
     }
   }
 }
