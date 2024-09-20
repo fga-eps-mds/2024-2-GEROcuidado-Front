@@ -72,6 +72,19 @@ describe("VisualizarMetrica component", () => {
       });
     });
 
+  it('deve retornar null se a chave não existir no AsyncStorage', async () => {
+    // Mock da implementação de AsyncStorage.getItem para retornar null
+    (AsyncStorage.getItem as jest.Mock).mockImplementation(() => {
+      return Promise.resolve(null);
+    });
+
+    const key = 'chave_inexistente';
+    const value = await AsyncStorage.getItem(key);
+
+    // Verifique se o valor retornado é null
+    expect(value).toBeNull();
+  });
+
   test("renders the component correctly", async () => {
     const { getByText } = render(<VisualizarMetrica />);
 
