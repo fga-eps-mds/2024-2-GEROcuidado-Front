@@ -73,10 +73,14 @@ describe("VisualizarMetrica component", () => {
   });
 
   it("calculates IMC when category is 'IMC'", async () => {
-    const { getByText, queryByText } = render(<VisualizarMetrica />);
-    await waitFor( () => {
-      fireEvent.press(getByText("Calcular automaticamente"));
+    const { getByText } = render(<VisualizarMetrica />);
+
+    // Verificando se o botão "Calcular automaticamente" está presente
+    await waitFor(() => {
+      expect(getByText("Calcular automaticamente")).toBeTruthy();
     });
+
+    fireEvent.press(getByText("Calcular automaticamente"));
   });
 
   test("renders 'Novo valor' button when category is not IMC", async () => {
