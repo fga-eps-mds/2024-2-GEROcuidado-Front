@@ -242,4 +242,22 @@ describe("CadastrarIdoso component", () => {
     consoleErrorSpy.mockRestore();
   });
 
+  it("Exibe mensagem de 'Usuário não encontrado' se não houver dados", async () => {
+    // Spy no console.log para monitorar as chamadas
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+    // Mock para retornar null, simulando ausência de dados no AsyncStorage
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
+
+    const { getByText } = render(<CadastrarIdoso />);
+
+    // Verifica se a mensagem de usuário não encontrado é exibida
+    await waitFor(() => {
+      expect(consoleLogSpy).toHaveBeenCalledWith("Usuário não encontrado no AsyncStorage.");
+    });
+
+    // Restaurar o comportamento original do console.log após o teste
+    consoleLogSpy.mockRestore();
+  });
+
 });
