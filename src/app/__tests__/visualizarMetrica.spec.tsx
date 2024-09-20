@@ -10,7 +10,6 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   setItem: jest.fn(),
 }));
 
-
 // Mock para metrica.service
 jest.mock("../services/metrica.service", () => ({
   getValoresMetrica: jest.fn(() => Promise.resolve([{ id: '123', categoria: 'HIDRATACAO', valorMaximo: 2000 }])),
@@ -40,8 +39,30 @@ describe("VisualizarMetrica component", () => {
         return Promise.resolve("mockedToken");
       }
       return Promise.resolve(null);
+//
+//      // Limpar os mocks antes de cada teste
+//      jest.clearAllMocks();
     });
+    
   });
+
+  it('deve retornar o valor mockado de AsyncStorage.getItem', async () => {
+    // Mock da implementação de AsyncStorage.getItem para retornar um valor simulado
+    (AsyncStorage.getItem as jest.Mock).mockImplementation((key: string) => {
+      return Promise.resolve('valor para a chave: ${key}');
+    });
+
+    // Chame a função que utiliza AsyncStorage.getItem
+    const key = 'teste_chave';
+    const value = await AsyncStorage.getItem(key);
+
+    // Verifique se o valor retornado é o esperado
+    expect(value).toBe('valor para a chave: ${key}');
+
+    // Verifique se AsyncStorage.getItem foi chamado corretamente
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith(key);
+  });
+
   test("renders 'Novo valor' button when category is not IMC", async () => {
       const { getByText } = render(<VisualizarMetrica />);
 
@@ -141,59 +162,59 @@ describe("VisualizarMetrica component", () => {
     });
   });
 
-});
-
-    test("calculates IMC when category is 'IMC'", async () => {
-      jest.mock("expo-router", () => ({
-        router: {
-          push: jest.fn(),
-          replace: jest.fn(),
-        },
-        useLocalSearchParams: jest.fn(() => ({
-          id: '123',
-          categoria: 'IMC',
-        })),
-      }));
-});
-
-test("closes the modal when 'Cancelar' is pressed", async () => {
-  const { getByText, queryByText } = render(<VisualizarMetrica />);
-
-  await waitFor(() => {
-    const addButton = getByText("Novo valor");
-    expect(addButton).toBeTruthy();
+  test("calculates IMC when category is 'IMC'", async () => {
+    jest.mock("expo-router", () => ({
+      router: {
+        push: jest.fn(),
+        replace: jest.fn(),
+      },
+      useLocalSearchParams: jest.fn(() => ({
+        id: '123',
+        categoria: 'IMC',
+      })),
+    }));
+  });
+  
+  test("closes the modal when 'Cancelar' is pressed", async () => {
+    const { getByText, queryByText } = render(<VisualizarMetrica />);
+  
+    await waitFor(() => {
+      const addButton = getByText("Novo valor");
+      expect(addButton).toBeTruthy();
+    });
+  
+    fireEvent.press(getByText("Novo valor"));
+  
+    await waitFor(() => {
+      expect(getByText("Salvar")).toBeTruthy();
+    });
+  
+    fireEvent.press(getByText("Cancelar"));
+  
+    await waitFor(() => {
+      expect(queryByText("Salvar")).toBeFalsy();
+    });
+  
+  });
+  
+  test("does not show 'Novo valor' button when categoria is different", async () => {
+    jest.mock("expo-router", () => ({
+      router: {
+        push: jest.fn(),
+        replace: jest.fn(),
+      },
+      useLocalSearchParams: jest.fn(() => ({
+        id: '123',
+        categoria: 'OUTRA_CATEGORIA',
+      })),
+    }));
+  
+    const { queryByText } = render(<VisualizarMetrica />);
+  
+    await waitFor(() => {
+      const addButton = queryByText("Novo valor");
+      expect(addButton).toBeNull();
+    });
   });
 
-  fireEvent.press(getByText("Novo valor"));
-
-  await waitFor(() => {
-    expect(getByText("Salvar")).toBeTruthy();
-  });
-
-  fireEvent.press(getByText("Cancelar"));
-
-  await waitFor(() => {
-    expect(queryByText("Salvar")).toBeFalsy();
-  });
-
-});
-
-test("does not show 'Novo valor' button when categoria is different", async () => {
-  jest.mock("expo-router", () => ({
-    router: {
-      push: jest.fn(),
-      replace: jest.fn(),
-    },
-    useLocalSearchParams: jest.fn(() => ({
-      id: '123',
-      categoria: 'OUTRA_CATEGORIA',
-    })),
-  }));
-
-  const { queryByText } = render(<VisualizarMetrica />);
-
-  await waitFor(() => {
-    const addButton = queryByText("Novo valor");
-    expect(addButton).toBeNull();
-  });
 });
