@@ -100,4 +100,33 @@ describe("MaskInput", () => {
     // Verifica se inputMaskChange foi chamado apenas com o primeiro dígito
     expect(mockInputMaskChange).toHaveBeenCalledWith("19:");
   });
+
+  test("chama inputMaskChange corretamente com valor inicial vazio", () => {
+    const { getByTestId } = render(
+      <MaskInput inputMaskChange={mockInputMaskChange} testID="mask-input" />
+    );
+  
+    const input = getByTestId("mask-input");
+  
+    // Simula a mudança do texto para uma string vazia
+    fireEvent.changeText(input, "");
+  
+    // Verifica se inputMaskChange foi chamado com uma string vazia
+    expect(mockInputMaskChange).toHaveBeenCalledWith("");
+  });
+
+  test("aplica a máscara parcialmente com dígito único", () => {
+    const { getByTestId } = render(
+      <MaskInput inputMaskChange={mockInputMaskChange} testID="mask-input" />
+    );
+  
+    const input = getByTestId("mask-input");
+  
+    // Simula a mudança do texto com um único dígito
+    fireEvent.changeText(input, "1");
+  
+    // Verifica se inputMaskChange foi chamado corretamente
+    expect(mockInputMaskChange).toHaveBeenCalledWith("1");
+  });
+
 });
