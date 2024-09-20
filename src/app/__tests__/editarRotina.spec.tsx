@@ -256,4 +256,23 @@ describe("EditarRotina Component", () => {
     });
   });
 
+  test('deve renderizar corretamente o botão de notificação quando notificacao está ativa', () => {
+    // Mock do retorno do useLocalSearchParams com notificacao ativada
+    (useLocalSearchParams as jest.Mock).mockReturnValue({
+      rotina: JSON.stringify({
+        id: 1,
+        titulo: 'Rotina Teste',
+        descricao: 'Descrição Teste',
+        categoria: 'GERAL',
+        dias: [1, 2, 3],
+        dataHora: new Date().toISOString(),
+        notificacao: true,
+        token: 'mockToken',
+      }),
+    });
+  
+    render(<EditarRotina />);
+    
+    expect(screen.getByText('Ativar notificação')).toBeTruthy();
+  });
 });
