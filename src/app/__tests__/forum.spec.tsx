@@ -66,4 +66,21 @@ describe("Forum", () => {
     }));
   });
 
+  it("deve realizar pesquisa com debounce", async () => {
+    const { getByPlaceholderText } = render(<Forum />);
+  
+    // Alterar para o placeholder correto
+    const searchInput = getByPlaceholderText("Pesquise uma publicação");
+  
+    fireEvent.changeText(searchInput, "");
+  
+    // Aguarda o debounce
+    await waitFor(() => {
+      expect(getAllPublicacao).toHaveBeenCalledWith(
+        0,
+        { titulo: "", isReported: false },
+        expect.any(Object)
+      );
+    });
+  });
 });

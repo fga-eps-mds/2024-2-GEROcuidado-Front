@@ -56,4 +56,9 @@ describe("TabsLayout", () => {
     expect(getByTestId('tabs-mock')).toBeTruthy();
   });
   */ 
+  it("deve configurar os listeners de notificação", () => {
+    render(<AppLayout />);
+    expect(Notifications.addNotificationReceivedListener).toHaveBeenCalled();
+    expect(Notifications.addNotificationResponseReceivedListener).toHaveBeenCalled();
+  });
 });

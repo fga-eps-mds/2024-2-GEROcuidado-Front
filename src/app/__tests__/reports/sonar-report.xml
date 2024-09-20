@@ -1,6 +1,7 @@
 <testExecutions version="1">
-<file path="src\app\__tests__\cadastrarMetrica.spec.tsx">
-<testCase name="criarMetrica Component renderiza corretamente e interage com as m&#xe9;tricas" duration="805" />
-<testCase name="criarMetrica Component mostrar mensagem quando uma m&#xe9;trica &#xe9; registrada com sucesso" duration="146" />
+<file path="src\app\__tests__\_layout.spec.tsx">
+<testCase name="AppLayout Component deve renderizar o layout com Toast e Stack" duration="559" />
+<testCase name="TabsLayout deve importar o componente TabsLayout corretamente" duration="6" />
+<testCase name="TabsLayout deve configurar os listeners de notifica&#xe7;&#xe3;o" duration="2" />
 </file>
 </testExecutions>
