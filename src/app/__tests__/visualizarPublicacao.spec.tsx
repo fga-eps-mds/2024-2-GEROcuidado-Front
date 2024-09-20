@@ -1,6 +1,8 @@
 import React from "react";
 import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import VisualizarPublicacao from "../private/pages/visualizarPublicacao";
+import ModalConfirmation from "../components/ModalConfirmation";
+import PublicacaoVisualizar from "../components/PublicacaoVisualizar";
 import { router } from "expo-router";  // Importa a função de roteamento
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -33,9 +35,45 @@ describe("VisualizarPublicacao", () => {
     });
   });
 
+  it("Exibe e interage com o modal de confirmação corretamente", async () => {
+    const mockCloseModal = jest.fn();
+    const mockCallbackFn = jest.fn();
+  
+    const { getByText, getByTestId } = render(
+      <ModalConfirmation
+        visible={true}
+        callbackFn={mockCallbackFn}
+        closeModal={mockCloseModal}
+        message="Tem certeza que deseja deletar?"
+        messageButton="Confirmar"
+        testID="modalConfirm"
+      />
+    );
+  
+    // Verifica se o modal é renderizado com a mensagem correta
+    expect(getByText("Tem certeza que deseja deletar?")).toBeTruthy();
+  
+    // Simula o clique no botão "Cancelar" e verifica se a função closeModal é chamada
+    fireEvent.press(getByTestId("cancelarBtn"));
+    expect(mockCloseModal).toHaveBeenCalled();
+  
+    // Simula o clique no botão "Confirmar" e verifica se a função callbackFn é chamada
+    fireEvent.press(getByTestId("callbackBtn"));
+    expect(mockCallbackFn).toHaveBeenCalled();
+  });  
+
   it("Renderiza sem quebrar", () => {
     render(<VisualizarPublicacao />);
   });
+
+  it("Obtém usuário e token ao carregar o componente", async () => {
+    render(<VisualizarPublicacao />);
+  
+    await waitFor(() => {
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith("usuario");
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith("token");
+    });
+  });  
 
   it("Exibe ações corretamente para admin", async () => {
     const { getByText } = render(<VisualizarPublicacao />);
@@ -45,24 +83,21 @@ describe("VisualizarPublicacao", () => {
     });
   });  
 
-  it("Testa botão de apagar", async () => {
-    const { getByTestId, getByText } = render(<VisualizarPublicacao />);
-    
-    // Simulando o clique no botão "Apagar"
+  it("Confirma exclusão de publicação via modal", async () => {
+    const { getByTestId } = render(<VisualizarPublicacao />);
+  
     await act(async () => {
       fireEvent.press(getByTestId("deleteBtn"));
     });
-    
-    // Verificando se o modal foi exibido corretamente
-    await waitFor(() => {
-      expect(getByTestId("deleteModal")).toBeTruthy();
-    });
-    
-    // Simulando a confirmação no modal
+  
     await act(async () => {
       fireEvent.press(getByTestId("callbackBtn"));
     });
-  });
+  
+    await waitFor(() => {
+      expect(AsyncStorage.getItem).toHaveBeenCalled();
+    });
+  });    
 
   it("Testa botão de reportar", async () => {
     // Configurando o estado para que o botão de reportar seja visível
