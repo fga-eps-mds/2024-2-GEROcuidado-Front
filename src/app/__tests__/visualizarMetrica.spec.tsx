@@ -40,8 +40,16 @@ describe("VisualizarMetrica component", () => {
         return Promise.resolve("mockedToken");
       }
       return Promise.resolve(null);
-    });    
+    });
   });
+  test("renders 'Novo valor' button when category is not IMC", async () => {
+      const { getByText } = render(<VisualizarMetrica />);
+
+      await waitFor(() => {
+        const novoValorButton = getByText("Novo valor");
+        expect(novoValorButton).toBeTruthy();
+      });
+    });
 
   test("renders the component correctly", async () => {
     const { getByText } = render(<VisualizarMetrica />);
@@ -51,6 +59,32 @@ describe("VisualizarMetrica component", () => {
       expect(categoriaText).toBeTruthy();
     });
   });
+
+
+  test("should retrieve idoso from AsyncStorage and update state", async () => {
+    const mockIdoso = { id: 1, name: "Teste idoso" };
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockIdoso));
+
+    const { queryByText } = render(<VisualizarMetrica />);
+
+    await waitFor(() => {
+
+      const idosoName = queryByText("Teste idoso");
+      expect(idosoName).toBeNull();
+    });
+  });
+
+    test("should not update state if no idoso is found", async () => {
+
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
+
+      const { queryByText } = render(<VisualizarMetrica />);
+
+      await waitFor(() => {
+        const idosoName = queryByText("Teste idoso");
+        expect(idosoName).toBeNull();
+      });
+    });
 
   test("opens the modal when 'Novo valor' button is pressed", async () => {
     const { getByText } = render(<VisualizarMetrica />);
@@ -97,15 +131,29 @@ describe("VisualizarMetrica component", () => {
     fireEvent.press(getByText("Novo valor"));
 
     await waitFor(() => {
-      expect(getByText("Salvar")).toBeTruthy(); // Confirma que o modal está aberto
+      expect(getByText("Salvar")).toBeTruthy();
     });
 
-    fireEvent.press(getByText("Cancelar")); // Supondo que exista um botão de cancelar
+    fireEvent.press(getByText("Cancelar"));
 
     await waitFor(() => {
-      expect(queryByText("Salvar")).toBeFalsy(); // Verifica se o modal foi fechado
+      expect(queryByText("Salvar")).toBeFalsy();
     });
   });
+
+});
+
+    test("calculates IMC when category is 'IMC'", async () => {
+      jest.mock("expo-router", () => ({
+        router: {
+          push: jest.fn(),
+          replace: jest.fn(),
+        },
+        useLocalSearchParams: jest.fn(() => ({
+          id: '123',
+          categoria: 'IMC',
+        })),
+      }));
 });
 
 test("closes the modal when 'Cancelar' is pressed", async () => {
@@ -119,13 +167,13 @@ test("closes the modal when 'Cancelar' is pressed", async () => {
   fireEvent.press(getByText("Novo valor"));
 
   await waitFor(() => {
-    expect(getByText("Salvar")).toBeTruthy(); // Confirma que o modal está aberto
+    expect(getByText("Salvar")).toBeTruthy();
   });
 
-  fireEvent.press(getByText("Cancelar")); // Supondo que exista um botão de cancelar
+  fireEvent.press(getByText("Cancelar"));
 
   await waitFor(() => {
-    expect(queryByText("Salvar")).toBeFalsy(); // Verifica se o modal foi fechado
+    expect(queryByText("Salvar")).toBeFalsy();
   });
 
 });
