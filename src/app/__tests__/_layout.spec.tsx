@@ -4,6 +4,7 @@ import AppLayout from "../_layout";
 import TabsLayout from "../private/tabs/_layout";
 import Toast from "react-native-toast-message";
 import * as Notifications from "expo-notifications";
+import { iconComponent } from  "../private/tabs/_layout"; // Ajuste o caminho conforme necessário
 
 // Mock do Stack
 jest.mock("expo-router", () => ({
@@ -106,3 +107,16 @@ describe("TabsLayout", () => {
   });
   */ 
 });
+
+// describe("TabsLayout Component", () => {
+//   it("deve renderizar as abas com os ícones corretos", () => {
+//     const { getByText } = render(<TabsLayout />);
+
+//     // Verifica se os títulos das abas estão presentes
+//     expect(getByText("Rotinas")).toBeTruthy();
+//     expect(getByText("Registros")).toBeTruthy();
+//     expect(getByText("Forum")).toBeTruthy();
+//     expect(getByText("Perfil")).toBeTruthy();
+//   });
+
+// });
