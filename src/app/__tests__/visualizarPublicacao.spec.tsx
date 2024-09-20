@@ -26,13 +26,39 @@ interface Mocks {
 
 describe("VisualizarPublicacao", () => {
   beforeEach(() => {
-    const mocks: Mocks = {
+    const mocks = {
       usuario: JSON.stringify({ id: 1, admin: true }),
       token: "mock-token",
     };
 
     (AsyncStorage.getItem as jest.Mock).mockImplementation((key: string) => {
       return Promise.resolve(mocks[key as keyof Mocks]);
+    });
+  });
+
+  it("Testa a renderização da foto - válida", async () => {
+    const mockPublicacao: IPublicacaoUsuario = {
+      id: 1,
+      idUsuario: 1,
+      admin: false,
+      email: "usuario@test.com",
+      nome: "Usuário Teste",
+      senha: "senhaFicticia",
+      foto: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...",   
+      titulo: "Título de Teste",
+      descricao: "Descrição de Teste",
+      dataHora: new Date().toISOString(),
+      categoria: ECategoriaPublicacao.SAUDE,
+      idUsuarioReporte: [],
+
+    };
+    const { getByTestId } = render(<PublicacaoVisualizar item={mockPublicacao} />);
+  
+    // Verifica se a imagem é renderizada como uma View sem foto
+    const fotoResultado = getByTestId("foto-resultado");
+    await waitFor(() => {
+      // Verifica se a View está renderizada corretamente
+      expect(fotoResultado).toBeTruthy(); // Isso verifica se o componente foi renderizado
     });
   });
 
@@ -53,11 +79,10 @@ describe("VisualizarPublicacao", () => {
     };    
 
     const { getByText } = render(<PublicacaoVisualizar item={mockPublicacao} />);
-   // Verifica se o título da publicação está sendo exibido
-   await waitFor(() => {
-     expect(getByText(mockPublicacao.titulo)).toBeTruthy();
-   });
- });  
+    await waitFor(() => {
+      expect(getByText(mockPublicacao.titulo)).toBeTruthy();
+    });
+  });
 
   it("Obtém usuário e token ao carregar o componente", async () => {
     render(<VisualizarPublicacao />);

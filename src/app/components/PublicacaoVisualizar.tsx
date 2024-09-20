@@ -18,7 +18,11 @@ export default function PublicacaoVisualizar({ item }: IProps) {
   const getFoto = (foto: string | null | undefined) => {
     if (hasFoto(foto)) {
       return (
-        <Image source={{ uri: foto as string }} style={styles.fotoPerfil} />
+        <Image         
+        source={{ uri: foto as string }}
+        style={styles.fotoPerfil}
+        testID="foto-resultado" 
+        />
       );
     }
 
