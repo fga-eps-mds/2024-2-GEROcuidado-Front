@@ -3,6 +3,13 @@ import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
 import CadastrarIdoso from "../private/pages/cadastrarIdoso";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams, useRouter } from "expo-router";
+import database from "../db";
+
+jest.mock('../db', () => ({
+  get: jest.fn().mockReturnValue({
+    query: jest.fn(),
+  }),
+}));
 
 // Substituindo o módulo real do expo-router por uma versão mockada
 jest.mock('expo-router', () => ({
@@ -30,6 +37,7 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
 }));
 
 describe("CadastrarIdoso component", () => {
+  
   test("renders correctly", () => {
     (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
       if (key === "usuario") {
@@ -214,4 +222,24 @@ describe("CadastrarIdoso component", () => {
       expect(erroTelefone.props.children.props.text).toBe("Campo obrigatório!");
     });
   });
+
+  it("Exibe mensagem de erro se o AsyncStorage falhar", async () => {
+    // Spy no console.error para monitorar as chamadas
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    // Mock de erro na leitura do AsyncStorage
+    const erroSimulado = new Error("Erro ao ler AsyncStorage");
+    (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(erroSimulado);
+
+    const { getByText } = render(<CadastrarIdoso />);
+
+    // Espera que o erro seja capturado corretamente
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith("Erro ao obter usuário:", erroSimulado);
+    });
+
+    // Restaurar o console.error original após o teste
+    consoleErrorSpy.mockRestore();
+  });
+
 });
