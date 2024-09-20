@@ -57,7 +57,20 @@ describe("AppLayout Component", () => {
     const headerView = getByTestId("stack-header");
     expect(headerView).toBeTruthy();
   });
-  
+
+  it("deve lidar com notificações corretamente", async () => {
+    const notification = { request: { content: { title: "Test Notification" } } };
+    Notifications.addNotificationReceivedListener.mock.calls[0][0](notification);
+
+    expect(Notifications.addNotificationReceivedListener).toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith(notification);
+
+    const response = { actionIdentifier: "default" };
+    Notifications.addNotificationResponseReceivedListener.mock.calls[0][0](response);
+
+    expect(Notifications.addNotificationResponseReceivedListener).toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith(response);
+  }); 
 });
 
 describe("TabsLayout", () => {
