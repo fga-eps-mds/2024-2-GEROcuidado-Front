@@ -33,7 +33,7 @@ jest.mock("expo-router", () => ({
   },
   useLocalSearchParams: jest.fn(() => ({
     id: '123',
-    categoria: 'HIDRATACAO',
+    categoria: 'IMC',
   })),
 }));
 
@@ -72,6 +72,13 @@ describe("VisualizarMetrica component", () => {
     expect(AsyncStorage.getItem).toHaveBeenCalledWith(key);
   });
 
+  it("calculates IMC when category is 'IMC'", async () => {
+    const { getByText, queryByText } = render(<VisualizarMetrica />);
+    await waitFor( () => {
+      fireEvent.press(getByText("Calcular automaticamente"));
+    });
+  });
+
   test("renders 'Novo valor' button when category is not IMC", async () => {
       const { getByText } = render(<VisualizarMetrica />);
 
@@ -98,7 +105,7 @@ describe("VisualizarMetrica component", () => {
     const { getByText } = render(<VisualizarMetrica />);
 
     await waitFor(() => {
-      const categoriaText = getByText("HIDRATACAO");
+      const categoriaText = getByText("IMC");
       expect(categoriaText).toBeTruthy();
     });
   });
@@ -183,19 +190,6 @@ describe("VisualizarMetrica component", () => {
       expect(queryByText("Salvar")).toBeFalsy();
     });
   });
-
-  test("calculates IMC when category is 'IMC'", async () => {
-    jest.mock("expo-router", () => ({
-      router: {
-        push: jest.fn(),
-        replace: jest.fn(),
-      },
-      useLocalSearchParams: jest.fn(() => ({
-        id: '123',
-        categoria: 'IMC',
-      })),
-    }));
-  });
   
   test("closes the modal when 'Cancelar' is pressed", async () => {
     const { getByText, queryByText } = render(<VisualizarMetrica />);
@@ -236,7 +230,7 @@ describe("VisualizarMetrica component", () => {
     await waitFor(() => {
       const addButton = queryByText("Novo valor");
       expect(addButton).toBeNull();
-    });
+    });
   });
 
 });
