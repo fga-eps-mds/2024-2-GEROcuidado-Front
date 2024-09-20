@@ -4,7 +4,6 @@ import CadastrarIdoso from "../private/pages/cadastrarIdoso";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams, useRouter } from "expo-router";
 
-// Mock any dependencies if needed
 // Substituindo o módulo real do expo-router por uma versão mockada
 jest.mock('expo-router', () => ({
   useLocalSearchParams: jest.fn().mockReturnValue({
@@ -24,6 +23,7 @@ jest.mock('expo-router', () => ({
     replace: jest.fn(),
   }),
 }));
+
 // Mock AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
@@ -142,76 +142,76 @@ describe("CadastrarIdoso component", () => {
     );
   });
 
-    // Novo teste para verificar a navegação ao clicar no botão de voltar na tela de cadastrar idoso
-    test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
-      // Renderiza o componente EditarPerfil
-      const { getByTestId } = render(<CadastrarIdoso />);
+  // Novo teste para verificar a navegação ao clicar no botão de voltar na tela de cadastrar idoso
+  test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
+    // Renderiza o componente EditarPerfil
+    const { getByTestId } = render(<CadastrarIdoso />);
+
+    // Obtendo o botão de voltar
+    const backButton = getByTestId("back-button-pressable");
+
+    // Simula o clique no botão de voltar
+    fireEvent.press(backButton);
+
+    // Verifica se a função de navegação foi chamada corretamente e se ele navega pra tela de listar idosos
+    await waitFor(() => {
+      // expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
+      expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
+    });
+  });
+
+  it("Cadastra um idoso com sucesso quando todos os dados estão válidos", async () => {
+    const { getByText, getByPlaceholderText } = render(<CadastrarIdoso />);
   
-      // Obtendo o botão de voltar
-      const backButton = getByTestId("back-button-pressable");
+    fireEvent.changeText(getByPlaceholderText("Nome"), "Nome Completo");
+    fireEvent.changeText(getByPlaceholderText("Data de Nascimento"), "01/01/1960");
+    fireEvent.changeText(getByPlaceholderText("Telefone Responsável"), "(11)12345-6789");
   
-      // Simula o clique no botão de voltar
-      fireEvent.press(backButton);
+    const cadastrarButton = getByText("Cadastrar");
+    fireEvent.press(cadastrarButton);
   
-      // Verifica se a função de navegação foi chamada corretamente e se ele navega pra tela de listar idosos
-      await waitFor(() => {
-        // expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
-        expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
-      });
+    await waitFor(() => {
+      const { replace } = useRouter();
+      expect(replace).toHaveBeenCalledWith("/private/pages/listarIdosos");
+    });
+  });
+
+  it("Navega para a tela anterior ao clicar no botão de voltar quando canGoBack é falso", async () => {
+    (router.canGoBack as jest.Mock).mockReturnValue(false);
+
+    const { getByTestId } = render(<CadastrarIdoso />);
+
+    const backButton = getByTestId("back-button-pressable");
+    fireEvent.press(backButton);
+
+    await waitFor(() => {
+      expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
+    });
+  });
+
+  it("Exibe mensagem de erro ao deixar campos obrigatórios em branco", async () => {
+    const { getByText, getByTestId, getByPlaceholderText } = render(<CadastrarIdoso />);
+
+    const nome = getByPlaceholderText("Nome");
+    const dataNascimento = getByPlaceholderText("Data de Nascimento");
+    const telefone = getByPlaceholderText("Telefone Responsável");
+    const cadastrar = getByText("Cadastrar");
+
+    act(() => {
+      fireEvent.changeText(nome, "");
+      fireEvent.changeText(dataNascimento, "");
+      fireEvent.changeText(telefone, "");
+      fireEvent.press(cadastrar);
     });
 
-    it("Cadastra um idoso com sucesso quando todos os dados estão válidos", async () => {
-      const { getByText, getByPlaceholderText } = render(<CadastrarIdoso />);
-    
-      fireEvent.changeText(getByPlaceholderText("Nome"), "Nome Completo");
-      fireEvent.changeText(getByPlaceholderText("Data de Nascimento"), "01/01/1960");
-      fireEvent.changeText(getByPlaceholderText("Telefone Responsável"), "(11)12345-6789");
-    
-      const cadastrarButton = getByText("Cadastrar");
-      fireEvent.press(cadastrarButton);
-    
-      await waitFor(() => {
-        const { replace } = useRouter();
-        expect(replace).toHaveBeenCalledWith("/private/pages/listarIdosos");
-      });
-    });
+    await waitFor(() => {
+      const erroNome = getByTestId("Erro-nome");
+      const erroData = getByTestId("Erro-data");
+      const erroTelefone = getByTestId("Erro-telefone");
 
-    it("Navega para a tela anterior ao clicar no botão de voltar quando canGoBack é falso", async () => {
-      (router.canGoBack as jest.Mock).mockReturnValue(false);
-  
-      const { getByTestId } = render(<CadastrarIdoso />);
-  
-      const backButton = getByTestId("back-button-pressable");
-      fireEvent.press(backButton);
-  
-      await waitFor(() => {
-        expect(router.push).toHaveBeenCalledWith("/private/pages/listarIdosos");
-      });
+      expect(erroNome.props.children.props.text).toBe("Campo obrigatório!");
+      expect(erroData.props.children.props.text).toBe("Campo obrigatório!");
+      expect(erroTelefone.props.children.props.text).toBe("Campo obrigatório!");
     });
-
-    it("Exibe mensagem de erro ao deixar campos obrigatórios em branco", async () => {
-      const { getByText, getByTestId, getByPlaceholderText } = render(<CadastrarIdoso />);
-  
-      const nome = getByPlaceholderText("Nome");
-      const dataNascimento = getByPlaceholderText("Data de Nascimento");
-      const telefone = getByPlaceholderText("Telefone Responsável");
-      const cadastrar = getByText("Cadastrar");
-  
-      act(() => {
-        fireEvent.changeText(nome, "");
-        fireEvent.changeText(dataNascimento, "");
-        fireEvent.changeText(telefone, "");
-        fireEvent.press(cadastrar);
-      });
-  
-      await waitFor(() => {
-        const erroNome = getByTestId("Erro-nome");
-        const erroData = getByTestId("Erro-data");
-        const erroTelefone = getByTestId("Erro-telefone");
-  
-        expect(erroNome.props.children.props.text).toBe("Campo obrigatório!");
-        expect(erroData.props.children.props.text).toBe("Campo obrigatório!");
-        expect(erroTelefone.props.children.props.text).toBe("Campo obrigatório!");
-      });
-    });
+  });
 });
