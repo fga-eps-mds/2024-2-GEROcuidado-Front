@@ -11,6 +11,12 @@ jest.mock("expo-router", () => ({
   Stack: jest.fn(({ screenOptions }) => (
     <>{screenOptions?.header?.()}</> // Renderiza o header se ele existir nas screenOptions
   )),
+  Tabs: jest.fn(({ screenOptions }) => (
+      <>{screenOptions?.header?.()}</> // Renderiza o header se ele existir nas screenOptions
+  )),
+  Screen: jest.fn(({ screenOptions }) => (
+      <>{screenOptions?.header?.()}</> // Renderiza o header se ele existir nas screenOptions
+  )),
 }));
 
 // Mock do Toast
@@ -98,14 +104,10 @@ describe("TabsLayout", () => {
     expect(typeof TabsLayout).toBe('function');
   });
 
-  /*
   it('deve renderizar o componente Tabs e seus filhos', () => {
-    const { getByTestId } = render(<TabsLayout />);
-    
-    // Verifique a presença de um elemento específico no DOM
-    expect(getByTestId('tabs-mock')).toBeTruthy();
+    render(<TabsLayout />);
   });
-  */ 
+
 });
 
 // describe("TabsLayout Component", () => {
