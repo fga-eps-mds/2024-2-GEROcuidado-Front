@@ -129,4 +129,23 @@ describe("MaskInput", () => {
     expect(mockInputMaskChange).toHaveBeenCalledWith("1");
   });
 
+  test("permite uma sequência correta sem alterações", () => {
+    const { getByTestId } = render(
+      <MaskInput inputMaskChange={mockInputMaskChange} testID="mask-input" />
+    );
+  
+    const input = getByTestId("mask-input");
+  
+    // Simula a mudança do texto para "12:34"
+    fireEvent.changeText(input, "1234");
+  
+    // Verifica se inputMaskChange foi chamado corretamente
+    expect(mockInputMaskChange).toHaveBeenCalledWith("12:34");
+  
+    // Simula a mudança do texto para "12:34" novamente
+    fireEvent.changeText(input, "1234");
+  
+    // Verifica se inputMaskChange foi chamado novamente com o mesmo valor
+    expect(mockInputMaskChange).toHaveBeenCalledWith("12:34");
+  });
 });
