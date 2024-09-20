@@ -96,6 +96,7 @@ export default function ModalMetrica({
             )}
             <View style={styles.input}>
               <TextInput
+                testID="valorInput"
                 value={valor}
                 onChangeText={setValor}
                 style={styles.textInput}
