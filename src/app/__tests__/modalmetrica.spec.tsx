@@ -324,4 +324,24 @@ describe("ModalMetrica Component", () => {
     const errorMessage = getByText("Campo obrigatório!");
     expect(errorMessage).toBeTruthy();
   });
+
+  describe("ModalMetrica Component Error Handling", () => {
+    it("should show error when valor is empty", async () => {
+      const { getByText, rerender } = render(
+        <ModalMetrica
+          visible={true}
+          callbackFn={() => {}}
+          closeModal={() => {}}
+          callbackValor={() => {}}
+          message="Teste"
+          metrica={{ ...mockItem, valor: "" }}
+        />
+      );
+  
+      await waitFor(() => {
+        expect(getByText("Campo obrigatório!")).toBeTruthy();
+      });
+    });
+  });
+  
 });
