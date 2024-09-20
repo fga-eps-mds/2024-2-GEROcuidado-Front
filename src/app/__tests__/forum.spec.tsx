@@ -83,4 +83,22 @@ describe("Forum", () => {
       );
     });
   });
+
+  describe("Forum - Carregar Mais", () => {
+    it("desativa o botão 'Carregar Mais' quando não há novas publicações", async () => {
+      // Simulando a resposta com uma lista vazia de publicações
+      (getAllPublicacao as jest.Mock).mockResolvedValueOnce({
+        data: [],
+      });
+  
+      const { queryByTestId } = render(<Forum />);
+      
+      // Verifica se setShowCarregarMais(false) foi chamado (ou seja, o botão foi removido)
+      await waitFor(() => {
+        const botaoCarregarMais = queryByTestId("botaoCarregarMais");
+        expect(botaoCarregarMais).toBeNull(); // Verifica que o botão "Carregar Mais" foi removido
+      });
+    });
+  });
+
 });
