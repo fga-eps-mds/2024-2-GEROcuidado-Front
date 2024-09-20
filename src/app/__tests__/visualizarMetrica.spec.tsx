@@ -16,6 +16,15 @@ jest.mock("../services/metrica.service", () => ({
   getSomaHidratacao: jest.fn(() => Promise.resolve(1500)),
 }));
 
+  // Mock para database
+  jest.mock("../db/index", () => ({
+    get: jest.fn(() => ({
+      query: jest.fn(() => ({
+        fetch: jest.fn(() => Promise.resolve([])),
+      })),
+    })),
+  }));
+
 // Mock para expo-router
 jest.mock("expo-router", () => ({
   router: {
