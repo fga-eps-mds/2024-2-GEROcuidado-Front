@@ -50,4 +50,10 @@ describe("hasFoto", () => {
     console.log("Testing hasFoto with an empty string...");
     expect(hasFoto("")).toBe(false);
   });
+
+  it("should return true if foto contains valid base64 data", () => {
+    console.log("Testing hasFoto with valid base64 data...");
+    const validFoto = "data:image/png;base64,validbase64string";
+    expect(hasFoto(validFoto)).toBe(true);
+  });
 });
