@@ -7,6 +7,7 @@ import { FontAwesome, Entypo } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import ErrorMessage from "./ErrorMessage";
 import { validateValue } from "../shared/helpers/modal.helper";
+import ModalButtons from "./ModalButtons";
 
 interface IProps {
   visible: boolean;
@@ -97,28 +98,13 @@ export default function ModalMetrica({
               </View>
             </View>
           </View>
-          <View style={styles.buttonContainer}>
-            <Pressable
-              testID="cancelarBtn"
-              style={[styles.button, styles.buttonCancel]}
-              onPress={() => closeModal()}
-            >
-              <Text style={styles.textStyle}>Cancelar</Text>
-            </Pressable>
-            <Pressable
-              testID="callbackBtn"
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => {
-                if (Object.keys(erros).length > 0) {
-                  setShowErrors(true);
-                } else {
-                  callbackFn(valor);
-                }
-              }}
-            >
-              <Text style={styles.textStyle}>{"Salvar"}</Text>
-            </Pressable>
-          </View>
+          <ModalButtons
+          onCancel={closeModal}
+          onSave={() => callbackFn(valor)}
+          showErrors={showErrors}
+          setShowErrors={setShowErrors}
+          erros={erros}
+          />
         </View>
       </View>
     </Modal>
@@ -165,34 +151,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    width: 100,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2CCDB5",
-    marginHorizontal: 15,
-  },
-  buttonCancel: {
-    backgroundColor: "#FF7F7F",
-    marginHorizontal: 15,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
   modalText: {
     marginBottom: 35,
     textAlign: "center",
     fontWeight: "bold",
-  },
-  buttonContainer: {
-    flexDirection: "row",
   },
 });
