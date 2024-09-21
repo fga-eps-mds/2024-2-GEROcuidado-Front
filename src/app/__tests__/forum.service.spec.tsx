@@ -58,6 +58,32 @@ describe("getAllPublicacao", () => {
       }
     }
   });
+
+  it("deve lançar um erro se o status da resposta não for 200", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => ({
+        data: null,
+        message: "Erro na API",
+        status: 400,
+      }),
+      status: 400,
+    });
+
+    const offset = 0;
+    const filter = { titulo: "Exemplo" };
+    const order: IOrder = {
+      column: "descricao",
+      dir: "DESC",
+    };
+
+    try {
+      await getAllPublicacao(offset, filter, order);
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).toBe("Erro na API");
+      }
+    }
+  });
 });
 
 describe("postPublicacao", () => {
@@ -284,3 +310,5 @@ describe("deletePublicacaoById", () => {
     }
   });
 });
+
+//  npx jest forum.service.spec.tsx
