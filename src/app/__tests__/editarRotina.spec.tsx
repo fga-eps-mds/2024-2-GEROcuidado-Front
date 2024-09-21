@@ -250,7 +250,7 @@ describe("EditarRotina Component", () => {
 
     await waitFor(() => {
       const erroTitulo = getByText(
-        "O título deve ter no máximo 100 caractéres."
+        "O título deve ter no máximo 100 caracteres."
       );
       expect(erroTitulo).toBeTruthy();
     });

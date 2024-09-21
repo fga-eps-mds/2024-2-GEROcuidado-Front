@@ -29,7 +29,7 @@ import * as Notifications from "expo-notifications";
 import Rotina from "../../model/Rotina";
 import database from "../../db";
 import { Collection } from "@nozbe/watermelondb";
-
+import { handleNotificacao, validateFields } from "../../shared/helpers/useNotification";
 interface IErrors {
   titulo?: string;
   data?: string;
@@ -91,37 +91,7 @@ export default function EditarRotina() {
   };
 
   const handleErrors = () => {
-    const erros: IErrors = {};
-
-    if (!titulo) {
-      erros.titulo = "Campo obrigatório!";
-    } else if (titulo.length > 100) {
-      erros.titulo = "O título deve ter no máximo 100 caractéres.";
-    }
-    // } else if (titulo.length < 5) {
-    //   erros.titulo = "O nome completo deve ter pelo menos 5 caractéres.";
-
-    if (!data) {
-      erros.data = "Campo obrigatório!";
-    } else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
-      erros.data = "Data deve ser no formato dd/mm/yyyy!";
-    }
-
-    if (!hora) {
-      erros.hora = "Campo obrigatório!";
-    } else if (!/^\d{2}:\d{2}$/.test(hora)) {
-      erros.hora = "Hora deve ser no formato hh:mm!";
-    }
-
-    if (!categoria) {
-      erros.categoria = "Campo obrigatório!";
-    }
-
-    if (descricao && descricao?.length > 300) {
-      erros.descricao = "A descrição deve ter no máximo 300 caracteres.";
-    }
-
-    setErros(erros);
+    validateFields(titulo, data, hora, categoria, descricao, setErros);
   };
 
   const categorias = [
@@ -196,48 +166,13 @@ export default function EditarRotina() {
     }
   };
 
-  const handleNotificacao = async () => {
-    if (!notificacao) return;
-
-    if (Platform.OS === "android") {
-      Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-      });
-    }
-
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-
-    let finalStatus = existingStatus;
-
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-
-    if (finalStatus !== "granted") {
-      alert("É necessário permitir as notificações!");
-      setNotificacao(false);
-      return;
-    }
-
-    const response = await Notifications.getExpoPushTokenAsync({
-      projectId: "7028a81c-adee-41de-91a7-b7e80535a448",
-    });
-
-    setExpoToken(response.data);
-  };
-
   useEffect(() => getIdoso(), []);
   useEffect(() => getToken(), []);
   useEffect(() => handleErrors(), [titulo, data, hora, categoria, descricao]);
   useEffect(() => handleDataHora(), []);
   useEffect(() => {
-    handleNotificacao();
-  }, [notificacao]);
+    handleNotificacao(notificacao, setNotificacao, setExpoToken);
+  }, [notificacao])
 
   const confirmation = () => {
     setModalVisible(!modalVisible);

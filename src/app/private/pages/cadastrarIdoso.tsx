@@ -24,7 +24,7 @@ import { useRouter } from "expo-router";
 import { IIdoso } from "../../interfaces/idoso.interface";
 import Usuario from "../../model/Usuario";
 import Metrica from "../../model/Metrica";
-
+import { getTipoSanguineoOptions } from "../../shared/helpers/useNotification";
 
 interface IErrors {
  nome?: string;
@@ -191,16 +191,7 @@ export default function CadastrarIdoso() {
 
   useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
-  const data = [
-    { key: ETipoSanguineo.A_POSITIVO, value: ETipoSanguineo.A_POSITIVO },
-    { key: ETipoSanguineo.A_NEGATIVO, value: ETipoSanguineo.A_NEGATIVO },
-    { key: ETipoSanguineo.B_POSITIVO, value: ETipoSanguineo.B_POSITIVO },
-    { key: ETipoSanguineo.B_NEGATIVO, value: ETipoSanguineo.B_NEGATIVO },
-    { key: ETipoSanguineo.AB_POSITIVO, value: ETipoSanguineo.AB_POSITIVO },
-    { key: ETipoSanguineo.AB_NEGATIVO, value: ETipoSanguineo.AB_NEGATIVO },
-    { key: ETipoSanguineo.O_POSITIVO, value: ETipoSanguineo.O_POSITIVO },
-    { key: ETipoSanguineo.O_NEGATIVO, value: ETipoSanguineo.O_NEGATIVO },
-  ];
+  const data = getTipoSanguineoOptions();
 
   return (
     <View>

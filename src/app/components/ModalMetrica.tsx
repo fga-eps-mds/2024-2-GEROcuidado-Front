@@ -6,6 +6,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import ErrorMessage from "./ErrorMessage";
+import { validateValue } from "../shared/helpers/modal.helper";
+
 interface IProps {
   visible: boolean;
   callbackFn: (valor: string) => unknown;
@@ -29,21 +31,9 @@ export default function ModalMetrica({
   const [erros, setErros] = useState<IErrors>({});
   const [showErrors, setShowErrors] = useState(false);
 
-  const handleErrors = () => {
-    const erros: IErrors = {};
-
-    if (!valor) {
-      erros.valor = "Campo obrigatório!";
-      setShowErrors(true);
-    } else if (!/^[0-9/.]+$/.test(valor)) {
-      erros.valor = "Formato inválido!";
-      setShowErrors(true);
-    }
-
-    setErros(erros);
-  };
-
-  useEffect(() => handleErrors(), [valor]);
+  useEffect(() => {
+    validateValue(valor, setShowErrors, setErros);
+  }, [valor]);
 
   return (
     <Modal animationType="fade" transparent={true} visible={visible}>

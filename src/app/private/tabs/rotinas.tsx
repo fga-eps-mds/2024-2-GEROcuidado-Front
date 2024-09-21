@@ -31,6 +31,7 @@ import "moment/locale/pt-br";
 import database from "../../db";
 import { Collection, Q } from "@nozbe/watermelondb";
 import Rotina from "../../model/Rotina";
+import { hasFoto } from "../../shared/helpers/foto.helper";
 
 export default function Rotinas() {
   moment.locale("pt-br");
@@ -59,13 +60,6 @@ export default function Rotinas() {
         setIdoso(idosoPayload);
       }
     });
-  };
-
-  const hasFoto = (foto: string | null | undefined) => {
-    if (!foto) return false;
-
-    const raw = foto.split("data:image/png;base64,")[1];
-    return raw.length > 0;
   };
 
   const getFoto = (foto: string | null | undefined) => {

@@ -4,6 +4,7 @@ import { IPublicacao } from "../interfaces/forum.interface";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
 import AntDesing from "react-native-vector-icons/AntDesign";
+import { hasFoto } from "../shared/helpers/foto.helper";
 
 interface IProps {
   item: IPublicacao;
@@ -11,12 +12,6 @@ interface IProps {
 }
 
 export default function Publicacao({ item, crop }: Readonly<IProps>) {
-  const hasFoto = (foto: string | null | undefined) => {
-    if (!foto) return false;
-
-    const raw = foto.split("data:image/png;base64,")[1];
-    return raw.length > 0;
-  };
 
   const getFoto = (foto: string | null | undefined) => {
     if (hasFoto(foto)) {

@@ -15,7 +15,9 @@ import { router } from "expo-router";
 import { postMetrica } from "../../services/metrica.service";
 import { EMetricas, IMetrica } from "../../interfaces/metricas.interface";
 import Toast from "react-native-toast-message";
+import { hasFoto
 
+ } from "../../shared/helpers/foto.helper";
 export default function criarMetrica() {
   const [user, setUser] = useState<IUser | undefined>(undefined);
   const [idoso, setIdoso] = useState<IIdoso>();
@@ -41,13 +43,6 @@ export default function criarMetrica() {
         setIdoso(idosoPayload);
       }
     });
-  };
-
-  const hasFoto = (foto: string | null | undefined) => {
-    if (!foto) return false;
-
-    const raw = foto.split("data:image/png;base64,")[1];
-    return raw.length > 0;
   };
 
   const getFoto = (foto: string | null | undefined) => {

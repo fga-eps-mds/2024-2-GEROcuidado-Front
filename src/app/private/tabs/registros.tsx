@@ -15,6 +15,7 @@ import { getAllMetrica } from "../../services/metrica.service";
 import Toast from "react-native-toast-message";
 import database from "../../db";
 import { Q } from "@nozbe/watermelondb";
+import { hasFoto } from "../../shared/helpers/foto.helper";
 
 export default function Registros() {
   const [user, setUser] = useState<IUser | undefined>(undefined);
@@ -36,13 +37,6 @@ export default function Registros() {
         setIdoso(idosoPayload);
       }
     });
-  };
-
-  const hasFoto = (foto: string | null | undefined) => {
-    if (!foto) return false;
-
-    const raw = foto.split("data:image/png;base64,")[1];
-    return raw.length > 0;
   };
 
   const getFoto = (foto: string | null | undefined) => {
