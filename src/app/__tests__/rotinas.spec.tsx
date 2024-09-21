@@ -1,9 +1,11 @@
 import React from "react";
-import { render, waitFor, fireEvent } from "@testing-library/react-native";
+import { render, waitFor } from "@testing-library/react-native";
 import Rotinas from "../private/tabs/rotinas";
 import AsyncStorage from "@react-native-async-storage/async-storage/jest/async-storage-mock";
+import { hasFoto } from "../shared/helpers/foto.helper";
 
 describe("Rotinas", () => {
+
   it("renderiza corretamente", async () => {
     await waitFor(() => render(<Rotinas />));
   });
@@ -28,11 +30,6 @@ describe("Rotinas", () => {
     });
   });
 
-  beforeEach(async () => {
-    // Clear AsyncStorage before each test
-    await AsyncStorage.clear();
-  });
-
   it("renderiza corretamente quando todas as condições são atendidas", async () => {
     // Define um usuário e idoso válidos no AsyncStorage
     await AsyncStorage.setItem("usuario", JSON.stringify({ id: 1 }));
@@ -44,5 +41,13 @@ describe("Rotinas", () => {
     await waitFor(() => {
       expect(getByText(/João/i)).toBeTruthy();
     });
+  });
+});
+
+describe("hasFoto", () => {
+
+  it("should return false if foto is an empty string", () => {
+    console.log("Testing hasFoto with an empty string...");
+    expect(hasFoto("")).toBe(false);
   });
 });
