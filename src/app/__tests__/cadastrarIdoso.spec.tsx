@@ -36,6 +36,10 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
 }));
 
+jest.mock('react-native/Libraries/Components/ToastAndroid/ToastAndroid', () => ({
+  show: jest.fn(),
+}));
+
 describe("CadastrarIdoso component", () => {
   
   test("renders correctly", () => {
@@ -260,4 +264,19 @@ describe("CadastrarIdoso component", () => {
     consoleLogSpy.mockRestore();
   });
 
+  test('Deve acionar a atualização de estado corretamente quando o usuário estiver logado', async () => {
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+    const { getByText } = render(<CadastrarIdoso />);
+    
+    await act(async () => {
+      fireEvent.press(getByText('Cadastrar'));
+    });
+  
+    await waitFor(() => {
+      expect(console.log).toHaveBeenCalledWith("Usuário logado:", { id: 1 });
+    });
+
+    consoleLogSpy.mockRestore();
+  });
 });
