@@ -122,6 +122,34 @@ describe("postPublicacao", () => {
       }
     }
   });
+
+  it("deve lançar um erro quando a resposta não for 201", async () => {
+    // Mock para simular uma resposta de erro
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => ({
+        data: null,
+        message: "Erro ao criar publicação",
+      }),
+      status: 400, // status diferente de 201
+    });
+
+    const body = {
+      idUsuario: 1,
+      titulo: "Título de Exemplo",
+      descricao: "Descrição de Exemplo",
+      dataHora: "2023-11-06T12:00:00",
+      categoria: ECategoriaPublicacao.GERAL,
+      contagemReportes: 0,
+    };
+
+    try {
+      await postPublicacao(body, token);
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).toBe("Erro ao criar publicação");
+      }
+    }
+  });
 });
 
 describe("updatePublicacao", () => {
