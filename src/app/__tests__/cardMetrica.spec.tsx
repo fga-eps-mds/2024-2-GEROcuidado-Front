@@ -8,7 +8,7 @@ import database from '../db';
 jest.mock('../db', () => ({
   get: jest.fn(() => ({
     query: jest.fn().mockReturnValue({
-      fetch: jest.fn(() => Promise.resolve([{ valor: 80, dataHora: '2024-09-18T12:00:00Z' }])),
+      fetch: jest.fn(() => Promise.resolve([{ valor: 80, dataHora: '2024-09-18T12:00:00-03:00' }])),
     }),
   })),
 }));
@@ -184,7 +184,7 @@ describe('CardMetrica Component', () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
 
     await waitFor(() => {
-      expect(getByText('18/09/2024 às 09:00')).toBeTruthy(); 
+      expect(getByText('18/09/2024 às 12:00')).toBeTruthy(); 
     });
   });
 
