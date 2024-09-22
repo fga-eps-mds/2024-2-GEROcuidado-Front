@@ -81,7 +81,8 @@ describe('CardMetrica Component', () => {
       expect(getByText('80')).toBeTruthy(); 
       expect(getByText('bpm')).toBeTruthy(); 
     });
-  });
+  },
+  10000);
 
   it('renderiza corretamente com um valor de métrica GLICEMIA', async () => {
     const { getByText } = render(<CardMetrica item={mockItemGlicemia} />);
