@@ -16,6 +16,7 @@ import Toast from "react-native-toast-message";
 import database from "../../db";
 import { Q } from "@nozbe/watermelondb";
 import { hasFoto } from "../../shared/helpers/foto.helper";
+import { getFoto } from "../../shared/helpers/photo.helper";
 
 export default function Registros() {
   const [user, setUser] = useState<IUser | undefined>(undefined);
@@ -37,20 +38,6 @@ export default function Registros() {
         setIdoso(idosoPayload);
       }
     });
-  };
-
-  const getFoto = (foto: string | null | undefined) => {
-    if (hasFoto(foto)) {
-      return (
-        <Image source={{ uri: foto as string }} style={styles.fotoPerfil} />
-      );
-    }
-
-    return (
-      <View style={[styles.semFoto, styles.fotoPerfil]}>
-        <Icon style={styles.semFotoIcon} name="image-outline" size={15} />
-      </View>
-    );
   };
 
   const visualizarMetrica = (item: IMetrica) => {

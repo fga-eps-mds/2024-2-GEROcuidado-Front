@@ -4,30 +4,12 @@ import { IPublicacaoUsuario } from "../interfaces/forum.interface";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesing from "react-native-vector-icons/AntDesign";
 import { hasFoto } from "../shared/helpers/foto.helper";
-
+import { getFoto } from "../shared/helpers/photo.helper";
 interface IProps {
   item: IPublicacaoUsuario;
 }
 
 export default function PublicacaoVisualizar({ item }: IProps) {
-
-  const getFoto = (foto: string | null | undefined) => {
-    if (hasFoto(foto)) {
-      return (
-        <Image         
-        source={{ uri: foto as string }}
-        style={styles.fotoPerfil}
-        testID="foto-resultado" 
-        />
-      );
-    }
-
-    return (
-      <View style={[styles.semFoto, styles.fotoPerfil]}>
-        <Icon style={styles.semFotoIcon} name="image-outline" size={15} />
-      </View>
-    );
-  };
 
   const getFormattedDate = (payload: Date | string): string => {
     const date = new Date(payload);
