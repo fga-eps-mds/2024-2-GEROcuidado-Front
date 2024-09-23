@@ -324,4 +324,67 @@ describe("ModalMetrica Component", () => {
     const errorMessage = getByText("Campo obrigatório!");
     expect(errorMessage).toBeTruthy();
   });
+
+  describe("ModalMetrica Component Error Handling", () => {
+    it("should show error when valor is empty", async () => {
+      const { getByText, rerender } = render(
+        <ModalMetrica
+          visible={true}
+          callbackFn={() => {}}
+          closeModal={() => {}}
+          callbackValor={() => {}}
+          message="Teste"
+          metrica={{ ...mockItem, valor: "" }}
+        />
+      );
+  
+      await waitFor(() => {
+        expect(getByText("Campo obrigatório!")).toBeTruthy();
+      });
+    });
+
+    it("exibe mensagem de erro ao tentar salvar com formato inválido", async () => {
+      const { getByTestId, getByText } = render(
+        <ModalMetrica
+          visible={true}
+          callbackFn={() => {}}
+          closeModal={() => {}}
+          callbackValor={() => {}}
+          message="Teste"
+          metrica={mockItem}
+        />,
+      );
+    
+      // Supondo que haja um campo de entrada para o valor
+      const input = getByTestId("valorInput"); // Altere para o seu testID real do input
+      fireEvent.changeText(input, "abc123"); // Valor inválido
+    
+      fireEvent.press(getByTestId("callbackBtn")); // Pressiona o botão para salvar
+    
+      await waitFor(() => {
+        expect(getByText("Formato inválido!")).toBeTruthy(); // Verifica se a mensagem de erro está visível
+      });
+    });
+
+    it("chama callbackFn com o valor correto ao pressionar Salvar", () => {
+      const mockCallbackFn = jest.fn(); // Cria uma função mock para o callback
+      const { getByTestId } = render(
+        <ModalMetrica
+          visible={true}
+          callbackFn={mockCallbackFn} // Passa a função mock
+          closeModal={() => {}}
+          callbackValor={() => {}}
+          message="Teste"
+          metrica={mockItem}
+        />
+      );
+    
+      const input = getByTestId("valorInput"); // Obtém o input pelo testID
+      fireEvent.changeText(input, "123"); // Define um valor válido
+      fireEvent.press(getByTestId("callbackBtn")); // Pressiona o botão Salvar
+    
+      expect(mockCallbackFn).toHaveBeenCalledWith("123"); // Verifica se a função foi chamada com o valor correto
+    });
+  });
 });
+

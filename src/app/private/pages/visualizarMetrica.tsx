@@ -163,19 +163,19 @@ export default function VisualizarMetrica() {
     }
   };
 
-  const getLastValue = async (idMetrica: number) => {
-    const filter: IMetricaValueFilter = { idMetrica };
-    const response = await getAllMetricaValues(filter, order);
-    const newMetricasValues = response.data as IValorMetrica[];
-
-    const valor = newMetricasValues[0]?.valor;
-
-    if (!valor) {
-      throw new Error("Altura/Peso não cadastrado!");
-    }
-
-    return valor;
-  };
+  // const getLastValue = async (idMetrica: number) => {
+  //   const filter: IMetricaValueFilter = { idMetrica };
+  //   const response = await getAllMetricaValues(filter, order);
+  //   const newMetricasValues = response.data as IValorMetrica[];
+  //
+  //   const valor = newMetricasValues[0]?.valor;
+  //
+  //   if (!valor) {
+  //     throw new Error("Altura/Peso não cadastrado!");
+  //   }
+  //
+  //   return valor;
+  // };
 
   const calcular = async () => {
     try {

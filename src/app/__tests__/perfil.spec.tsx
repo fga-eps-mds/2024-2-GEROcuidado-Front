@@ -62,4 +62,33 @@ describe("Perfil", () => {
       expect(router.router.push).toHaveBeenCalled();
     });
   });
+
+  it("deve chamar navigateIdosos", async () => {
+    // Simula o usuário com ID 1 no AsyncStorage
+    AsyncStorage.setItem("usuario", JSON.stringify({ id: 1 }));
+  
+    await waitFor(async () => {
+      // Renderiza o componente Perfil
+      const { getByText } = render(<Perfil />);
+  
+      // Espera um momento para garantir que o componente esteja renderizado
+      await new Promise((r) =>
+        setTimeout(() => {
+          // Encontra o botão "Idosos" pelo texto ou pelo testID (se você adicionar um)
+          const navigateBtn = getByText("Idosos"); // ou use getByTestId("navigateIdososBtn") se tiver um testID
+  
+          // Simula o pressionamento do botão
+          fireEvent.press(navigateBtn);
+  
+          r(true);
+        }, 100),
+      );
+  
+      // Verifica se a navegação foi chamada com os parâmetros corretos
+      expect(router.router.push).toHaveBeenCalledWith({
+        pathname: "/private/pages/listarIdosos",
+        params: { id: 1 }, // Aqui, certifica-se de que está passando o usuário correto
+      });
+    });
+  });
 });

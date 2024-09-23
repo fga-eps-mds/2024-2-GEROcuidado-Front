@@ -148,7 +148,7 @@ export default function CardRotina({ item, index, date }: IProps) {
           style={styles.checkBox}
           testID="checkbox"
         >
-          {check && <Icon name="check" size={30}></Icon>}
+          {check && <Icon name="check" size={30} testID="check-icon"></Icon>}
         </Pressable>
       </Pressable>
     </>

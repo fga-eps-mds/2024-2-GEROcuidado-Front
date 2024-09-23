@@ -15,6 +15,8 @@ import { getAllMetrica } from "../../services/metrica.service";
 import Toast from "react-native-toast-message";
 import database from "../../db";
 import { Q } from "@nozbe/watermelondb";
+import { hasFoto } from "../../shared/helpers/foto.helper";
+import { getFoto } from "../../shared/helpers/photo.helper";
 
 export default function Registros() {
   const [user, setUser] = useState<IUser | undefined>(undefined);
@@ -38,43 +40,37 @@ export default function Registros() {
     });
   };
 
-  const hasFoto = (foto: string | null | undefined) => {
-    if (!foto) return false;
-
-    const raw = foto.split("data:image/png;base64,")[1];
-    return raw.length > 0;
-  };
-
-  const getFoto = (foto: string | null | undefined) => {
-    if (hasFoto(foto)) {
-      return (
-        <Image source={{ uri: foto as string }} style={styles.fotoPerfil} />
-      );
-    }
-
-    return (
-      <View style={[styles.semFoto, styles.fotoPerfil]}>
-        <Icon style={styles.semFotoIcon} name="image-outline" size={15} />
-      </View>
-    );
-  };
-
   const visualizarMetrica = (item: IMetrica) => {
     router.push({
       pathname: "private/pages/visualizarMetrica",
-      params: item._raw,
+      params: {
+        id: item.id,
+        idIdoso: item.idIdoso,
+        categoria: item.categoria,
+        valorMaximo: item.valorMaximo,
+      },
     });
   };
+  
 
   const getMetricas = async () => {
-    if (idoso == undefined) return;
-
+    if (!idoso) return;
+  
     const metricasCollection = database.get('metrica');
-
+  
     try {
       setLoading(true);
       const idosoMetricas = await metricasCollection.query(Q.where('idoso_id', idoso.id)).fetch();
-      setMetricas(idosoMetricas);
+      
+      // Map the WatermelonDB models to your IMetrica interface
+      const metricasData: IMetrica[] = idosoMetricas.map((metrica: any) => ({
+        id: metrica._raw.id,  // Assuming `id` is a field in the _raw object
+        idIdoso: metrica._raw.idoso_id,
+        categoria: metrica._raw.categoria,
+        valorMaximo: metrica._raw.valorMaximo,
+      }));
+  
+      setMetricas(metricasData);
     } catch (err) {
       console.log("Erro ao obter metricas do idoso:", err);
     } finally {

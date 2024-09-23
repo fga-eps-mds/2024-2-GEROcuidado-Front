@@ -183,6 +183,22 @@ describe("getAllRotina", () => {
       }
     }
   });
+
+  it("deve lançar um erro quando a API retorna um erro", async () => {
+    // Mock para simular uma resposta de erro
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => ({
+        message: "Mensagem de erro",
+        status: 400,
+      }),
+      status: 400,
+    });
+
+    const filter = {}; 
+    const order = {}; 
+
+    await expect(getAllRotina(filter, order)).rejects.toThrow("Mensagem de erro");
+  });
 });
 
 describe("deleteRotina", () => {

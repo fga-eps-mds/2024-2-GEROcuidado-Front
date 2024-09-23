@@ -38,4 +38,31 @@ describe('FiltroDropdown Component', () => {
     expect(screen.getByText('Alimentação')).toBeTruthy();
   });
 
+  it('should update button dimensions on dropdown visibility change', () => {
+    const { rerender } = render(<FiltroDropdown filtro={null} setFiltro={() => {}} />);
+    const dropdownButton = screen.getByText('Filtro');
+
+    fireEvent.press(dropdownButton); // Open dropdown
+    rerender(<FiltroDropdown filtro={null} setFiltro={() => {}} />);
+  });
+
+  it('should correctly handle selection toggling', async () => {
+    const mockSetFiltro = jest.fn();
+
+    render(<FiltroDropdown filtro={null} setFiltro={mockSetFiltro} />);
+
+    const dropdownButton = screen.getByText('Filtro');
+    fireEvent.press(dropdownButton);
+
+    const optionButton = screen.getByText('Alimentação');
+    fireEvent.press(optionButton);
+
+    expect(mockSetFiltro).toHaveBeenCalledWith('Alimentação');
+
+    expect(screen.getByText('Alimentação')).toBeTruthy();
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Alimentação')).toBeTruthy();
+    });
+ });
 });

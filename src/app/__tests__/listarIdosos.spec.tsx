@@ -24,54 +24,40 @@ jest.mock('expo-router', () => ({
   }),
 }));
 
-// Mockando o módulo dos serviços para substituir as implementações
-jest.mock("../services/idoso.service");
+// Mockando o banco de dados e a função getIdosos
+jest.mock("../db/index", () => ({
+  get: jest.fn().mockReturnValue({
+    query: jest.fn().mockReturnValue({
+      fetch: jest.fn().mockResolvedValueOnce([
+        { _raw: { id: 1, nome: "Idoso 1", foto: "foto1.jpg" } },
+        { _raw: { id: 2, nome: "Idoso 2", foto: "foto2.jpg" } },
+      ]),
+    }),
+  }),
+}));
+
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(),
+}));
 
 describe("ListarIdosos", () => {
 
   it("deve exibir a lista de idosos após a conclusão da chamada da API", async () => {
-    // Simula uma resposta fictícia da API
+    // Mock do AsyncStorage para retornar um usuário com ID
     (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
       if (key === "usuario") {
         return Promise.resolve(JSON.stringify({ id: 1 }));
-      } else if (key === "token") {
-        return Promise.resolve("mockedToken");
       }
       return Promise.resolve(null);
-    });
-    
-    (getAllIdoso as jest.Mock).mockResolvedValueOnce({
-      data: [
-        { id: 1, nome: "Idoso 1" },
-        { id: 2, nome: "Idoso 2" },
-      ],
     });
 
     const { getByText } = render(<ListarIdosos />);
 
-    // Aguarda a resolução da promessa
-    await waitFor(() => expect(getAllIdoso).toHaveBeenCalled());
-
-    // Verifica se os elementos esperados são renderizados
-    expect(getByText("Idoso 1")).toBeTruthy();
+    // Aguarda a resolução da promessa e a renderização dos dados
+    await waitFor(() => expect(getByText("Idoso 1")).toBeTruthy());
     expect(getByText("Idoso 2")).toBeTruthy();
   });
-
-  it("deve exibir uma mensagem de erro se a chamada da API falhar", async () => {
-    const errorMessage = "Erro ao buscar idosos";
-  
-    // Simula um erro na chamada da API
-    (getAllIdoso as jest.Mock).mockRejectedValueOnce({ message: errorMessage });
-  
-    const { queryByText } = render(<ListarIdosos />);
-  
-    // Aguarda a resolução da promessa
-    await waitFor(() => expect(getAllIdoso).toHaveBeenCalled(), { timeout: 5000 });
-  
-    // Verifica se a mensagem de erro é exibida
-    expect(queryByText(errorMessage)).toBeNull(); // Ajuste se a mensagem de erro é realmente exibida
-  });
-
+ 
   test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
     // Renderiza o componente ListarIdosos
     const { getByTestId } = render(<ListarIdosos />);

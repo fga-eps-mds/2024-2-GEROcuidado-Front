@@ -6,6 +6,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "../../interfaces/user.interface";
 import { router } from "expo-router";
 import NaoAutenticado from "../../components/NaoAutenticado";
+import { hasFoto } from "../../shared/helpers/foto.helper";
+import { getFoto } from "../../shared/helpers/photo.helper";
 
 export default function Perfil() {
   const [user, setUser] = useState<IUser | undefined>(undefined);
@@ -37,27 +39,6 @@ export default function Perfil() {
       const usuario = JSON.parse(response as string) as IUser;
       setIdUsuario(usuario?.id);
     });
-  };
-
-  const hasFoto = (foto: string | null | undefined) => {
-    if (!foto) return false;
-
-    const raw = foto.split("data:image/png;base64,")[1];
-    return raw.length > 0;
-  };
-
-  const getFoto = (foto: string | null | undefined) => {
-    if (hasFoto(foto)) {
-      return (
-        <Image source={{ uri: foto as string }} style={styles.fotoPerfil} />
-      );
-    }
-
-    return (
-      <View style={[styles.semFoto, styles.fotoPerfil]}>
-        <Icon style={styles.semFotoIcon} name="image-outline" size={15} />
-      </View>
-    );
   };
 
   useEffect(() => handleUser(), []);

@@ -21,10 +21,10 @@ jobs:
         run: yarn
 
       - name: Linter
-        run: (yarn eslint . --format json --output-file reports/eslint-report.json) || true
+        run: yarn eslint . --format json --output-file reports/eslint-report.json
 
       - name: Test and coverage
-        run: (yarn jest --coverage) || true
+        run: TZ=UTC yarn jest --coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

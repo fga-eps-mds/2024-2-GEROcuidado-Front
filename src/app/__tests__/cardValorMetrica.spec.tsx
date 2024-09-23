@@ -75,6 +75,14 @@ const mockItem8 = {
   idMetrica: 123,
 };
 
+const mockItem9 = {
+  categoria: EMetricas.HIDRATACAO,
+  id: 1,
+  valor: "80",
+  dataHora: "2023-01-01T12:30:00",
+  idMetrica: 123,
+};
+
 describe("CardValorMetrica Component", () => {
   it("renderiza corretamente", () => {
     const { getByText } = render(<CardValorMetrica item={mockItem} />);
@@ -161,5 +169,14 @@ describe("CardValorMetrica Component", () => {
     } else {
       expect(() => getByText("cmkg/m²")).toThrow();
     }
+  });
+
+  it("renderiza corretamente HIDRATACAO", () => {
+    const { getByText } = render(<CardValorMetrica item={mockItem9} />);
+
+    expect(getByText("80")).toBeDefined();
+    expect(getByText("ml")).toBeDefined();
+    expect(getByText("01/01/2023")).toBeDefined();
+    expect(getByText("12:30")).toBeDefined();
   });
 });

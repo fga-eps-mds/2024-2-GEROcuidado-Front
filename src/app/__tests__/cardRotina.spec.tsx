@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render } from "@testing-library/react-native";
+import { act, render, fireEvent } from "@testing-library/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "@react-native-async-storage/async-storage/jest/async-storage-mock";
 import CardRotina from "../components/CardRotina";
@@ -11,10 +11,13 @@ jest.mock("expo-router", () => ({
   },
 }));
 
+// Usando timers falsos para simular a passagem do tempo
+jest.useFakeTimers();
+
 const rotina = {
-  id: 1,
+  id: "1",
   titulo: "Título de Exemplo",
-  idIdoso: 123,
+  idIdoso: "123",
   categoria: ECategoriaRotina.ALIMENTACAO,
   descricao: "Descrição de Exemplo",
   dataHoraConcluidos: [],
@@ -24,9 +27,9 @@ const rotina = {
 };
 
 const rotina_exercicios = {
-  id: 2,
+  id: "2",
   titulo: "Card exercicio",
-  idIdoso: 456,
+  idIdoso: "456",
   categoria: ECategoriaRotina.EXERCICIOS,
   descricao: "caminhada",
   dataHoraConcluidos: [],
@@ -36,9 +39,9 @@ const rotina_exercicios = {
 };
 
 const rotina_medicamentos = {
-  id: 3,
+  id: "3",
   titulo: "Card medicamento",
-  idIdoso: 789,
+  idIdoso: "789",
   categoria: ECategoriaRotina.MEDICAMENTO,
   descricao: "dipirona",
   dataHoraConcluidos: [],
@@ -70,5 +73,29 @@ describe("Teste Componente Card Rotina", () => {
       expect(getByText("Card medicamento")).toBeTruthy();
       expect(getByText("dipirona")).toBeTruthy();
     });
+
+    test("Verifica se debounceConcluido funciona corretamente", () => {
+
+      const { getByTestId, queryByTestId } = render(
+        <CardRotina item={rotina} index={0} date={new Date()} />
+      );
+  
+      const checkbox = getByTestId("checkbox");
+
+      // Inicialmente, o ícone de check não deve estar visível
+      expect(queryByTestId("check-icon")).toBeNull();
+  
+      // Simulando o clique no Pressable
+      fireEvent.press(checkbox);
+  
+      // Avança o tempo para que o debounce seja executado
+      act(() => {
+        jest.runAllTimers();
+      });
+  
+      // Após o clique, o ícone de check deve aparecer
+      expect(queryByTestId("check-icon")).toBeTruthy();
+    });
+
   });
 });

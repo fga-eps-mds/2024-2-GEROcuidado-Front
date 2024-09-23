@@ -195,6 +195,32 @@ describe("getAllIdoso", () => {
       }
     }
   });
+
+  it("deve lançar um erro se o status da resposta não for 200", async () => {
+    const order: IOrder = {
+      column: "descricao",
+      dir: "DESC",
+    };
+    const idUsuario = 1;
+  
+    // Mock para simular uma resposta de erro
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => ({
+        data: null,
+        message: "Mensagem de erro",
+        status: 400,
+      }),
+      status: 400,
+    });
+
+    try {
+      await getAllIdoso(idUsuario, order);
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).toBe("Mensagem de erro");
+      }
+    }
+  });
 });
 
 describe("deleteIdoso", () => {
