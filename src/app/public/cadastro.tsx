@@ -5,6 +5,7 @@ import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import BackButton from "../components/BackButton";
+import ForgetButton from "../components/ForgetButton";
 import CustomButton from "../components/CustomButton";
 import ErrorMessage from "../components/ErrorMessage";
 import UploadImage from "../components/UploadImage";
@@ -159,6 +160,8 @@ export default function Cadastro() {
               secureTextEntry={escondeSenha}
               style={styles.passwordInput}
             />
+
+           
 
             <Icon
               testID="escondeSenhaIcon"
