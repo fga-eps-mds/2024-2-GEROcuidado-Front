@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import React, { useState, useEffect } from "react";
-import { Image, StyleSheet, Text, View, TextInput } from "react-native";
+import { Image, StyleSheet, Text, View, TextInput, Button } from "react-native";
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -16,6 +16,7 @@ import database from "../db";
 import { Collection, Q } from "@nozbe/watermelondb";
 import { syncDatabaseWithServer } from "../services/watermelon.service";
 import Usuario from "../model/Usuario";
+import ForgetButton from "../components/ForgetButton";
 
 interface IErrors {
   email?: string;
@@ -23,13 +24,16 @@ interface IErrors {
 }
 
 export default function Login() {
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+  const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
+  const BASE_URL = `${API_URL}:${API_PORT}/api/usuario`;
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [escondeSenha, setEscondeSenha] = useState(true);
   const [erros, setErros] = useState<IErrors>({});
   const [showErrors, setShowErrors] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
-
+  
   const login = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
@@ -41,7 +45,7 @@ export default function Login() {
     try {
       setShowLoading(true);
       console.log("Iniciando o login...");
-
+      console.log(BASE_URL);
       const response = await loginUser(body);
       console.log("Resposta do login:", response);
 
@@ -242,6 +246,7 @@ export default function Login() {
               name={escondeSenha ? "eye-outline" : "eye-off-outline"}
               size={20}
             />
+
           </View>
           <ErrorMessage show={showErrors} text={erros.senha} />
         </View>
@@ -253,9 +258,16 @@ export default function Login() {
             showLoading={showLoading}
           />
         </View>
+
+        <View style={styles.EsqueciButton}>
+          <ForgetButton
+            title="Esqueci minha senha!!"
+            showLoading={showLoading}
+          />
+        </View>
       </ScrollView>
     </View>
-  );
+  );  
 }
 
 const styles = StyleSheet.create({
@@ -347,4 +359,11 @@ const styles = StyleSheet.create({
   eye: {
     marginLeft: 100,
   },
+  EsqueciButton: {
+    marginTop: 35,
+    alignItems: "center",
+    justifyContent: "center", // Adicionado para centralizar verticalmente
+    width: "100%",
+    flex: 1,
+  }
 });

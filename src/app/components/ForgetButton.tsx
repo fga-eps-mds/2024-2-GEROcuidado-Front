@@ -1,50 +1,47 @@
 import React from "react";
-import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, StyleSheet, Text } from "react-native";
+import { router } from "expo-router";
+import { View } from 'react-native';
 
 interface Props {
   title: string;
-  callbackFn: () => unknown;
-  backgroundColor?: string;
   showLoading?: boolean;
 }
 
 export default function ForgetButton({
   title,
-  callbackFn,
-  backgroundColor,
   showLoading,
 }: Readonly<Props>) {
-  const background = backgroundColor ?? "#2CCDB5";
+
+  const handlePress = () => {
+    router.push("/private/pages/esqueciSenha"); 
+  };
 
   return (
-    <Pressable
-      testID="customButtonId"
-      style={styles(background).button}
-      onPress={() => callbackFn()}
-    >
+    <View>
       {showLoading ? (
-        <ActivityIndicator size="small" color="#fff" />
+        <ActivityIndicator size="small" color="#0000ff" />
       ) : (
-        <Text style={styles(background).buttonText}>{title}</Text>
+        <Text
+          style={styles.linkText}
+          onPress={handlePress}
+        >
+          {title}
+        </Text>
       )}
-    </Pressable>
+    </View>
   );
 }
 
-const styles = (backgroundColor: string) =>
-  StyleSheet.create({
-    buttonText: {
-      fontSize: 13,
-      color: "white",
-      fontWeight: "300",
-    },
-    button: {
-      width: "30%",
-      maxWidth: 150,
-      paddingVertical: 10,
-      paddingHorizontal: 10,
-      backgroundColor,
-      alignItems: "center",
-      borderRadius: 15,
+const styles = StyleSheet.create({
+    linkText: {
+      width: "40%",
+      color: "#2CCDB5",
+      maxWidth: 300,
+      textDecorationLine: "underline",
+      paddingVertical: 12,
+      paddingHorizontal: 18,
+      textAlign: "left",
+      borderRadius: 20,
     },
   });
