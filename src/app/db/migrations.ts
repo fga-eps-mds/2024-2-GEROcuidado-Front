@@ -67,11 +67,17 @@ export default schemaMigrations({
         {
           type: 'create_table',
           schema: tableSchema({
-            name: 'valor_metrica',
+            name: 'evento',
             columns: [
-              { name: 'metrica_id', type: 'string', isIndexed: true },
-              { name: 'valor', type: 'string' },
+              { name: 'titulo', type: 'string' },
+              { name: 'descricao', type: 'string' },
+              { name: 'categoria', type: 'string' },
               { name: 'dataHora', type: 'number' },
+              { name: 'notificacao', type: 'boolean' },
+              { name: 'token', type: 'string' },
+              { name: 'idoso_id', type: 'string', isIndexed: true },
+              { name: 'created_at', type: 'number' },
+              { name: 'updated_at', type: 'number' },
             ],
           }),
         },

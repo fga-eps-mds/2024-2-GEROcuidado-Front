@@ -9,6 +9,7 @@ import Idoso from '../model/Idoso'
 import Rotina from '../model/Rotina'
 import Metrica from '../model/Metrica'
 import ValorMetrica from '../model/ValorMetrica'
+import Evento from '../model/Evento'
 // import Post from './model/Post' // ⬅️ You'll import your Models here
 
 // First, create the adapter to the underlying database:
@@ -31,7 +32,7 @@ const database = new Database({
   adapter,
   modelClasses: [
     // Post, // ⬅️ You'll add Models to Watermelon here
-    Usuario, Idoso, Rotina, Metrica, ValorMetrica
+    Usuario, Idoso, Rotina, Metrica, ValorMetrica, Evento
   ],
 });
 
