@@ -41,6 +41,16 @@ export default function TabsLayout() {
           }}
         />
 
+          <Tabs.Screen
+          name="eventos"
+          options={{
+            title: "Eventos",
+            headerShown: false,
+            tabBarIcon: ({ size, focused }) => {
+              return iconComponent(focused, size, "calendar");
+            },
+          }}
+        />      
         <Tabs.Screen
           name="registros"
           options={{
