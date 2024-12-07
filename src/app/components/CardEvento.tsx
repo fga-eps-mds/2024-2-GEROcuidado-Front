@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
 import { IEvento } from "../interfaces/evento.interface";
+import { updateEvento } from "../services/evento.service"
 import database from "../db";
 import { Collection } from "@nozbe/watermelondb";
 import Evento from "../model/Evento";
@@ -13,9 +14,19 @@ interface IProps {
     date: Date;
   }
 
-export default function CardEvento({ item, index }: IProps) {
-  const [nameIcon, setNameIcon] = useState("calendar-outline");
-  const [time, setTime] = useState<string>("");
+  export default function CardEvento({ item, index, date }: IProps) {
+    const dateString = date.toLocaleString("pt-BR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    
+    const [nameIcon, setnameIcon] = useState("view-grid-outline");
+    const [check, setCheck] = useState(false);
+    const [time, setTime] = useState<string>("");
+    const [token, setToken] = useState<string>("");
+    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+
 
   const editar = () => {
     const evento = item as unknown as Evento;

@@ -28,6 +28,7 @@ import {
   import { handleNotificacao, validateFields } from "../../shared/helpers/useNotification";
   import CustomButton from "../../components/CustomButton";
   import WeekDays from "../../components/weekDay";
+import { Try } from "expo-router/build/views/Try";
   
   interface IErrors {
     titulo?: string;
@@ -94,7 +95,7 @@ import {
     };
   
     const salvarNoBancoLocal = async () => {
-      const eventoCollection = database.get("evento") as Collection<Evento>;
+      const eventoCollection = database.get('evento') as Collection<Evento>;
   
       await database.write(async () => {
         await eventoCollection.create((evento) => {
@@ -107,7 +108,9 @@ import {
           evento.idIdoso = String(idoso?.id);
         });
       });
-  
+      console.log("Estado atual do banco:", await eventoCollection.query().fetch());
+    }
+
     const salvar = async () => {
       if (Object.keys(erros).length > 0) {
         setShowErrors(true);
@@ -399,4 +402,3 @@ import {
       marginBottom: 30,
     },
   });
-}
