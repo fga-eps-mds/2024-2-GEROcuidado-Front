@@ -83,10 +83,10 @@ import {
   
         const eventoCollection = database.get('evento') as Collection<Evento>;
         await database.write(async () => {
-          const evento = await eventoCollection.find(params.id);
+          const evento  = await eventoCollection.find(params.id);
+
           await evento.update(() => {
             evento.titulo = titulo;
-            evento.local = local;
             evento.dataHora = new Date(getDateIsoString(data, hora));
             evento.descricao = descricao;
             evento.notificacao = notificacao;
@@ -98,9 +98,16 @@ import {
           text1: "Sucesso!",
           text2: "Evento atualizado com sucesso",
         });
+
+        router.back();
   
       } catch (err) {
         console.log("Erro ao atualizar evento:", err);
+        Toast.show({
+          type: "error",
+          text1: "Erro!",
+          text2: "Erro ao atualizar evento",
+        });
       } finally {
         setShowLoading(false);
       }
@@ -148,7 +155,7 @@ import {
         <View style={styles.Evento}>
           <TextInput
             value={titulo}
-            onChangeText={setTitulo}
+            onChangeText={(NewTitulo) => {setTitulo(NewTitulo);}}
             placeholder="Título do evento"
             style={styles.inputTitulo}
           />
@@ -180,19 +187,28 @@ import {
           <Text style={styles.repete}>Evento no(s) dia(s)</Text>
         </View>
 
+        <View style={styles.notificacaoContainer}>
+          <Switch
+            trackColor={{ false: "#767577", true: "#2CCDB5" }}
+            onValueChange={setNotificacao}
+            value={notificacao}
+          />
+          <Text style={styles.notificacaoText}>Ativar notificação</Text>
+        </View>
+
         <View style={styles.weekDays}>
           <WeekDays dias={dias} callbackFn={setDias} />
         </View>
           <TextInput
             value={descricao}
-            onChangeText={setDescricao}
+            onChangeText={(NewDescription) => {setDescricao(NewDescription);}}
             placeholder="Descrição"
             style={styles.textInputDescription}
             multiline={true}
+            numberOfLines={4}
           />
           <ErrorMessage show={showErrors} text={erros.descricao} />
-  
-          <Switch value={notificacao} onValueChange={setNotificacao} />
+
   
           <View style={styles.linkButton}>
           <CustomButton
@@ -306,7 +322,7 @@ import {
       weekDays: {
         flexDirection: "row",
         marginTop: 15,
-        marginBottom: 30,
+        marginBottom: 15,
       },
       iconDesciption: {
         width: "10%",
@@ -351,7 +367,7 @@ import {
         alignItems: "center",
         width: "100%",
         fontWeight: "700",
-        marginBottom: 25,
+        marginBottom: 10,
       },
       notificacaoText: {
         fontWeight: "600",

@@ -301,14 +301,9 @@ import { Try } from "expo-router/build/views/Try";
     },
     header: {
       backgroundColor: "#2CCDB5",
-      width: "100%",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      paddingTop: 10,
-      paddingBottom: 10,
-      alignItems: "center",
-      paddingHorizontal: 15,
-      marginBottom: 15,
+        height: 60,
+        flexDirection: "row",
+        alignItems: "center",
     },
     tituloheader: {
       fontWeight: "bold",
