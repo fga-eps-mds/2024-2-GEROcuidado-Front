@@ -28,6 +28,7 @@ import database from "../../db";
 import { Collection, Q } from "@nozbe/watermelondb";
 import Evento from "../../model/Evento";
 import { getFoto } from "../../shared/helpers/photo.helper";
+import { json } from "@nozbe/watermelondb/decorators";
 
 export default function Eventos() {
   moment.locale("pt-br");
@@ -79,15 +80,23 @@ export default function Eventos() {
     try {
       const eventoCollection = database.get('evento') as Collection<Evento>;
 
-      const allIdosoEventos = await eventoCollection.query(
-        Q.where('idoso_id', idoso.id)
-      ).fetch();
+      // TODO: Consulta com defeito, arrumar um jeito de filtar com ela
+      /*const eventoFiltrados = await eventoCollection.query(
+        Q.where('idoso_id', idoso.id),
+      ).fetch();*/
 
-      const filteredEventos = allIdosoEventos.filter((evento) => {
-        return moment(evento.dataHora).isSame(selectedDate, 'day');
+      const todosEventos = await eventoCollection.query().fetch();
+
+      const startOfDay = selectedDate.startOf('day').toISOString();
+      const endOfDay = selectedDate.endOf('day').toISOString();
+
+      // Metodo menos eficiente, assim que resolvido deve ser descontinuado
+      const eventosFiltrados = todosEventos.filter(evento => {
+        const eventoDataHora = new Date(evento.dataHora).toISOString(); 
+        return evento.idIdoso === idoso.id && eventoDataHora >= startOfDay && eventoDataHora <= endOfDay;
       });
 
-      setEventos(filteredEventos);
+      setEventos(eventosFiltrados);
     } finally {
       setLoading(false);
     }

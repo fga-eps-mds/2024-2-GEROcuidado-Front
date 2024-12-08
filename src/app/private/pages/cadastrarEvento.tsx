@@ -105,7 +105,7 @@ import { Try } from "expo-router/build/views/Try";
           evento.dataHora = new Date(getDateIsoString());
           evento.token = token;
           evento.notificacao = notificacao;
-          evento.idIdoso = String(idoso?.id);
+          evento.idIdoso = idoso?.id;
         });
       });
       console.log("Estado atual do banco:", await eventoCollection.query().fetch());
@@ -291,7 +291,7 @@ import { Try } from "expo-router/build/views/Try";
       alignItems: "center",
       width: "100%",
       fontWeight: "700",
-      marginBottom: 25,
+      marginBottom: 20,
     },
     notificacaoText: {
       fontWeight: "600",
@@ -308,7 +308,7 @@ import { Try } from "expo-router/build/views/Try";
       paddingBottom: 10,
       alignItems: "center",
       paddingHorizontal: 15,
-      marginBottom: 10,
+      marginBottom: 15,
     },
     tituloheader: {
       fontWeight: "bold",
@@ -316,7 +316,17 @@ import { Try } from "expo-router/build/views/Try";
       color: "#fff",
     },
     evento: {
-      marginHorizontal: 10,
+      flexDirection: "column",
+      borderRadius: 15,
+      backgroundColor: "white",
+      margin: 15,
+      padding: 15,
+      shadowColor: "#000",
+      shadowOffset: { width: 1, height: 1 },
+      shadowOpacity: 0.3,
+      shadowRadius: 6,
+      alignItems: "center",
+      justifyContent: "center",
     },
     titulo: {
       width: "100%",
@@ -325,7 +335,7 @@ import { Try } from "expo-router/build/views/Try";
       borderRadius: 6,
       justifyContent: "center",
       paddingHorizontal: 15,
-      marginBottom: 30,
+      marginBottom: -20,
     },
     inputTitulo: {
       width: "100%",
@@ -340,7 +350,7 @@ import { Try } from "expo-router/build/views/Try";
       height: 60,
       backgroundColor: "#F6F6F6",
       borderRadius: 6,
-      marginBottom: 30,
+      marginBottom: 0,
       flexDirection: "row",
       alignItems: "center",
       paddingHorizontal: 15,
@@ -360,21 +370,18 @@ import { Try } from "expo-router/build/views/Try";
       borderRadius: 5,
       borderWidth: 0,
       height: 60,
-      marginBottom: 30,
+      marginBottom: -5,
     },
     categoriaSelecionada: {
       fontSize: 18,
       color: "#707070",
     },
     categoria: {
-      width: "100%",
-      height: 60,
-      backgroundColor: "#F6F6F6",
-      borderRadius: 6,
-      marginBottom: 30,
       flexDirection: "row",
-      alignItems: "center",
-      paddingHorizontal: 15,
+      borderBottomWidth: 1,
+      width: 300,
+      alignItems: "baseline",
+      paddingBottom: 5,
     },
     iconCategoria: {
       marginRight: 10,
@@ -382,13 +389,14 @@ import { Try } from "expo-router/build/views/Try";
       color: "#707070",
     },
     repete: {
-      marginBottom: 15,
+      marginBottom: 5,
     },
     weekDays: {
-      marginBottom: 30,
+      marginBottom: 0,
     },
     descricao: {
-      marginBottom: 30,
+      width: "100%",
+      marginBottom: 0,
     },
     textInputDescription: {
       padding: 10,
@@ -400,5 +408,6 @@ import { Try } from "expo-router/build/views/Try";
     },
     linkButton: {
       marginBottom: 30,
+      alignItems: "center",
     },
   });
