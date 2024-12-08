@@ -239,7 +239,7 @@ import { Try } from "expo-router/build/views/Try";
           </View>
   
           <View style={styles.repete}>
-            <Text style={styles.repete}>Se repete às:</Text>
+            <Text style={styles.repete}>Evento no(s) dia(s)</Text>
           </View>
   
           <View style={styles.weekDays}>
