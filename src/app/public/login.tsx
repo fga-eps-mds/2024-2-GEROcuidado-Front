@@ -261,7 +261,7 @@ export default function Login() {
 
         <View style={styles.EsqueciButton}>
           <ForgetButton
-            title="Esqueci minha senha!!"
+            title="Esqueci minha senha"
             showLoading={showLoading}
           />
         </View>
