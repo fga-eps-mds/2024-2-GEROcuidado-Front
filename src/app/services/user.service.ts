@@ -26,6 +26,28 @@ export const postUser = async (
   return json;
 };
 
+export const forgotPassword = async (
+  email: string,
+): Promise<IResponse<null>> => {
+  const response = await fetch(`${BASE_URL}/esqueci-senha`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  const json = await response.json();
+
+  if (response.status !== 200) {
+    throw new Error(json.message as string);
+  }
+
+  return json;
+};
+
+
 export const updateUser = async (
   id: number,
   body: Partial<IUser>,
