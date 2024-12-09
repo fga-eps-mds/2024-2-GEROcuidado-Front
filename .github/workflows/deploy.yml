@@ -1,0 +1,78 @@
+# Aqui realizamos o deploy do microserviço fazendo push da imagem docker atualizada
+# com a versão mais recente do código para o Dockerhub. Depois fazemos o deploy no EC2
+# que nada mais é que um git pull e restartar os containers do micro-serviço
+#
+# Nesse mesmo workflow temos a action de release, que cria uma release no github
+# caso seja feito um push de tag com nome no formato vX.Y.Z
+#
+
+name: Deploy
+
+on:
+  push:
+    branches: ['develop']
+    tags: ['v*.*.*']
+
+env:
+  TARGET_DIR: '~/${{ github.event.repository.name }}'
+
+jobs:
+  docker-hub:
+    name: Docker Hub Image Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Sending Image to Docker Hub
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: victorjorge/gerocuidado-usuario-api
+          registry: docker.io
+          directory: ./
+          dockerfile: ./Dockerfile.prod
+          tags: latest
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+  deploy-ec2:
+    name: Deploy EC2
+    needs: docker-hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
+
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_DNS }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ${{env.TARGET_DIR}}
+            sudo git pull
+            sudo docker compose -f docker-compose.prod.yml up --force-recreate --build --pull always --remove-orphans -d
+
+  release:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags')
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+
+      - name: Envia métricas como assets da release
+        if: startsWith(github.ref, 'refs/tags')
+        uses: AButler/upload-release-assets@v3.0
+        with:
+          files: 'analytics-raw-data/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ github.ref_name }}

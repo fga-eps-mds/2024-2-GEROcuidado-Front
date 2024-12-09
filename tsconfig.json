@@ -1,8 +1,41 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "jsx": "react",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "allowJs": true,
+    "checkJs": true,
     "strict": true,
-    "experimentalDecorators": true
-  }
+    "pretty": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2019",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "typeRoots": ["@types", "node_modules/@types"],
+    "paths": {
+      "*": ["node_modules/*"],
+      "../*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    ".vscode",
+    "dist/**/*",
+    "e2e/**/*",
+    "e2e/**/*"
+  ]
 }

@@ -1,15 +1,44 @@
 version: '3.7'
 services:
-  gerocuidado-front:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: gerocuidado-front
-    ports:
-      - '8081:8081'
+  gerocuidado-usuario-api:
+    image: gerocuidadodev/node:18.17.0-alpine-dev
+    container_name: gerocuidado-usuario-api
     volumes:
-      - ./:/app
-      - /app/node_modules
+      - '.:/home/node/app'
+    entrypoint: ./.docker/entrypoint.sh
     environment:
-      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-      - NODE_ENV=${NODE_ENV}
+      - NODE_ENV=development
+    ports:
+      - '3001:3001'
+      - '4001:4001'
+      - '7001:7001'
+    depends_on:
+      - gerocuidado-usuario-db
+    networks:
+      - gerocuidado-usuario-net
+      - gerocuidado-apis-net
+
+  gerocuidado-usuario-db:
+    build:
+      context: ./.docker/postgres
+      dockerfile: Dockerfile
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    container_name: gerocuidado-usuario-db
+    volumes:
+      - './db/postgres:/var/lib/postgresql/data'
+      - './.docker/postgres/config/postgresql.conf:/etc/postgresql/postgresql.conf'
+    environment:
+      - POSTGRES_DB=gerocuidado-usuario-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5001:5001'
+    networks:
+      - gerocuidado-usuario-net
+
+networks:
+  gerocuidado-usuario-net:
+    driver: bridge
+  gerocuidado-apis-net:
+    name: gerocuidado-apis-net
+    external: true

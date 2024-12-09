@@ -1,0 +1,10 @@
+{
+  // "typescript.tsdk": "node_modules/typescript/lib",
+  "js/ts.implicitProjectConfig.experimentalDecorators": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "cSpell.words": [],
+  "cSpell.diagnosticLevel": "Hint",
+}

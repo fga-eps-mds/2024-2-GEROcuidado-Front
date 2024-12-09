@@ -23,4 +23,3 @@
  - [ ] Documentação
  - [ ] Experiência do usuário (UX)
  - [ ] Melhoria de desempenho
-
