@@ -66,7 +66,7 @@ export default function Login() {
   const handleErrors = () => {
     const erros: IErrors = {};
     let hasErrors = false;
-  
+
     // Verifica o campo de email
     if (!email) {
       erros.email = "Campo Obrigatório!";
@@ -85,7 +85,7 @@ export default function Login() {
         text2: 'Formato de email inválido!',
       });
     }
-  
+
     // Verifica o campo de senha
     if (!senha) {
       erros.senha = "Campo Obrigatório!";
@@ -96,17 +96,17 @@ export default function Login() {
         text2: 'O campo de senha é obrigatório!',
       });
     }
-  
+
     setErros(erros);
-  
+
     // Retorna se há erros para interromper a submissão
     return hasErrors;
   };
-  
+
   useEffect(() => {
     handleErrors();
   }, [email, senha]);
-  
+
 
   const handleUser = async (token: string) => {
     try {
@@ -151,41 +151,46 @@ export default function Login() {
 
         const user = queryResult.at(0);
 
-        if (user instanceof Usuario) {
-          console.log("Settando usuario a partir do objeto do banco!");
+        // if (user instanceof Usuario) {
+        //   console.log("Settando usuario a partir do objeto do banco!");
 
-          const userTransformed = {
-            id: user.id.toString(),
-            email: user.email,
-            senha: user.senha,
-            foto: user.foto,
-            admin: user.admin,
-            nome: user.nome
-          }
+        //   const userTransformed = {
+        //     id: user.id.toString(),
+        //     email: user.email,
+        //     senha: user.senha,
+        //     foto: user.foto,
+        //     admin: user.admin,
+        //     nome: user.nome,
+        //     data_nascimento: user.data_nascimento,
+        //     descricao: user.descricao,
+        //   }
 
-          console.log("userTransformed", userTransformed);
-          await AsyncStorage.setItem("usuario", JSON.stringify(
-            userTransformed
-          ));
+        //   console.log("userTransformed", userTransformed);
+        //   await AsyncStorage.setItem("usuario", JSON.stringify(
+        //     userTransformed
+        //   ));
 
-          console.log(await AsyncStorage.getItem('usuario'));
-          return;
-        }
+        const response = await getUserById(id, token);
+
+        const responseUser = response.data as IUser & {
+          foto: { data: Uint8Array };
+        };
+
+        await AsyncStorage.setItem("usuario", JSON.stringify(
+          responseUser
+        ));
+
+        // TODO: Remove this in the future
+        // console.log("Usuario buscado diretamente da API...");
+        // console.log(await usersCollection.query().fetch());
+
+        await AsyncStorage.setItem("usuario", JSON.stringify(responseUser));
 
       } catch (err) {
         console.log("Erro ao buscar usuário no banco local:", err);
       }
 
-      const response = await getUserById(id, token);
-      const responseUser = response.data as IUser & {
-        foto: { data: Uint8Array };
-      };
 
-      // TODO: Remove this in the future
-      console.log("Usuario buscado diretamente da API...");
-      console.log(await usersCollection.query().fetch());
-
-      await AsyncStorage.setItem("usuario", JSON.stringify(responseUser));
     } catch (err) {
       console.error("Erro ao obter o usuário:", err);
       const error = err as { message: string };

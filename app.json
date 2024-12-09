@@ -33,14 +33,15 @@
       "typeRoutes": true
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-build-properties"
     ],
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "7b777975-c65a-4ae3-ab23-93691fd81c12"
+        "projectId": "d0700b57-06bb-420d-b975-fcd5d3193360"
       }
     },
     "runtimeVersion": {
