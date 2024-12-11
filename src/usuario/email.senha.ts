@@ -1,30 +1,35 @@
 import cors from 'cors';
+
 import express, { Request, Response } from 'express';
 import nodemailer from 'nodemailer';
 
+
 const app = express();
+
 app.use(express.json()); // Para processar o corpo das requisições em formato JSON
 app.use(cors());
 
-// Função para enviar o e-mail de redefinição de senha
+// Função para enviar o e-mail
 export async function sendResetEmail(email: string, codigo: string) {
+
     // Configuração do Nodemailer
     const transporter = nodemailer.createTransport({
         service: 'gmail', // Usando o serviço Gmail
         auth: {
-            user: 'kauanfelipesousa1@gmail.com', // Seu e-mail
-            pass: 'F@elipe123',  // Sua senha (ou senha do app para maior segurança)
+            user: 'kauanfelipesousa1@gmail.com', // Meu e-mail
+            pass: 'A@leatoria123',  // Minha senha 
         },
     });
 
     try {
         // Envia o e-mail
         const info = await transporter.sendMail({
-            from: '"Sistema" <kauanfelipesousa1@gmail.com>',  // Ajuste o remetente para seu e-mail
+            from: '"Sistema" <kauanfelipesousa1@gmail.com>',  //remetente 
             to: email,  // E-mail do destinatário
             subject: 'Redefinição de Senha',  // Assunto do e-mail
             text: `Seu código de redefinição é: ${codigo}`,  // Corpo do e-mail
         });
+
 
         // Exibe o ID da mensagem para depuração
         console.log('E-mail enviado:', info.messageId);
@@ -34,6 +39,7 @@ export async function sendResetEmail(email: string, codigo: string) {
         console.error('Erro ao enviar o e-mail:', error);
         return { success: false, message: 'Erro ao enviar o e-mail', error };
     }
+
 }
 
 // Endpoint para recuperar senha

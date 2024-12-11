@@ -34,6 +34,7 @@ export class UsuarioController {
 
   // cria a rota nova do esqueci minha senha. Facilita o trabalho no postman -- chama o servi~ço de redefinição.
   @Post('esqueci-senha')
+
   @PublicRoute()
   async esqueciSenha(@Body() EsqueciSenhaDto: EsqueciSenhaDto) {
     return this._service.enviarCodigoRedefinicao(EsqueciSenhaDto.email);
@@ -41,6 +42,7 @@ export class UsuarioController {
 
   //cria a nova rota de resetar a senha. Facilita trbalaho no postman -- recebe o email com o token para a senha.
   @Post('resetar-senha')
+
   @PublicRoute()
   async resetarSenha(@Body() ResetarSenhaDto: ResetarSenhaDto) {
     return this._service.resetarSenha(ResetarSenhaDto);
@@ -48,6 +50,7 @@ export class UsuarioController {
 
 
   @Post()
+
   @PublicRoute()
   async create(@Body() body: CreateUsuarioDto): Promise<Response<Usuario>> {
     const created = await this._service.create(body);

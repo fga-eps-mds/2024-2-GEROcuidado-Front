@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcrypt';
@@ -22,6 +23,7 @@ import { IUsuarioFilter } from './interfaces/usuario-filter.interface';
 @Injectable()
 export class UsuarioService {
   constructor(
+
     @InjectRepository(Usuario) // Correção: Injeção de repositório
     private readonly _repository: Repository<Usuario>,
     private readonly _configService: ConfigService,
@@ -52,13 +54,14 @@ export class UsuarioService {
 
     // Envia o e-mail
     await sendResetEmail(email, codigo);
-
     return { message: 'Código enviado para o e-mail' };
+
   }
 
   async resetarSenha({ email, codigo, novaSenha }: ResetarSenhaDto) {
     // Busca o usuário no banco de dados
     const usuario = await this._repository.findOne({ where: { email } });
+
     if (!usuario) {
       throw new NotFoundException('Usuário não encontrado');
     }
@@ -71,7 +74,6 @@ export class UsuarioService {
     ) {
       throw new NotFoundException('Código inválido ou expirado');
     }
-
     // Atualiza a senha e cria o hash
     const senhaHash = await bcrypt.hash(novaSenha, 10);
     usuario.senha = senhaHash;
@@ -81,6 +83,7 @@ export class UsuarioService {
     usuario.CodigoResetExpiracao = undefined;
 
     await this._repository.save(usuario);
+
 
     return { message: 'Senha redefinida com sucesso' };
   }
