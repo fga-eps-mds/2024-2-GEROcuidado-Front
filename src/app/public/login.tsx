@@ -86,7 +86,7 @@ export default function Login() {
       Toast.show({
         type: 'error',
         text1: 'Erro!',
-        text2: 'Formato de email inválido!',
+        text2: 'Formato de email inválido!!',
       });
     }
   
@@ -96,10 +96,11 @@ export default function Login() {
       hasErrors = true;
       Toast.show({
         type: 'error',
-        text1: 'Erro!',
-        text2: 'O campo de senha é obrigatório!',
+        text1: ` ${API_PORT} , ${BASE_URL}`,
+        text2: `Você está utilizando o endpoint: ${API_URL}`,
       });
     }
+    
   
     setErros(erros);
   
