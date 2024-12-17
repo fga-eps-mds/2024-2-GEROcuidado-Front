@@ -2,6 +2,8 @@ import { Image, StyleSheet, Text, View } from "react-native";
 
 import LinkButton from "./components/LinkButton";
 import React from "react";
+import 'react-native-gesture-handler';
+import Reanimated from 'react-native-reanimated';
 
 export default function Home() {
   return (
@@ -9,7 +11,7 @@ export default function Home() {
       <Image source={require("../../assets/logo.png")} />
       <Text style={styles.titulo}> Seja um GEROcuidador! </Text>
       <LinkButton title="Acessar Fórum" href="/private/tabs/forum" />
-      <LinkButton title="Login" href="/public/login" />
+      <LinkButton title="Login" href="/public/login"/>
       <LinkButton
         title="Cadastre-se"
         backgroundColor="#B47B9D"

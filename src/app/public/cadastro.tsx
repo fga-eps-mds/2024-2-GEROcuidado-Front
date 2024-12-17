@@ -209,6 +209,8 @@ export default function Cadastro() {
               style={styles.passwordInput}
             />
 
+           
+
             <Icon
               testID="escondeSenhaIcon"
               onPress={() => setEscondeSenha(!escondeSenha)}
