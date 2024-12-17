@@ -21,15 +21,47 @@ import User from "../../model/Usuario";
 import { Q } from "@nozbe/watermelondb";
 import { IUser } from "../../interfaces/user.interface";
 import Usuario from "../../model/Usuario";
+import MaskInput, { Masks } from "react-native-mask-input";
+import { Fontisto } from "@expo/vector-icons";
 
 interface IErrors {
   nome?: string;
+  data_nascimento?: string;
+  descricao?: string;
+  senha?: string
+  confirmaSenha?: string
 }
 
+const getDateFromEdit = (date: string) => {
+  const data = new Date(date);
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+
+  return `${dia}/${mes}/${ano}`;
+};
+
+const getDateIsoString = (value: string) => {
+  const dateArray = value.split("/");
+  return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
+};
+
 export default function EditarPerfil() {
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+  const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
+  const BASE_URL = `${API_URL}:${API_PORT}/api/usuario`;
   const user = useLocalSearchParams() as unknown as IUser;
   const [foto, setFoto] = useState<string | undefined | null>(user.foto);
   const [nome, setNome] = useState(user.nome);
+  const [senha, setSenha] = useState("");
+  const [escondeSenha, setEscondeSenha] = useState(true);
+  const [confirmaSenha, setConfirmaSenha] = useState("");
+  const [escondeConfirmaSenha, setEscondeConfirmaSenha] = useState(true);
+
+  const [descricao, setDescricao] = useState(user.descricao);
+  const [dataNascimento, setDataNascimento] = useState(
+    getDateFromEdit(user.data_nascimento as unknown as string),
+  );
   const [erros, setErros] = useState<IErrors>({});
   const [showErrors, setShowErrors] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -48,7 +80,7 @@ export default function EditarPerfil() {
       return;
     }
 
-    const body = { nome, foto };
+    const body = { nome, foto, data_nascimento: getDateIsoString(dataNascimento), descricao, senha };
     console.log("Dados a serem salvos:", body);
 
     if (body.foto && isBase64Image(body.foto)) {
@@ -59,39 +91,55 @@ export default function EditarPerfil() {
     try {
       setShowLoading(true);
 
-      const usersCollection = database.get<Usuario>("usuario");
-      console.log("Coleção de usuários obtida:", usersCollection);
+      // const usersCollection = database.get<Usuario>("usuario");
+      // console.log("Coleção de usuários obtida:", usersCollection);
 
-      await database.write(async () => {
-        const userToUpdate = await usersCollection
-          .query(Q.where("id", user.id.toString()))
-          .fetch();
+      // await database.write(async () => {
+      //   const userToUpdate = await usersCollection
+      //     .query(Q.where("id", user.id.toString()))
+      //     .fetch();
 
-        console.log("Usuário encontrado para atualizar:", userToUpdate);
+      //   console.log("Usuário encontrado para atualizar:", userToUpdate);
 
-        if (userToUpdate.length > 0) {
-          console.log("Estado antes da atualização:", userToUpdate[0]);
+      //   if (userToUpdate.length > 0) {
+      //     console.log("Estado antes da atualização:", userToUpdate[0]);
 
-          await userToUpdate[0].update((user) => {
-            user.nome = nome;
-            if (foto) user.foto = foto;
-          });
+      //     await userToUpdate[0].update((user) => {
+      //       user.nome = nome;
+      //       if (foto) user.foto = foto;
+      //     });
 
-          const updatedUsers = await usersCollection
-            .query(Q.where("id", user.id.toString()))
-            .fetch();
-          console.log("Usuário atualizado no banco de dados:", updatedUsers);
+      //     const updatedUsers = await usersCollection
+      //       .query(Q.where("id", user.id.toString()))
+      //       .fetch();
+      //     console.log("Usuário atualizado no banco de dados:", updatedUsers);
 
-          const updatedUser = {
-            ...user,
-            nome,
-            foto,
-          };
+      //     const updatedUser = {
+      //       ...user,
+      //       nome,
+      //       foto,
+      //     };
 
-          console.log("Usuário atualizado:", updatedUser);
+      //     console.log("Usuário atualizado:", updatedUser);
 
-          await AsyncStorage.setItem("usuario", JSON.stringify(updatedUser));
-        }
+      //     await AsyncStorage.setItem("usuario", JSON.stringify(updatedUser));
+
+      //     const updateUser
+      //   }
+      // });
+
+      const token = await AsyncStorage.getItem('token')
+
+      const response = await fetch(`${BASE_URL}/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(body),
+      }).then((res) => res.json()).then(async (data) => {
+        await AsyncStorage.setItem("usuario", JSON.stringify(data.data))
       });
 
       Toast.show({
@@ -99,7 +147,7 @@ export default function EditarPerfil() {
         text1: "Sucesso!",
         text2: "Perfil atualizado com sucesso.",
       });
-
+      
       router.push("/private/tabs/perfil");
     } catch (err) {
       const error = err as { message: string };
@@ -173,7 +221,7 @@ export default function EditarPerfil() {
     console.log("Modal fechado");
   };
 
-  useEffect(() => handleErrors(), [nome]);
+  useEffect(() => handleErrors(), [nome, senha, confirmaSenha, descricao, dataNascimento]);
 
   const handleErrors = () => {
     const erros: IErrors = {};
@@ -184,6 +232,16 @@ export default function EditarPerfil() {
       erros.nome = "O nome completo deve ter pelo menos 5 caractéres.";
     } else if (nome.length > 60) {
       erros.nome = "O nome completo deve ter no máximo 60 caractéres.";
+    }
+
+    if (senha.length < 6) {
+      erros.senha = "Senha deve ter no mínimo 6 caracteres!";
+    }
+
+    if (!confirmaSenha) {
+      erros.confirmaSenha = "Campo Obrigatório!";
+    } else if (confirmaSenha !== senha) {
+      erros.confirmaSenha = "As senhas precisam ser iguais!";
     }
 
     setErros(erros);
@@ -214,6 +272,79 @@ export default function EditarPerfil() {
         <View style={styles.field}>
           <Icon style={styles.iconInput} name="email-outline" size={20} />
           <Text style={styles.textInput}>{user.email}</Text>
+        </View>
+      </View>
+
+      <View style={styles.formControl}>
+        <View style={styles.field}>
+          <Icon style={styles.iconInput} name="lock-outline" size={20} />
+          <TextInput
+            onChangeText={setSenha}
+            value={senha}
+            placeholder="Senha"
+            secureTextEntry={escondeSenha}
+            style={styles.passwordInput}
+          />
+
+          <Icon
+            testID="escondeSenhaIcon"
+            onPress={() => setEscondeSenha(!escondeSenha)}
+            style={styles.passwordIcon}
+            name={escondeSenha ? "eye-outline" : "eye-off-outline"}
+            size={20}
+          />
+        </View>
+        <ErrorMessage show={showErrors} text={erros.senha} />
+      </View>
+
+      <View style={styles.formControl}>
+        <View style={styles.field}>
+          <Icon style={styles.iconInput} name="lock-outline" size={20} />
+          <TextInput
+            onChangeText={setConfirmaSenha}
+            value={confirmaSenha}
+            placeholder="Confirme sua senha"
+            secureTextEntry={escondeConfirmaSenha}
+            style={styles.passwordInput}
+          />
+          <Icon
+            testID="escondeConfirmaSenhaIcon"
+            onPress={() => setEscondeConfirmaSenha(!escondeConfirmaSenha)}
+            style={styles.passwordIcon}
+            name={escondeConfirmaSenha ? "eye-outline" : "eye-off-outline"}
+            size={20}
+          />
+        </View>
+        <ErrorMessage show={showErrors} text={erros.confirmaSenha} />
+      </View>
+
+      <View style={styles.formControl}>
+        <View style={styles.field}>
+          <Icon
+            style={styles.iconInput}
+            name="cake-variant-outline"
+            size={20}
+          />
+          <MaskInput
+            style={styles.textInput}
+            value={dataNascimento}
+            onChangeText={setDataNascimento}
+            mask={Masks.DATE_DDMMYYYY}
+            placeholder="Data de Nascimento"
+          />
+        </View>
+        <ErrorMessage show={showErrors} text={erros.data_nascimento} />
+      </View>
+
+      <View style={styles.formControl}>
+        <View style={styles.field}>
+          <Fontisto style={styles.iconInput} name="left-align" size={15} />
+          <TextInput
+            onChangeText={setDescricao}
+            value={descricao}
+            placeholder="Descrição"
+            style={styles.textInput}
+          />
         </View>
       </View>
 
@@ -284,5 +415,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 60,
     marginBottom: 60,
+  },
+  passwordInput: {
+    paddingLeft: 10,
+    color: "#05375a",
+    width: "80%",
+    fontSize: 17,
+  },
+  passwordIcon: {
+    width: "10%",
   },
 });

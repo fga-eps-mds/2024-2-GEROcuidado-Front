@@ -10,6 +10,7 @@ import CustomButton from "../components/CustomButton";
 import ErrorMessage from "../components/ErrorMessage";
 import UploadImage from "../components/UploadImage";
 import { postUser } from "../services/user.service";
+import MaskInput, { Masks } from "react-native-mask-input";
 
 interface IErrors {
   nome?: string;
@@ -17,6 +18,7 @@ interface IErrors {
   confirmaEmail?: string;
   senha?: string;
   confirmaSenha?: string;
+  dataNascimento?: string;
 }
 
 export default function Cadastro() {
@@ -24,6 +26,8 @@ export default function Cadastro() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [confirmaEmail, setConfirmaEmail] = useState("");
+  const [dataNascimento, setDataNascimento] = useState<string>("");
+  const [descricao, setDescricao] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmaSenha, setConfirmaSenha] = useState("");
   const [escondeSenha, setEscondeSenha] = useState(true);
@@ -32,13 +36,18 @@ export default function Cadastro() {
   const [showErrors, setShowErrors] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
 
+  const getDateIsoString = (value: string) => {
+    const dateArray = value.split("/");
+    return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
+  };
+
   const cadastrar = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
       return;
     }
 
-    const body = { nome, email: email.toLowerCase().trim(), senha, foto };
+    const body = { nome, email: email.toLowerCase().trim(), senha, foto, data_nascimento: getDateIsoString(dataNascimento), descricao };
 
     try {
       setShowLoading(true);
@@ -144,6 +153,45 @@ export default function Cadastro() {
               onChangeText={setConfirmaEmail}
               value={confirmaEmail}
               placeholder="Confirme seu Email"
+              style={styles.textInput}
+            />
+          </View>
+          <ErrorMessage show={showErrors} text={erros.confirmaEmail} />
+        </View>
+
+        <View style={styles.formControl}>
+          <View style={styles.field}>
+            <Icon
+              style={styles.iconInput}
+              name="cake-variant-outline"
+              size={20}
+            />
+            <MaskInput
+              style={styles.textInput}
+              value={dataNascimento}
+              onChangeText={setDataNascimento}
+              mask={Masks.DATE_DDMMYYYY}
+              placeholder="Data de Nascimento"
+            />
+            {/* <Icon
+              style={styles.iconInput}
+              name="asterisk"
+              size={10}
+              color="red"
+            /> */}
+          </View>
+          <View testID="Erro-data">
+            <ErrorMessage show={showErrors} text={erros.dataNascimento} />
+          </View>
+        </View>
+
+        <View style={styles.formControl}>
+          <View style={styles.field}>
+            <Icon style={styles.iconInput} name="email-outline" size={20} />
+            <TextInput
+              onChangeText={setDescricao}
+              value={descricao}
+              placeholder="Descrição"
               style={styles.textInput}
             />
           </View>
