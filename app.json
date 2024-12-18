@@ -1,0 +1,64 @@
+{
+  "expo": {
+    "name": "GEROcuidado",
+    "slug": "gerocuidado",
+    "scheme": "gero.cuidado",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "permissions": [],
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.gerocuidado.gerocuidado"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "experiments": {
+      "typeRoutes": true
+    },
+    "plugins": [
+      "expo-router",
+      [
+      "expo-build-properties",
+      {
+        "android": {
+          "usesCleartextTraffic": true
+        }
+      }
+    ]
+    ],
+    "extra": {
+      "expoEnv": "process.env.EXPO_PUBLIC_API_URL",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "53b640fc-f72d-4fb5-88b4-c80d4162aa8b"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/7028a81c-adee-41de-91a7-b7e80535a448"
+    }
+  }
+}

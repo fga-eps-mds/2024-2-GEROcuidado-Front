@@ -1,33 +1,44 @@
-.npmrc
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
-# compiled output
-/dist
-/node_modules
+# dependencies
+node_modules/
 
-# Logs
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+# Expo
+.expo/
+dist/
+web-build/
 
-# OS
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
 .DS_Store
+*.pem
 
-# Tests
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
 /coverage
-/.nyc_output
 
-# IDEs and editors
+ios
+
+android
+
 /.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# DB
-/db
+/reports

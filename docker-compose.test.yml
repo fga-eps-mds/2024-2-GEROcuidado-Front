@@ -1,40 +1,14 @@
 version: '3.7'
 services:
-  gerocuidado-usuario-api-test:
-    image: gerocuidadodev/node:18.17.0-alpine-dev
-    container_name: gerocuidado-usuario-api-test
-    volumes:
-      - '.:/home/node/app'
-    entrypoint: dockerize -wait tcp://gerocuidado-usuario-db-test:5001 -timeout 40s ./.docker/entrypoint.test.sh
-    environment:
-      - NODE_ENV=test
-      - TEST=$TEST
-    user: root
-    ports:
-      - '3001:3001'
-      - '8001:8001'
-    depends_on:
-      - gerocuidado-usuario-db-test
-    networks:
-      - gerocuidado-usuario-net-test
-
-  gerocuidado-usuario-db-test:
+  gerocuidado-front-test:
     build:
-      context: ./.docker/postgres
+      context: .
       dockerfile: Dockerfile
-    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
-    container_name: gerocuidado-usuario-db-test
-    volumes:
-      - './.docker/postgres/config/postgresql.conf:/etc/postgresql/postgresql.conf'
-    environment:
-      - POSTGRES_DB=gerocuidado-usuario-db-test
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    container_name: gerocuidado-front-test
     ports:
-      - '5001:5001'
-    networks:
-      - gerocuidado-usuario-net-test
-
-networks:
-  gerocuidado-usuario-net-test:
-    driver: bridge
+      - '8081:8081'
+    user: root
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    entrypoint: ./.docker/entrypoint.test.sh

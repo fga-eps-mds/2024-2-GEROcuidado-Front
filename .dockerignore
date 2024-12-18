@@ -1,3 +1,5 @@
-node_modules/
-coverage/
-db/
+node_modules
+.github
+.vscode
+sonar-project.properties
+parser.py

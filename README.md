@@ -1,81 +1,67 @@
-# gerocuidado-usuario-api
+# GEROcuidado Mobile App
 
-## Configuração
+## Badges
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
 
-Definir valores iguais para os arquivos .env e docker-compose
 
-Arquivo .env.development e .env.test:
+## Como rodar o projeto
 
-    #POSTGRES
-    DB_TYPE=
-    DB_HOST=
-    DB_USERNAME=
-    DB_PASS=
-    DB_DATABASE=
-    DB_PORT=
-    JWT_TOKEN_SECRET=
-    JWT_TOKEN_EXPIRES_IN=
-    HASH_SALT=
+1. Clonar o repositório:
+```bash
+git clone https://github.com/fga-eps-mds/2023-2-GEROcuidado-Front.git
+```
 
-Arquivo .docker-compose, na seção **_environment_**:
+2. Ir para a pasta do projeto:
+```bash
+cd 2023-2-GEROcuidado-Front/
+```
 
-    ...
-    environment:
-      - POSTGRES_DB=
-      - POSTGRES_USER=
-      - POSTGRES_PASSWORD=
-    ...
+3. Rodar o container:
+- em ambiente de dev:
+```bash
+docker compose up
+```
 
-Da mesma forma, alterar os valores das portas terminadas em **_x_** (i.e 300x para 3001) para a porta desejada nos arquivos de compose, bem como no arquivo launch.json da pasta .vscode.
+- em ambiente de prod:
+```bash
+NODE_ENV=production docker compose up
+```
 
-## Execução
+### OBSERVAÇÕES IMPORTANTES
 
-  Para subir a aplicação, basta rodar o comando:
+1. Para testar a aplicação no celular, basta subir o container com os passos acima, ter baixado no seu dispositivo o aplicativo EXPO GO e por fim acessar o link exp://192.168.0.9:8081 no seu navegador. (A aplicação não aparecerá automaticamente no aplicativo do EXPO GO, é necessário acessar o link)
 
-  ```bash
-  docker compose up
-  ```
+2. Para testar a aplicação no celular em ambiente de desenvolvimento, é necessário também remover essa configuração do app.json:
 
-## Testes
+```json
+"eas": {
+  "projectId": "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx"
+}
+```
 
-  Para testar a aplicação, suba o container de testes:
+## Testes Unitários
 
-  ```bash
-    TEST=dev docker compose -f docker-compose.test.yml up
-  ```
+Para rodar os testes unitários, basta executar o comando:
+```bash
+docker compose -f docker-compose.test.yml up
+```
 
- E rode os comandos para os testes unitários e E2E respectivamente (:cov gera o arquivo de coverage na raiz do projeto):
-  ```bash
-    npm run test:cov
-    npm run test:e2e:cov
-  ```
+## QR Code para testes
+### IOS
+![IOS](https://github.com/fga-eps-mds/2023-2-GEROcuidado-Front/assets/51385738/1a9562d5-dec5-485d-999a-59f2f16e2427)
+### Android
+![Android](https://github.com/fga-eps-mds/2023-2-GEROcuidado-Front/assets/51385738/9a6d23c0-2f88-42de-ac26-719e6faa9fd3)
+### 📝 Notes
 
- ## Migrations
-
-  Sempre que houver qualquer alteração em alguma entidade na aplicação (adicionar uma entidade, remover ou edita-la), deve ser gerada uma migration para sincronizar o banco de dados.
-
-  1. Entrar no container da api:
-
-  ```bash
-    docker exec -it gerocuidado-usuario-api bash
-  ```
-
-  2. Rodar o comando de criar uma migration (tente dar um nome descritivo, ex.: CreateTableUsuario)
-
-  ```bash
-    npm run typeorm:migrate src/migration/NOME_DA_MIGRATION
-  ```
-
-# Dicionário variáveis de ambiente
-
-| ENV                  | Descrição                 | Valor Padrão           |
-| -------------------- | ------------------------- | ---------------------- |
-| DB_TYPE              | tipo do banco             | postgres               |
-| DB_HOST              | host do PostgreSQL        | localhost              |
-| DB_USERNAME          | usuário do PostgreSQL     | postgres               |
-| DB_PASS              | senha do PostgreSQL       | postgres               |
-| DB_DATABASE          | database do PostgreSQL    | gerocuidado-usuario-db |
-| DB_PORT              | porta do PostgreSQL       | 5001                   |
-| JWT_TOKEN_SECRET     | secret do JWT             |                        |
-| JWT_TOKEN_EXPIRES_IN | tempo de expiração do JWT | 12h                    |
-| HASH_SALT            | saltRounds da senha       | 10                     |
+- [Expo Router: Docs](https://expo.github.io/router)
+- [Expo Router: Repo](https://github.com/expo/router)
