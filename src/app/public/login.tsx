@@ -96,8 +96,8 @@ export default function Login() {
       hasErrors = true;
       Toast.show({
         type: 'error',
-        text1: ` ${API_PORT} , ${BASE_URL}`,
-        text2: `Você está utilizando o endpoint: ${API_URL}`,
+        text1: `Erro!`,
+        text2: `O campo de senha é obrigatório!`,
       });
     }
     
