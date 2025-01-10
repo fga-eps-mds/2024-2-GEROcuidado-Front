@@ -27,11 +27,11 @@ import Metrica from "../../model/Metrica";
 import { getTipoSanguineoOptions } from "../../shared/helpers/useNotification";
 import styles from "../../components/style/styles";
 interface IErrors {
- nome?: string;
- dataNascimento?: string;
- tipoSanguineo?: string;
- telefoneResponsavel?: string;
- descricao?: string;
+  nome?: string;
+  dataNascimento?: string;
+  tipoSanguineo?: string;
+  telefoneResponsavel?: string;
+  descricao?: string;
 }
 
 export default function CadastrarIdoso() {
@@ -41,14 +41,16 @@ export default function CadastrarIdoso() {
   const [telefoneResponsavel, setTelefoneResponsavel] = useState<string>("");
   const [dataNascimento, setDataNascimento] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
-  const [token, setToken] = useState<string>("");
   const [erros, setErros] = useState<IErrors>({});
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [idUsuario, setIdUsuario] = useState<number | null>(null);
   const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] = useState<string>("");
-
   const router = useRouter();
+
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+  const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
+  const BASE_URL = `${API_URL}:${API_PORT}/api/saude/idoso`;
 
   useEffect(() => {
     const getIdUsuario = async () => {
@@ -57,7 +59,7 @@ export default function CadastrarIdoso() {
         if (response) {
           const usuario = JSON.parse(response) as IUser;
           setIdUsuario(usuario.id);
-          console.log("Usuário logado:", usuario);
+          // console.log("Usuário logado:", usuario);
         } else {
           console.log("Usuário não encontrado no AsyncStorage.");
         }
@@ -66,13 +68,10 @@ export default function CadastrarIdoso() {
       }
     };
 
-
     getIdUsuario();
   }, []);
 
-
   useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
-
 
   const getDateIsoString = (value: string) => {
     const dateArray = value.split("/");
@@ -177,10 +176,52 @@ export default function CadastrarIdoso() {
     }
 
     try {
+      const token = await AsyncStorage.getItem('token')
+
+      if (!token) {
+        console.error('Token não encontrado.');
+        return;
+      }
+
       setShowLoading(true);
-      await salvarNoBancoLocal();
-      ToastAndroid.show("Idoso salvo no banco local com sucesso!", ToastAndroid.SHORT);
-      router.replace("/private/pages/listarIdosos");
+      // await salvarNoBancoLocal();
+
+      if (idUsuario === null) {
+        return
+      }
+
+      const body = {
+        nome: nome,
+        dataNascimento: getDateIsoString(dataNascimento),
+        telefoneResponsavel: telefoneResponsavel,
+        descricao: descricao,
+        tipoSanguineo: tipoSanguineo,
+        idUsuario: idUsuario,
+        foto: foto || ''
+      };
+
+      const response = await fetch(BASE_URL,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body)
+        }
+      )
+
+      const data = await response.json()
+
+      console.log('response', data)
+
+      if (data.message == "Salvo com sucesso!") {
+        ToastAndroid.show("Idoso salvo com sucesso!", ToastAndroid.SHORT);
+        router.replace("/private/pages/listarIdosos");
+      } else {
+        throw new Error("Erro ao salvar idoso")
+      }
     } catch (err) {
       const error = err as { message: string };
       ToastAndroid.show(`Erro: ${error.message}`, ToastAndroid.SHORT);
