@@ -34,12 +34,10 @@ export default function EsqueciSenha() {
 
       <View style={styles.imagem}>
         <Image
-          source={require("../../../../assets/logo2.png")}
-          style={{ width: 200, height: 90 }}
+          source={require("../../../../assets/logo.png")}
+          style={{ width: 220, height: 90 }}
         />
       </View>
-
-      {/* Logo deveria estar aqui, mas não consegui encaixá-la */}
 
       <Text style={styles.title}>Esqueceu sua senha? </Text>
       <Text style={styles.subtitle}>Calma, a GERO te ajuda!! </Text>
