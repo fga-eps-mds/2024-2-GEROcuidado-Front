@@ -4,7 +4,6 @@ import { Image, Alert, Text, View, TextInput, StyleSheet, TouchableOpacity } fro
 import { router } from "expo-router";
 import { ScrollView } from "react-native";
 import BackButton from "../../components/BackButton"
-//import BackButton from "/components/BackButton.tsx"; Não consigo achar esse caminho, preciso fazer rodar... (é o botão q volta pra outra pag)
 
 export default function EsqueciSenha() {
   const [email, setEmail] = useState("");
@@ -15,6 +14,7 @@ export default function EsqueciSenha() {
       return;
     }
     else if(email){
+      await(5)
       Alert.alert("Mensagem de email enviada com sucesso!")
       router.push("/public/login")
     }
@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 30,
   },
 });
