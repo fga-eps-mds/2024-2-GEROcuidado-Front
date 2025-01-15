@@ -60,14 +60,23 @@ export default function VisualizarMetrica() {
       getHidratacao(response as string);
     });
   };
-
+  //tentando corrigir isso aqui depois de subir os idosos no banco remoto
   const getIdoso = () => {
-    AsyncStorage.getItem("idoso").then((idosoString) => {
+
+    const response = await fetch(BASE_URL, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    /*AsyncStorage.getItem("idoso").then((idosoString) => {
       if (idosoString) {
         const idosoPayload = JSON.parse(idosoString) as IIdoso;
         setIdoso(idosoPayload);
       }
-    });
+    });*/
   };
 
   const getMetricasValues = async () => {
