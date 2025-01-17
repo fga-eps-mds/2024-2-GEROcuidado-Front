@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import { View, Image, Text, StyleSheet, Pressable, Button } from "react-native";
 import { IPublicacao } from "../interfaces/forum.interface";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
@@ -37,12 +37,24 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
     return date.toLocaleDateString("pt-BR");
   };
 
+  const makeReport = () => {
+    const params = { ...item, ...item.usuario, id: item.id };
+
+    router.push({
+      pathname: "/private/pages/criarDenuncia",
+      params: { ... params},
+    });
+  }
+
+
   const navigate = () => {
     const params = { ...item, ...item.usuario, id: item.id };
 
     router.push({
       pathname: "/private/pages/visualizarPublicacao",
-      params: params,
+      params: {
+        ...params
+      },
     });
   };
 
@@ -81,6 +93,23 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
         </View>
       </View>
       <Text style={styles.postContent}>{getDescricao(item.descricao)}</Text>
+      <View style={styles.iconContainer}>
+        <Pressable onPress={() => {console.log("Não implementado")}}>
+          <Icon name="thumb-up-outline" size={25} />
+        </Pressable>
+        <Pressable onPress={() => {console.log("Não implementado")}}>
+          <Icon name="comment-outline" size={25} />
+        </Pressable>
+        <Pressable onPress={() => {console.log("Não implementado")}}>
+          <Icon name="star-outline" size={25} />
+        </Pressable>
+        <Pressable onPress={() => {console.log("Não implementado")}}>
+          <Icon name="eye-outline" size={25} />
+        </Pressable>
+        <Pressable onPress={makeReport}>
+          <Icon name="flag" color={"red"} size={25} />
+        </Pressable>
+      </View>
       <View style={styles.underInfo}>
       {item.idUsuarioReporte && item.idUsuarioReporte.length > 0 && (
         <View style={styles.reports}>
@@ -94,6 +123,11 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
 }
 
 const styles = StyleSheet.create({
+  iconContainer: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
   postContainer: {
     margin: 10,
     borderRadius: 14,
