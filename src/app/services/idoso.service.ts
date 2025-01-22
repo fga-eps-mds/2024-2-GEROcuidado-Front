@@ -51,7 +51,7 @@ export const getAllIdoso = async (
     throw new Error(json.message as string);
   }
 
-  return json;
+  return json.data;
 };
 
 export const updateIdoso = async (
