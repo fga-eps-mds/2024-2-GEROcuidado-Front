@@ -1,30 +1,37 @@
 import React, { useState } from "react";
-import { forgotPassword } from "../../services/user.service";
+import { forgotPassword, resetPassword } from "../../services/user.service";
 import { Image, Alert, Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { ScrollView } from "react-native";
 import BackButton from "../../components/BackButton"
 
-export default function EsqueciSenha() {
+export default function ResetSenha() {
   const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
+  const [password, setPassword] = useState("");
   const [showLoading, setShowLoading] = useState(false);
 
-  const handleRecuperarSenha = async () => {
+  const handleResetarSenha = async () => {
     if (!email) {
       Alert.alert("Erro", "Por favor, insira um email válido.");
       return;
     }
-    else if(email){
-      setShowLoading(true)
-      await(10)
-      Alert.alert("Mensagem de email enviada com sucesso!")
-      router.push("/private/pages/editarSenha")
+    else if(email && token && password){
+        setShowLoading(true)
+        await(10)
+        Alert.alert("")
+        router.push("/public/login")
+      }
+    else if(!token){
+        Alert.alert("Erro", "Por favor, insira um token válido.");
     }
+    else if(!password){
+        Alert.alert("Erro", "Por favor, insira uma senha");
     try {
-      const response = await forgotPassword(email);
-      console.log("E-mail de recuperação enviado:", response);
+      const response = await resetPassword(email, token, password);
+      console.log("Senha alterada! A Gero agradece!", response);
     } catch (error) {
-      console.error("Erro ao solicitar recuperação de senha:", error.message);
+      console.error("Erro ao alterar a senha", error.message);
     }
     };
 
@@ -41,8 +48,7 @@ export default function EsqueciSenha() {
         />
       </View>
 
-      <Text style={styles.title}>Esqueceu sua senha? </Text>
-      <Text style={styles.subtitle}>Calma, a GERO te ajuda!! </Text>
+      <Text style={styles.title}>Altere sua senha:</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -55,8 +61,30 @@ export default function EsqueciSenha() {
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleRecuperarSenha}>
-        <Text style={styles.buttonText}>Recuperar senha</Text>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Token"
+          value={token}
+          onChangeText={setToken}
+          keyboardType="numeric"
+          placeholderTextColor="black" 
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nova Senha"
+          value={password}
+          onChangeText={setPassword}
+          keyboardType="default"
+          placeholderTextColor="black" 
+        />
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={handleResetarSenha}>
+        <Text style={styles.buttonText}>Alterar Senha</Text>
       </TouchableOpacity>
     </View>
   );
@@ -121,3 +149,4 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 });
+}
