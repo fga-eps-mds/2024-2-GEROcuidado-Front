@@ -143,7 +143,7 @@ export default function Login() {
       // Aqui acontece a sincronização com o backend
       await syncDatabaseWithServer();
 
-      console.log("Buscando usuário no banco...");
+      // console.log("Buscando usuário no banco...");
       const usersCollection = database.get('usuario') as Collection<Usuario>;
 
       try {
@@ -151,7 +151,7 @@ export default function Login() {
           Q.where('id', id.toString())
         ).fetch();
 
-        console.log("Resultado da busca no banco:", queryResult);
+        // console.log("Resultado da busca no banco:", queryResult);
 
         const user = queryResult.at(0);
 
