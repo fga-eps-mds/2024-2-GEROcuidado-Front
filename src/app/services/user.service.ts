@@ -60,6 +60,7 @@ export const resetPassword = async (
     },
     body: JSON.stringify({ email, token, password }),
   });
+  console.log("Dados enviados:", { email, token, password });
 
   const json = await response.json();
 

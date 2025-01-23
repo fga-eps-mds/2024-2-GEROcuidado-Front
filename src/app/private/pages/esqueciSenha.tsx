@@ -13,18 +13,21 @@ export default function EsqueciSenha() {
     if (!email) {
       Alert.alert("Erro", "Por favor, insira um email válido.");
       return;
-    }
-    else if(email){
-      setShowLoading(true)
-      await(10)
-      Alert.alert("Mensagem de email enviada com sucesso!")
-      router.push("/private/pages/editarSenha")
-    }
+    }   
     try {
       const response = await forgotPassword(email);
       console.log("E-mail de recuperação enviado:", response);
+      Alert.alert("Mensagem de email enviada com sucesso!")
+      router.push("/private/pages/editarSenha")
     } catch (error) {
-      console.error("Erro ao solicitar recuperação de senha:", error.message);
+      console.error("Erro ao solicitar recuperação de senha:", error);
+      if (error.response) {
+        console.error("Detalhes do erro:", error.response.data);
+      } else if (error.request) {
+        console.error("Nenhuma resposta recebida. Detalhes da requisição:", error.request);
+      } else {
+        console.error("Erro ao configurar a requisição:", error.message);
+      }
     }
     };
 
@@ -37,7 +40,7 @@ export default function EsqueciSenha() {
       <View style={styles.imagem}>
         <Image
           source={require("../../../../assets/logo.png")}
-          style={{ width: 220, height: 90 }}
+          style={{ width: 220, height: 200 }}
         />
       </View>
 

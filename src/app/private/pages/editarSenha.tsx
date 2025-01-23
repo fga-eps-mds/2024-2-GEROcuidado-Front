@@ -16,22 +16,26 @@ export default function ResetSenha() {
       Alert.alert("Erro", "Por favor, insira um email válido.");
       return;
     }
-    else if(email && token && password){
-        setShowLoading(true)
-        await(10)
-        Alert.alert("")
-        router.push("/public/login")
-      }
-    else if(!token){
-        Alert.alert("Erro", "Por favor, insira um token válido.");
+    if (!token) {
+      Alert.alert("Erro", "Por favor, insira um token válido.");
+      return;
     }
-    else if(!password){
-        Alert.alert("Erro", "Por favor, insira uma senha");
+    if (!password) {
+      Alert.alert("Erro", "Por favor, insira uma senha válida.");
+      return;
+    }
+  
     try {
+      setShowLoading(true);
       const response = await resetPassword(email, token, password);
-      console.log("Senha alterada! A Gero agradece!", response);
-    } catch (error) {
-      console.error("Erro ao alterar a senha", error.message);
+      console.log("Senha alterada com sucesso!", response);
+      Alert.alert("Sucesso", "Senha alterada com sucesso!");
+      router.push("/public/login");
+    } catch (error: any) {
+      Alert.alert("Erro", error.message || "Erro ao alterar senha.");
+      console.error("Erro ao alterar senha", error);
+    } finally {
+      setShowLoading(false);
     }
     };
 
@@ -149,4 +153,3 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 });
-}
