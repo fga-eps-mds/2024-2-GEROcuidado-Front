@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { forgotPassword, resetPassword } from "../../services/user.service";
+import { resetPassword } from "../../services/user.service";
 import { Image, Alert, Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { ScrollView } from "react-native";
@@ -7,8 +7,8 @@ import BackButton from "../../components/BackButton"
 
 export default function ResetSenha() {
   const [email, setEmail] = useState("");
-  const [token, setToken] = useState("");
-  const [password, setPassword] = useState("");
+  const [codigo, setCodigo] = useState("");
+  const [novaSenha, setNovaSenha] = useState("");
   const [showLoading, setShowLoading] = useState(false);
 
   const handleResetarSenha = async () => {
@@ -16,18 +16,18 @@ export default function ResetSenha() {
       Alert.alert("Erro", "Por favor, insira um email válido.");
       return;
     }
-    if (!token) {
+    if (!codigo) {
       Alert.alert("Erro", "Por favor, insira um token válido.");
       return;
     }
-    if (!password) {
+    if (!novaSenha) {
       Alert.alert("Erro", "Por favor, insira uma senha válida.");
       return;
     }
   
     try {
       setShowLoading(true);
-      const response = await resetPassword(email, token, password);
+      const response = await resetPassword(email, codigo, novaSenha);
       console.log("Senha alterada com sucesso!", response);
       Alert.alert("Sucesso", "Senha alterada com sucesso!");
       router.push("/public/login");
@@ -69,8 +69,8 @@ export default function ResetSenha() {
         <TextInput
           style={styles.input}
           placeholder="Token"
-          value={token}
-          onChangeText={setToken}
+          value={codigo}
+          onChangeText={setCodigo}
           keyboardType="numeric"
           placeholderTextColor="black" 
         />
@@ -80,8 +80,8 @@ export default function ResetSenha() {
         <TextInput
           style={styles.input}
           placeholder="Nova Senha"
-          value={password}
-          onChangeText={setPassword}
+          value={novaSenha}
+          onChangeText={setNovaSenha}
           keyboardType="default"
           placeholderTextColor="black" 
         />

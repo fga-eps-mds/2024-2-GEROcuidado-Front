@@ -4,6 +4,7 @@ import { Image, Alert, Text, View, TextInput, StyleSheet, TouchableOpacity } fro
 import { router } from "expo-router";
 import { ScrollView } from "react-native";
 import BackButton from "../../components/BackButton"
+import RememberButton from "../../components/rememberButton";
 
 export default function EsqueciSenha() {
   const [email, setEmail] = useState("");
@@ -13,21 +14,13 @@ export default function EsqueciSenha() {
     if (!email) {
       Alert.alert("Erro", "Por favor, insira um email válido.");
       return;
-    }   
+    }
     try {
       const response = await forgotPassword(email);
       console.log("E-mail de recuperação enviado:", response);
-      Alert.alert("Mensagem de email enviada com sucesso!")
-      router.push("/private/pages/editarSenha")
+      Alert.alert("Sucesso", "E-mail de recuperação enviado com sucesso!");
     } catch (error) {
-      console.error("Erro ao solicitar recuperação de senha:", error);
-      if (error.response) {
-        console.error("Detalhes do erro:", error.response.data);
-      } else if (error.request) {
-        console.error("Nenhuma resposta recebida. Detalhes da requisição:", error.request);
-      } else {
-        console.error("Erro ao configurar a requisição:", error.message);
-      }
+      console.error("Erro ao solicitar recuperação de senha:", error.message);
     }
     };
 
@@ -58,9 +51,13 @@ export default function EsqueciSenha() {
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleRecuperarSenha}>
-        <Text style={styles.buttonText}>Recuperar senha</Text>
-      </TouchableOpacity>
+      <View style={styles.EsqueciButton}>
+                <RememberButton
+                  title="Recuperar senha"
+                  showLoading={showLoading}
+                  onPress={handleRecuperarSenha}
+                />
+              </View>
     </View>
   );
 }
@@ -122,5 +119,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 30,
+  },
+  EsqueciButton: {
+    marginTop: 35,
+    alignItems: "center",
+    justifyContent: "center", // Adicionado para centralizar verticalmente
+    width: "100%",
+    flex: 1,
   },
 });
