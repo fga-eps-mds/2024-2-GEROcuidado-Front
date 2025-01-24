@@ -18,9 +18,10 @@ export default function EsqueciSenha() {
     try {
       const response = await forgotPassword(email);
       console.log("E-mail de recuperação enviado:", response);
-      Alert.alert("Sucesso", "E-mail de recuperação enviado com sucesso!");
     } catch (error) {
       console.error("Erro ao solicitar recuperação de senha:", error.message);
+    } finally {
+      Alert.alert("Sucesso", "E-mail de recuperação enviado com sucesso!");
     }
     };
 
