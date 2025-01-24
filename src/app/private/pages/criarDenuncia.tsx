@@ -27,6 +27,9 @@ export default function CriarDenuncia() {
         descricao: "",
     });
 
+    const API_URL = process.env.EXPO_PUBLIC_API_URL;
+    const API_PORT = process.env.EXPO_PUBLIC_API_FORUM_PORT;
+    const BASE_URL = `${API_URL}:${API_PORT}/api/forum`;
 
     const motivoDenuncia = [
       { key: 1, value: "Conteúdo impróprio" },
@@ -59,7 +62,7 @@ export default function CriarDenuncia() {
         });
       };
 
-    const reportPublication = () => {
+    const reportPublication = async() => {
       console.log("report");
       if (!report.motivo) {
         alert("Selecione um motivo para a denúncia");
@@ -71,6 +74,28 @@ export default function CriarDenuncia() {
       }
 
       // Substituir quando o back for resolvido
+      const token = await AsyncStorage.getItem('token')
+
+      if (!token) {
+        console.error('Token não encontrado.');
+        return;
+      }
+
+      const response = await fetch(`${BASE_URL}/${publicacao?.id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({idUsuarioReporte:[idUsuario]}),
+      });
+
+      if (!response.ok) {
+        alert("Erro ao reportar publicação");
+        return;
+      }
+      const data = await response.json();
+
       alert("Denúncia realizada com sucesso");
       router.push({ pathname: "/private/tabs/forum" });
     }
@@ -105,7 +130,7 @@ export default function CriarDenuncia() {
               <View style={styles.actions}>
                 <TextInput
                   style={styles.textReport}
-                  placeholder="Descreva o motivo da denúncia (Opcional)"
+                  placeholder="Descreva o motivo da denúncia!"
                   multiline
                   onChangeText={(value) =>
                     setReport({ ...report, descricao: value })
