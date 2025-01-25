@@ -49,6 +49,7 @@ export default function VisualizarPublicacao() {
 const getPublicacaoFromParams = () => {
   const payload: IPublicacaoUsuario = {
     ...params,
+    descricao: params.descricao || "", // Adiciona descrição ao visualizar a publicação.
     idUsuarioReporte: mapIdUsuarioReporte(params.idUsuarioReporte),
   };
   setPublicacao(payload);
@@ -169,7 +170,7 @@ const getPublicacaoFromParams = () => {
       <View style={styles.header}>
         <BackButton route="private/tabs/forum" />
 
-        <Text style={styles.tituloheader}>Visualizar Publicação</Text>
+        <Text style={styles.tituloheader}>Visualizar publicação</Text>
       </View>
 
       <ScrollView>
@@ -347,5 +348,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     margin: 20,
+  },
+  descricao: {
+    fontSize: 14,
+    marginTop: 25,
+    lineHeight: 20, 
+    color: "#000000", 
+    textAlign: "justify", 
   },
 });

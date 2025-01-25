@@ -23,7 +23,7 @@ export default function PublicacaoVisualizar({ item }: IProps) {
         <Text style={styles.username}>{item.nome || "Usuário deletado"}</Text>
       </View>
       <Text style={styles.titulo}>{item.titulo}</Text>
-      <Text style={styles.descricao}>{item.descricao}</Text>
+      <Text style={styles.descricao}>{item.descricao || "Descrição indisponível"} </Text>
       <View style={styles.underInfo}>
         <Text style={styles.categoria}>{item.categoria}</Text>
         <Text style={styles.date}>{getFormattedDate(item.dataHora)}</Text>
@@ -79,8 +79,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   descricao: {
-    fontSize: 14,
-    marginTop: 25,
+    fontSize: 16,
+    marginTop: 27,
+    color: "#000000",
   },
   underInfo: {
     flexDirection: "row",
