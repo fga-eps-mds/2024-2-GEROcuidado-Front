@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   username: {
-    color: "#000000",
-    opacity: 0.6,
+    color: "#b4026d",
+    opacity: 0.8,
     fontSize: 16,
     marginLeft: 15,
     fontWeight: "500",
