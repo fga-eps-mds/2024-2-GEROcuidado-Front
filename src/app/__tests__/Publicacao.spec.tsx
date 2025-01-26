@@ -82,4 +82,20 @@ describe("Publicacao", () => {
       params: expectedParams,
     });
   });
+
+  it("deve exibir a foto se o item tiver uma foto", () => {
+    render(<Publicacao item={mockItemComFoto} crop={false} />);
+
+    // Verifique se a foto está presente
+    const fotoElement = screen.getByText("data:image/png;base64,base64-encoded-image-data");
+    expect(fotoElement).toBeTruthy();
+  });
+
+  it("não deve exibir foto", () => {
+    render(<Publicacao item={mockItemSemFoto} crop={false} />);
+
+    // Verifique se a foto está presente
+    const fotoElement = screen.getByPlaceholderText("foto");
+    expect(fotoElement).toBeNull();
+  });
 });
