@@ -36,7 +36,7 @@ export interface IPublicacaoParams extends IPublicacaoBody, IUser {
   idUsuarioReporte: string;
 }
 
-export interface IPublicacaoUsuario extends IPublicacao, IUser { }
+export interface IPublicacaoUsuario extends IPublicacao, IUser {}
 
 export interface IPublicacaoFilter {
   titulo?: string;

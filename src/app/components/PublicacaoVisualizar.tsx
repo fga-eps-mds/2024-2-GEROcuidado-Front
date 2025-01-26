@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
-import { IPublicacaoUsuario } from "../interfaces/forum.interface";
+import { IPublicacao, IPublicacaoBody, IPublicacaoUsuario } from "../interfaces/forum.interface";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesing from "react-native-vector-icons/AntDesign";
 import { hasFoto } from "../shared/helpers/foto.helper";
@@ -23,7 +23,7 @@ export default function PublicacaoVisualizar({ item }: IProps) {
         <Text style={styles.username}>{item.nome || "Usuário deletado"}</Text>
       </View>
       <Text style={styles.titulo}>{item.titulo}</Text>
-      <Text style={styles.descricao}>{item.descricao || "Descrição indisponível"} </Text>
+      <Text style={styles.descricao}> {item.descricao || "Descrição indisponível"} </Text>
       <View style={styles.underInfo}>
         <Text style={styles.categoria}>{item.categoria}</Text>
         <Text style={styles.date}>{getFormattedDate(item.dataHora)}</Text>
@@ -66,11 +66,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   username: {
-    color: "#000000",
-    opacity: 0.6,
-    fontSize: 16,
-    marginLeft: 15,
-    fontWeight: "500",
+    color: "#137364",
+    opacity: 0.8,
+    fontSize: 18,
+    marginLeft: 13,
+    marginBottom: 3,
+    fontWeight: "600",
     width: "80%",
   },
   titulo: {
@@ -79,9 +80,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   descricao: {
-    fontSize: 16,
-    marginTop: 27,
-    color: "#000000",
+    fontSize: 14,
+    marginTop: 20,
+    color: "#0000000",
   },
   underInfo: {
     flexDirection: "row",

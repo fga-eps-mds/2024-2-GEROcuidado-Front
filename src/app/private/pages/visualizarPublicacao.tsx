@@ -12,6 +12,7 @@ import AntDesing from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   IPublicacao,
+  IPublicacaoBody,
   IPublicacaoParams,
   IPublicacaoUsuario,
 } from "../../interfaces/forum.interface";
@@ -45,11 +46,10 @@ export default function VisualizarPublicacao() {
     return payload.split(",").map((item) => Number(item));
   };  
 
-// Verifique como você obtém a publicação dos parâmetros
+// Verifique como você obtém a publicação dos parâmetros  
 const getPublicacaoFromParams = () => {
   const payload: IPublicacaoUsuario = {
     ...params,
-    descricao: params.descricao || "", // Adiciona descrição ao visualizar a publicação.
     idUsuarioReporte: mapIdUsuarioReporte(params.idUsuarioReporte),
   };
   setPublicacao(payload);
@@ -233,8 +233,8 @@ const getPublicacaoFromParams = () => {
           )}
         </View>
 
-        {publicacao && <PublicacaoVisualizar item={publicacao} />}
-      </ScrollView>
+        {publicacao && <PublicacaoVisualizar item={publicacao}/>}
+        </ScrollView>
 
         <ModalConfirmation
         visible={modalVisibleApagar}
