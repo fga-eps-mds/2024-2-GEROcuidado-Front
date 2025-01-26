@@ -48,6 +48,30 @@ export const forgotPassword = async (
   return json;
 };
 
+export const resetPassword = async (
+  email: string,
+  codigo: string,
+  novaSenha: string,
+): Promise<IResponse<null>> => {
+  const response = await fetch(`${BASE_URL}/resetar-senha`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, codigo, novaSenha }),
+  });
+  console.log("Dados enviados:", { email, codigo, novaSenha });
+
+  const json = await response.json();
+
+  if (response.status !== 200) {
+    throw new Error(json.message as string);
+  }
+
+  return json;
+};
+
 
 export const updateUser = async (
   id: number,
