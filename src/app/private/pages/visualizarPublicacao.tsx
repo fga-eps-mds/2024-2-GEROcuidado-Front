@@ -232,6 +232,7 @@ const getPublicacaoFromParams = () => {
             </Pressable>
           )}
         </View>
+        
 
         {publicacao && <PublicacaoVisualizar item={publicacao}/>}
         </ScrollView>
@@ -277,6 +278,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     paddingBottom: 5,
+    position: "relative",
   },
   header: {
     backgroundColor: "#2CCDB5",

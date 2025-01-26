@@ -63,10 +63,10 @@ const styles = StyleSheet.create({
   fotoPerfil: {
     width: 65,
     aspectRatio: 1,
-    borderRadius: 100,
+    borderRadius: 140,
   },
   username: {
-    color: "#137364",
+    color: "#b4026d",
     opacity: 0.8,
     fontSize: 18,
     marginLeft: 13,
