@@ -182,7 +182,7 @@ const getPublicacaoFromParams = () => {
             style={styles.botaoResponder }
             testID="answerBtn"
           >
-            <Text style={{ color: "white", fontWeight: "bold" }}>Responder</Text>
+            <Text style={{ color: "white", fontWeight: "bold", marginLeft: 3 }}>Responder</Text>
           </Pressable>
         )}
         </View>
