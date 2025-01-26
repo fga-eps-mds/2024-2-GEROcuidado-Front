@@ -43,7 +43,6 @@
           "usesCleartextTraffic": true
         }
       }
-    ]
     ],
     "extra": {
       "expoEnv": "process.env.EXPO_PUBLIC_API_URL",
@@ -58,7 +57,7 @@
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/7028a81c-adee-41de-91a7-b7e80535a448"
+      "url": "https://u.expo.dev/53b640fc-f72d-4fb5-88b4-c80d4162aa8b"
     }
   }
 }

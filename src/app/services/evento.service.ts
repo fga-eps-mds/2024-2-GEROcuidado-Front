@@ -1,21 +1,16 @@
-import {
-  IOrder,
-  IPublicacao,
-  IPublicacaoBody,
-  IPublicacaoFilter,
-} from "../interfaces/forum.interface";
+import { IEvento, IEventoBody, IEventoFilter, IOrder } from "../interfaces/evento.interface";
 import { IResponse } from "../interfaces/response.interface";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
-const API_PORT = process.env.EXPO_PUBLIC_API_FORUM_PORT;
-const BASE_URL = `${API_URL}:${API_PORT}/api/forum`;
-const CREATE_POST = `${API_URL}:${API_PORT}/api/forum/`;
+const API_PORT = process.env.EXPO_PUBLIC_API_SAUDE_PORT;
+const BASE_URL = `${API_URL}:${API_PORT}/api/saude/evento`;
 
-export const postPublicacao = async (
-  body: IPublicacaoBody,
-  token: string,
-): Promise<IResponse<IPublicacao | null>> => {
-  const response = await fetch(CREATE_POST, {
+// Função para criar um evento
+export const postEvento = async (
+  body: IEventoBody,
+  token: string
+): Promise<IResponse<IEvento | null>> => {
+  const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -34,15 +29,14 @@ export const postPublicacao = async (
   return json;
 };
 
-export const getAllPublicacao = async (
-  offset: number,
-  filter: IPublicacaoFilter,
-  order: IOrder,
-): Promise<IResponse<IPublicacao[] | null>> => {
-  const params = `limit=10&offset=${offset}&filter=${JSON.stringify(
-    filter,
+// Função para listar todos os eventos
+export const getAllEvento = async (
+  filter: IEventoFilter,
+  order: IOrder
+): Promise<IResponse<IEvento[] | null>> => {
+  const params = `limit=20&offset=0&filter=${JSON.stringify(
+    filter
   )}&order=${JSON.stringify(order)}`;
-
   const response = await fetch(`${BASE_URL}?${params}`, {
     method: "GET",
     headers: {
@@ -60,11 +54,12 @@ export const getAllPublicacao = async (
   return json;
 };
 
-export const updatePublicacao = async (
+// Função para atualizar um evento
+export const updateEvento = async (
   id: number,
-  body: Partial<IPublicacao>,
-  token: string,
-): Promise<IResponse<IPublicacao | null>> => {
+  body: Partial<IEvento>,
+  token: string
+): Promise<IResponse<IEvento | null>> => {
   const response = await fetch(`${BASE_URL}/${id}`, {
     method: "PATCH",
     headers: {
@@ -84,10 +79,11 @@ export const updatePublicacao = async (
   return json;
 };
 
-export const deletePublicacaoById = async (
+// Função para excluir um evento
+export const deleteEvento = async (
   id: number,
-  token: string,
-): Promise<IResponse<IPublicacao | null>> => {
+  token: string
+): Promise<IResponse<IEvento | null>> => {
   const response = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {

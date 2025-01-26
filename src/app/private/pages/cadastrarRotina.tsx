@@ -122,7 +122,19 @@ export default function CadastrarRotina() {
 
     try {
       setShowLoading(true);
-      await salvarNoBancoLocal();
+      await salvarNoBancoLocal().then(()=>{
+        // A notificação tem um delay minimo mas que pode afetar maracações de horario muito instantaneas. Tentar correção futura (Possivelmente fuso horario)
+        Notifications.scheduleNotificationAsync({
+          content: {
+            title: titulo,
+            body: "Hora de realizar a rotina!",
+          },
+          trigger: {
+            date: new Date(data.split("/").reverse().join("-") + "T" + hora + ":00"),
+          },
+        });
+      });
+
       Toast.show({
         type: "success",
         text1: "Sucesso!",

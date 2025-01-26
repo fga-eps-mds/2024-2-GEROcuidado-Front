@@ -4,11 +4,12 @@ import { IUser, IUserBody, IUserLogin } from "../interfaces/user.interface";
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
 const BASE_URL = `${API_URL}:${API_PORT}/api/usuario`;
+const POST_URL = `${API_URL}:${API_PORT}/api/usuario/`;
 
 export const postUser = async (
   body: IUserBody,
 ): Promise<IResponse<IUser | null>> => {
-  const response = await fetch(BASE_URL, {
+  const response = await fetch(POST_URL, {
     method: "POST",
     headers: {
       Accept: "application/json",
