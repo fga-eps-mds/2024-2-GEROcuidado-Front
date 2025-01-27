@@ -68,11 +68,11 @@ export default function EditarRotina() {
         setIdoso(idosoPayload);
       }
     });
-  };
 
-  const getToken = () => {
-    AsyncStorage.getItem("token").then((response) => {
-      setToken(response as string);
+    AsyncStorage.getItem("token").then((token) => {
+      if (token) {
+        setToken(token);
+      }
     });
   };
 
@@ -115,19 +115,30 @@ export default function EditarRotina() {
     try {
       setShowLoading(true);
 
-      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
-      await database.write(async () => {
-        const rotina = await rotinaCollection.find(params.id);
-        await rotina.update(() => {
-          rotina.titulo = titulo;
-          rotina.categoria = categoria;
-          rotina.dias = dias;
-          rotina.dataHora = new Date(getDateIsoString(data, hora));
-          rotina.descricao = descricao;
-          rotina.token = token;
-          rotina.notificacao = notificacao
-        });
-      });
+      // const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+      // await database.write(async () => {
+      //   const rotina = await rotinaCollection.find(params.id);
+      //   await rotina.update(() => {
+      //     rotina.titulo = titulo;
+      //     rotina.categoria = categoria;
+      //     rotina.dias = dias;
+      //     rotina.dataHora = new Date(getDateIsoString(data, hora));
+      //     rotina.descricao = descricao;
+      //     rotina.token = token;
+      //     rotina.notificacao = notificacao
+      //   });
+      // });
+
+      const body = {
+        titulo,
+        categoria,
+        dias,
+        dataHora: new Date(getDateIsoString(data, hora)),
+        descricao,
+        notificacao
+      };
+
+      await updateRotina(params.id, body, token);
 
       Toast.show({
         type: "success",
@@ -135,7 +146,7 @@ export default function EditarRotina() {
         text2: "Rotina atualizada com sucesso",
       });
 
-    } catch(err) {
+    } catch (err) {
       console.log("Erro ao atualizar rotina:", err);
     } finally {
       setShowLoading(false);
@@ -147,13 +158,15 @@ export default function EditarRotina() {
     setShowLoadingApagar(true);
 
     try {
-      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
-      await database.write(async () => {
-        const rotina = await rotinaCollection.find(params.id);
+      // const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+      // await database.write(async () => {
+      //   const rotina = await rotinaCollection.find(params.id);
 
-        // TODO: mudar para `markAsDeleted` quando houver sincronização
-        await rotina.destroyPermanently();
-      });
+      //   // TODO: mudar para `markAsDeleted` quando houver sincronização
+      //   await rotina.destroyPermanently();
+      // });
+
+      await deleteRotina(params.id, token);
 
       router.replace({
         pathname: "private/tabs/rotinas",
@@ -167,7 +180,6 @@ export default function EditarRotina() {
   };
 
   useEffect(() => getIdoso(), []);
-  useEffect(() => getToken(), []);
   useEffect(() => handleErrors(), [titulo, data, hora, categoria, descricao]);
   useEffect(() => handleDataHora(), []);
   useEffect(() => {

@@ -50,7 +50,7 @@ export const getAllMetrica = async (
     throw new Error(json.message as string);
   }
 
-  return json;
+  return json.data;
 };
 
 export const updateMetrica = async (
