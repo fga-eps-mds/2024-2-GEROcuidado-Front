@@ -13,7 +13,7 @@ import { router } from "expo-router";
 import Publicacao from "../../components/Publicacao";
 import { getAllPublicacao } from "../../services/forum.service";
 import Toast from "react-native-toast-message";
-import { ECategoriaPesquisa, ECategoriaPublicacao, IOrder, IPublicacao } from "../../interfaces/forum.interface";
+import { ECategoriaPesquisa, ECategoriaPublicacao, IOrder, IPublicacao, IPublicacaoFilter } from "../../interfaces/forum.interface";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "../../interfaces/user.interface";
 import BarraPesquisa from "../../components/BarraPesquisa";
@@ -37,11 +37,11 @@ export default function Forum() {
   };
 
   const data = [
-    {key: ECategoriaPesquisa.TODAS, value: ECategoriaPesquisa.TODAS},
-    {key: ECategoriaPesquisa.ALIMENTACAO, value: ECategoriaPesquisa.ALIMENTACAO},
-    {key: ECategoriaPesquisa.SAUDE, value: ECategoriaPesquisa.SAUDE},
-    {key: ECategoriaPesquisa.EXERCICIOS, value: ECategoriaPesquisa.EXERCICIOS},
-    {key: ECategoriaPesquisa.GERAL, value: ECategoriaPesquisa.GERAL},
+    { key: ECategoriaPesquisa.TODAS, value: ECategoriaPesquisa.TODAS },
+    { key: ECategoriaPesquisa.ALIMENTACAO, value: ECategoriaPesquisa.ALIMENTACAO },
+    { key: ECategoriaPesquisa.SAUDE, value: ECategoriaPesquisa.SAUDE },
+    { key: ECategoriaPesquisa.EXERCICIOS, value: ECategoriaPesquisa.EXERCICIOS },
+    { key: ECategoriaPesquisa.GERAL, value: ECategoriaPesquisa.GERAL },
 
   ]
 
@@ -55,6 +55,11 @@ export default function Forum() {
       setUsuario(usuario);
     });
   };
+
+  const filteredPublicacoes = publicacoes.filter((publicacao) => {
+    if (usuario?.admin) return true; 
+    return publicacao.idUsuarioReporte.length === 0;
+  });
 
   const getPublicacoes = (
     anterior: IPublicacao[],
@@ -159,20 +164,20 @@ export default function Forum() {
 
       <View style={styles.botoes}>
         {!usuario?.admin && (
-         <View style={styles.list}>
-          <SelectList
-            data={data}
-            setSelected={(item: ECategoriaPesquisa) => {
-              setCategoria(item);
-            }}
-            search={false}
-            boxStyles={styles.boxDropDown}
-            inputStyles={styles.boxInputDropDown}
-            dropdownStyles={styles.dropDown}
-            defaultOption={{key: ECategoriaPesquisa.TODAS, value: ECategoriaPesquisa.TODAS}}
-            placeholder="Todas"
-          />
-      </View>
+          <View style={styles.list}>
+            <SelectList
+              data={data}
+              setSelected={(item: ECategoriaPesquisa) => {
+                setCategoria(item);
+              }}
+              search={false}
+              boxStyles={styles.boxDropDown}
+              inputStyles={styles.boxInputDropDown}
+              dropdownStyles={styles.dropDown}
+              defaultOption={{ key: ECategoriaPesquisa.TODAS, value: ECategoriaPesquisa.TODAS }}
+              placeholder="Todas"
+            />
+          </View>
 
         )}
 
@@ -199,22 +204,21 @@ export default function Forum() {
         )}
       </View>
       {usuario?.admin && (
-         <View style={styles.list}>
-        <SelectList
-          data={data}
-          setSelected={(item: ECategoriaPesquisa) => {
-            setCategoria(item);
-          }}
-          search={false}
-          boxStyles={styles.boxDropDown}
-          inputStyles={styles.boxInputDropDown}
-          dropdownStyles={styles.dropDown}
-          defaultOption={data[4]}
-          placeholder="Todas"
-        />
-      </View>
-
-        )}
+        <View style={styles.list}>
+          <SelectList
+            data={data}
+            setSelected={(item: ECategoriaPesquisa) => {
+              setCategoria(item);
+            }}
+            search={false}
+            boxStyles={styles.boxDropDown}
+            inputStyles={styles.boxInputDropDown}
+            dropdownStyles={styles.dropDown}
+            defaultOption={data[4]}
+            placeholder="Todas"
+          />
+        </View>
+      )}
 
       {loading && (
         <View style={styles.loading}>
@@ -224,7 +228,7 @@ export default function Forum() {
 
       {!loading && (
         <ScrollView>
-          {publicacoes.map((publicacao) => (
+          {filteredPublicacoes.map((publicacao) => (
             <View key={publicacao.id}>
               <Publicacao crop={true} item={publicacao} />
             </View>
@@ -321,7 +325,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     position: "absolute",
     right: 0,
-    height:45
+    height: 45
   },
   botaoCarregarMais: {
     flexDirection: "row",
@@ -408,7 +412,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   list: {
-    marginTop:10,
+    marginTop: 10,
     marginBottom: 20,
   },
 });

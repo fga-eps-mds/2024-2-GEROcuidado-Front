@@ -26,7 +26,8 @@ export interface IPublicacaoBody {
 export interface IPublicacao extends IPublicacaoBody {
   id: number;
   usuario?: IUser;
-  idUsuarioReporte: number[];
+  //idUsuarioReporte: number[];
+  idUsuarioReporte: Array<{ idUsuario: number; motivo: string }>;
   categoria: ECategoriaPublicacao;
 }
 

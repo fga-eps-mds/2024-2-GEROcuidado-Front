@@ -29,12 +29,27 @@ export default function PublicacaoVisualizar({ item }: IProps) {
         <Text style={styles.date}>{getFormattedDate(item.dataHora)}</Text>
       </View>
       <View style={styles.secondUnderInfo}>
-      {item.idUsuarioReporte && item.idUsuarioReporte.length > 0 && (
-        <View style={styles.reports}>
-          <AntDesing name="warning" size={18} color="#FFCC00" />
-          <Text style={styles.reportsText}>Usuários reportaram</Text>
-        </View>
-      )}
+        {item.idUsuarioReporte && item.idUsuarioReporte.length > 0 && (
+          <View style={styles.reports}>
+            <AntDesing name="warning" size={18} color="#FFCC00" />
+
+            <View style={styles.reportsContainer}>
+              <Text style={styles.reportsText}>
+                Reportada por {item.idUsuarioReporte.length} usuário(s){"\n"}
+                {/* IDs dos usuários: {item.idUsuarioReporte.join(", ")} */}
+              </Text>
+
+              {/* <Text style={styles.reportsText}>
+              IDs dos usuários: {item.idUsuarioReporte.join(", ")}
+            </Text> */}
+              <Text style={styles.reportsDetails}>
+                {item.idUsuarioReporte.map(
+                  (item) => `Usuário ${item}`
+                ).join("\n")}
+              </Text>
+            </View>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -98,10 +113,32 @@ const styles = StyleSheet.create({
   reports: {
     flexDirection: "row",
     alignItems: "center",
+    padding: 8,
+    backgroundColor: "#FFF4E5",
+    borderRadius: 8,
   },
   reportsText: {
-    color: "#FFCC00",
-    marginLeft: 3,
+    fontSize: 14,
+    color: "#FF8800",
+    width: "auto",
+    textAlign: "center",
+  },
+  reportsDetails: {
+    fontSize: 12,
+    color: "#FF8800",
+    width: "95%",
+    textAlign: "center",
+
+  },
+  reportsContainer: {
+    gap: 1,
+    display: "flex",
+    flexDirection: "column",
+    height: "auto",
+    width: "95%",
+    alignItems: "center",
+    fontSize: 12,
+    color: "#FF8800",
   },
   semFoto: { position: "relative", backgroundColor: "#EFEFF0" },
   semFotoIcon: {
