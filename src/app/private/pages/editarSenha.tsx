@@ -1,27 +1,41 @@
 import React, { useState } from "react";
-import { forgotPassword } from "../../services/user.service";
+import { resetPassword } from "../../services/user.service";
 import { Image, Alert, Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { ScrollView } from "react-native";
 import BackButton from "../../components/BackButton"
-import RememberButton from "../../components/rememberButton";
 
-export default function EsqueciSenha() {
+export default function ResetSenha() {
   const [email, setEmail] = useState("");
+  const [codigo, setCodigo] = useState("");
+  const [novaSenha, setNovaSenha] = useState("");
   const [showLoading, setShowLoading] = useState(false);
 
-  const handleRecuperarSenha = async () => {
+  const handleResetarSenha = async () => {
     if (!email) {
       Alert.alert("Erro", "Por favor, insira um email válido.");
       return;
     }
+    if (!codigo) {
+      Alert.alert("Erro", "Por favor, insira um token válido.");
+      return;
+    }
+    if (!novaSenha) {
+      Alert.alert("Erro", "Por favor, insira uma senha válida.");
+      return;
+    }
+  
     try {
-      const response = await forgotPassword(email);
-      console.log("E-mail de recuperação enviado:", response);
-    } catch (error) {
-      console.error("Erro ao solicitar recuperação de senha:", error.message);
+      setShowLoading(true);
+      const response = await resetPassword(email, codigo, novaSenha);
+      console.log("Senha alterada com sucesso!", response);
+      Alert.alert("Sucesso", "Senha alterada com sucesso!");
+      router.push("/public/login");
+    } catch (error: any) {
+      Alert.alert("Erro", error.message || "Erro ao alterar senha.");
+      console.error("Erro ao alterar senha", error);
     } finally {
-      Alert.alert("Sucesso", "E-mail de recuperação enviado com sucesso!");
+      setShowLoading(false);
     }
     };
 
@@ -34,12 +48,11 @@ export default function EsqueciSenha() {
       <View style={styles.imagem}>
         <Image
           source={require("../../../../assets/logo.png")}
-          style={{ width: 220, height: 200 }}
+          style={{ width: 220, height: 90 }}
         />
       </View>
 
-      <Text style={styles.title}>Esqueceu sua senha? </Text>
-      <Text style={styles.subtitle}>Calma, a GERO te ajuda!! </Text>
+      <Text style={styles.title}>Altere sua senha:</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -52,13 +65,31 @@ export default function EsqueciSenha() {
         />
       </View>
 
-      <View style={styles.EsqueciButton}>
-                <RememberButton
-                  title="Recuperar senha"
-                  showLoading={showLoading}
-                  onPress={handleRecuperarSenha}
-                />
-              </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Token"
+          value={codigo}
+          onChangeText={setCodigo}
+          keyboardType="numeric"
+          placeholderTextColor="black" 
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nova Senha"
+          value={novaSenha}
+          onChangeText={setNovaSenha}
+          keyboardType="default"
+          placeholderTextColor="black" 
+        />
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={handleResetarSenha}>
+        <Text style={styles.buttonText}>Alterar Senha</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -120,12 +151,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 30,
-  },
-  EsqueciButton: {
-    marginTop: 35,
-    alignItems: "center",
-    justifyContent: "center", // Adicionado para centralizar verticalmente
-    width: "100%",
-    flex: 1,
   },
 });
