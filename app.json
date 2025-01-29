@@ -19,6 +19,8 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": [],
+      "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -34,21 +36,28 @@
     },
     "plugins": [
       "expo-router",
-      "expo-build-properties"
+      [
+      "expo-build-properties",
+      {
+        "android": {
+          "usesCleartextTraffic": true
+        }
+      }
     ],
     "extra": {
+      "expoEnv": "process.env.EXPO_PUBLIC_API_URL",
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "620c100b-0b18-4cb4-88cf-9a84e0327fd4"
+        "projectId": "53b640fc-f72d-4fb5-88b4-c80d4162aa8b"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/e30305f3-1909-4fb7-ad3d-41cd29eb1963"
+      "url": "https://u.expo.dev/53b640fc-f72d-4fb5-88b4-c80d4162aa8b"
     }
   }
 }

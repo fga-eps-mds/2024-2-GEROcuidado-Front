@@ -10,7 +10,7 @@ import { FlatList } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import BackButton from "../../components/BackButton";
 import CardIdoso from "../../components/CardIdoso";
-import { router, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { IIdoso, IOrder } from "../../interfaces/idoso.interface";
 import Toast from "react-native-toast-message";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -20,6 +20,8 @@ import database from "../../db";
 import Idoso from "../../model/Idoso";
 import { Collection, Q } from "@nozbe/watermelondb";
 import { getImageUri } from "../../shared/helpers/image.helper";
+import { getAllIdoso } from "../../services/idoso.service";
+
 
 interface IOrderOption {
   key: IOrder;
@@ -57,17 +59,17 @@ const data: IOrderOption[] = [
   },
 ];
 
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
+const BASE_URL = `${API_URL}:${API_PORT}/api/saude/idoso`;
 
 export default function ListarIdosos() {
   const [idosos, setIdosos] = useState<IIdoso[]>([]);
   const [loading, setLoading] = useState(true);
   const [orderOption, setOrderOption] = useState<IOrder>(data[0].key);
   const [idUsuario, setIdUsuario] = useState<number | null>(null);
+  const [token, setToken] = useState<string>("");
   const router = useRouter();
-
-  const API_URL = process.env.EXPO_PUBLIC_API_URL;
-  const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
-  const BASE_URL = `${API_URL}:${API_PORT}/api/saude/idoso`;
 
   useEffect(() => {
     const getIdUsuario = async () => {
@@ -76,49 +78,66 @@ export default function ListarIdosos() {
         if (response) {
           const usuario = JSON.parse(response) as IUser;
           setIdUsuario(usuario.id);
-          //  console.log("Usuário logado:", usuario);
+          // console.log("Usuário logado:", usuario);
+        }
+
+        const token = await AsyncStorage.getItem("token");
+        if (token) {
+          setToken(token);
+        } else {
+          console.log("Token não encontrado no AsyncStorage.");
         }
       } catch (error) {
         console.error("Erro ao obter usuário:", error);
       }
     };
 
+
     getIdUsuario();
   }, []);
 
-  const getIdosos = async () => {
-    if (!idUsuario) return;
+  const getIdosos = async (idUsuario: number) => {
+    const idosos = await getAllIdoso(idUsuario, { column: 'nome', dir: 'ASC' })
 
-    setLoading(true);
+    if (!idosos) return
 
-    try {
-      //  const idosoCollection = database.get('idoso') as Collection<Idoso>;
+    setLoading(false)
+    setIdosos(idosos as unknown as IIdoso[])
 
-      //  const query = Q.sortBy(
-      //    orderOption.column,
-      //    orderOption.dir.toLowerCase() as 'asc' | 'desc'
-      //  );
+  }
+  //   if (!idUsuario) return;
 
-      //  const idosoRecords = await idosoCollection.query(query).fetch();
+  //   setLoading(true);
 
-      const response = await fetch(BASE_URL, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+  //   try {
+  //     const responseIdoso = await fetch(BASE_URL, {
+  //       method: 'GET',
+  //       headers: {
+  //         "Authorization": `Bearer ${token}`,
+  //         Accept: "application/json"
+  //       }
+  //     })
 
-      const data = await response.json();
+  //     if (!responseIdoso.ok) {
+  //       console.error('Erro na resposta da API:', responseIdoso.status, responseIdoso.statusText);
+  //       return;
+  //     }
 
       // console.log("Dados recebidos:", data);
 
-      const idosoRecords: any[] = data.data
+  //     const idosoCollection = database.get('idoso') as Collection<Idoso>;
 
-      const mappedIdoso = idosoRecords.map((item: any) => ({
-        ...item,
-        foto: getImageUri(item.foto),
-      }));
+  //     const query = Q.sortBy(
+  //       orderOption.column,
+  //       orderOption.dir.toLowerCase() as 'asc' | 'desc'
+  //     );
+
+  //     const idosoRecords = await idosoCollection.query(query).fetch();
+
+  //     const mappedIdoso = idosoRecords.map((item) => ({
+  //       ...item._raw,
+  //       foto: getImageUri(item.foto),
+  //     }));
 
       setIdosos(mappedIdoso);
       // console.log("Idosos carregados:", mappedIdoso);
@@ -138,11 +157,13 @@ export default function ListarIdosos() {
     router.push("/private/pages/cadastrarIdoso");
   };
 
+
   useEffect(() => {
     if (idUsuario) {
-      getIdosos();
+      getIdosos(idUsuario);
     }
   }, [orderOption, idUsuario]);
+
 
   return (
     <View style={styles.screen}>
@@ -150,7 +171,9 @@ export default function ListarIdosos() {
         <BackButton route="/private/tabs/perfil" color="#000" />
       </View>
 
+
       <Text style={styles.header}>De quem está cuidando agora?</Text>
+
 
       <View style={styles.list}>
         <SelectList
@@ -166,11 +189,13 @@ export default function ListarIdosos() {
         />
       </View>
 
+
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#2CCDB5" />
         </View>
       )}
+
 
       {!loading && (
         <View style={styles.cardIdoso}>
@@ -191,6 +216,7 @@ export default function ListarIdosos() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   screen: {

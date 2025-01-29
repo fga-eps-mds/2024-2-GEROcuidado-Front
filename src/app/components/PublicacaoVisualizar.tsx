@@ -142,7 +142,8 @@ const styles = StyleSheet.create({
   },
   descricao: {
     fontSize: 14,
-    marginTop: 25,
+    marginTop: 20,
+    color: "#0000000",
   },
   underInfo: {
     flexDirection: "row",
