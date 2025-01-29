@@ -35,8 +35,15 @@ export interface IPublicacaoParams extends IPublicacaoBody, IUser {
   usuario?: IUser;
   idUsuarioReporte: string;
 }
+export interface IDenuncia {
+  dataHora: Date | string;
+  id: number;
+  idUsuario?: number;
+  motivo: string;
+  descricao: string;
+}
 
-export interface IPublicacaoUsuario extends IPublicacao, IUser {}
+export interface IPublicacaoUsuario extends IPublicacao, IUser { }
 
 export interface IPublicacaoFilter {
   titulo?: string;

@@ -1,15 +1,67 @@
-import React from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
-import { IPublicacao, IPublicacaoBody, IPublicacaoUsuario } from "../interfaces/forum.interface";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import AntDesing from "react-native-vector-icons/AntDesign";
-import { hasFoto } from "../shared/helpers/foto.helper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { IDenuncia, IPublicacaoUsuario } from "../interfaces/forum.interface";
 import { getFoto } from "../shared/helpers/photo.helper";
+
 interface IProps {
   item: IPublicacaoUsuario;
 }
 
-export default function PublicacaoVisualizar({ item }: IProps) {
+const URL_DENUNCIAS = `${process.env.EXPO_PUBLIC_API_URL}:${process.env.EXPO_PUBLIC_API_FORUM_PORT}/api/forum/denuncias`;
+
+export default function PublicacaoVisualizar({ item: itemPublicacao }: IProps) {
+  const [denuncias, setDenuncias] = useState<{ [idUsuario: number]: IDenuncia[] }>({});
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const getDenuncias = async () => {
+      const token = await AsyncStorage.getItem("token");
+
+      if (!token) {
+        console.error("Token não encontrado.");
+        return;
+      }
+
+      setToken(token);
+
+      try {
+        const response = await fetch(`${URL_DENUNCIAS}/byPublicacaoId/${itemPublicacao.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const dataDenuncias = await response.json();
+
+        if (!Array.isArray(dataDenuncias.data)) {
+          console.error("Erro ao buscar denúncias:", dataDenuncias);
+          return;
+        }
+
+        // Agrupar denúncias por usuário
+        const groupedDenuncias = dataDenuncias.data.reduce(
+          (acc: { [idUsuario: number]: IDenuncia[] }, denuncia: IDenuncia) => {
+            if (denuncia.idUsuario !== undefined && !acc[denuncia.idUsuario]) {
+              acc[denuncia.idUsuario] = [];
+            }
+            if (denuncia.idUsuario !== undefined) {
+              acc[denuncia.idUsuario].push(denuncia);
+            }
+            return acc;
+          },
+          {}
+        );
+
+        setDenuncias(groupedDenuncias);
+      } catch (error) {
+        console.error("Erro ao buscar denúncias:", error);
+      }
+    };
+
+    getDenuncias();
+  }, []);
 
   const getFormattedDate = (payload: Date | string): string => {
     const date = new Date(payload);
@@ -19,22 +71,42 @@ export default function PublicacaoVisualizar({ item }: IProps) {
   return (
     <View style={styles.postContainer}>
       <View style={styles.userInfo}>
-        {getFoto(item.foto)}
-        <Text style={styles.username}>{item.nome || "Usuário deletado"}</Text>
+        {getFoto(itemPublicacao.foto)}
+        <Text style={styles.username}>{itemPublicacao.nome || "Usuário deletado"}</Text>
       </View>
-      <Text style={styles.titulo}>{item.titulo}</Text>
-      <Text style={styles.descricao}> {item.descricao || "Descrição indisponível"} </Text>
+      <Text style={styles.titulo}>{itemPublicacao.titulo}</Text>
+      <Text style={styles.descricao}>{itemPublicacao.descricao}</Text>
       <View style={styles.underInfo}>
-        <Text style={styles.categoria}>{item.categoria}</Text>
-        <Text style={styles.date}>{getFormattedDate(item.dataHora)}</Text>
+        <Text style={styles.categoria}>{itemPublicacao.categoria}</Text>
+        <Text style={styles.date}>{getFormattedDate(itemPublicacao.dataHora)}</Text>
       </View>
       <View style={styles.secondUnderInfo}>
-      {item.idUsuarioReporte && item.idUsuarioReporte.length > 0 && (
-        <View style={styles.reports}>
-          <AntDesing name="warning" size={18} color="#FFCC00" />
-          <Text style={styles.reportsText}>Usuários reportaram</Text>
-        </View>
-      )}
+        {itemPublicacao.idUsuarioReporte && itemPublicacao.idUsuarioReporte.length > 0 && (
+          <View style={styles.reports}>
+            <View style={styles.reportsContainer}>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: 'center', marginBottom: 5, marginTop: 10, gap: 7 }}>
+                <AntDesign name="warning" size={18} color="#FFCC00" />
+                <Text style={styles.reportsText}>
+                  Reportada por {Object.keys(denuncias).length} usuário(s)
+                </Text>
+              </View>
+              {Object.entries(denuncias).map(([idUsuario, userDenuncias]) => (
+                <View key={idUsuario} style={styles.reportGroup}>
+                  <Text style={styles.reportUser}>Usuário {idUsuario}</Text>
+                  {userDenuncias.map((denuncia, index) => (
+                    <View key={index} style={styles.reportItem}>
+                      <Text style={styles.reportReason}>Motivo: {denuncia.motivo}</Text>
+                      <Text style={styles.reportDescription}>Descrição: {denuncia.descricao}</Text>
+                      <Text style={styles.reportDate}>
+                        Data: {getFormattedDate(denuncia.dataHora)}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -51,28 +123,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 2,
     padding: 15,
-    display: "flex",
-    flexDirection: "column",
-    height: "auto",
   },
   userInfo: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
-  },
-  fotoPerfil: {
-    width: 65,
-    aspectRatio: 1,
-    borderRadius: 140,
   },
   username: {
-    color: "#b4026d",
-    opacity: 0.8,
-    fontSize: 18,
-    marginLeft: 13,
-    marginBottom: 3,
-    fontWeight: "600",
-    width: "80%",
+    color: "#000",
+    opacity: 0.6,
+    fontSize: 16,
+    marginLeft: 15,
+    fontWeight: "500",
   },
   titulo: {
     fontSize: 16,
@@ -86,42 +147,62 @@ const styles = StyleSheet.create({
   },
   underInfo: {
     flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
     justifyContent: "space-between",
     marginTop: 30,
   },
   secondUnderInfo: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    width: "100%",
     marginTop: 10,
   },
   reports: {
     flexDirection: "row",
     alignItems: "center",
+    padding: 8,
+    backgroundColor: "#FFF4E5",
+    borderRadius: 8,
   },
   reportsText: {
-    color: "#FFCC00",
-    marginLeft: 3,
+    fontSize: 14,
+    color: "#FF8800",
+    textAlign: "center",
   },
-  semFoto: { position: "relative", backgroundColor: "#EFEFF0" },
-  semFotoIcon: {
-    position: "absolute",
-    right: "38%",
-    bottom: "38%",
-    opacity: 0.4,
-    margin: "auto",
-    alignSelf: "center",
-    zIndex: 1,
+  reportsContainer: {
+    flexDirection: "column",
+    width: "95%",
+  },
+  reportGroup: {
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  reportUser: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#442200",
+  },
+  reportItem: {
+    marginTop: 5,
+  },
+  reportReason: {
+    fontSize: 14,
+    color: "#663300",
+  },
+  reportDescription: {
+    fontSize: 14,
+    fontStyle: "italic",
+    color: "#884400",
+  },
+  reportDate: {
+    fontSize: 12,
+    color: "#AA5500",
   },
   categoria: {
-    marginRight: 15,
     color: "#137364",
     fontWeight: "500",
   },
   date: {
-    color: "#000000",
+    color: "#000",
     fontSize: 14,
   },
 });

@@ -29,7 +29,6 @@ import { ECategoriaPublicacao } from "../../interfaces/forum.interface";
 import Toast from "react-native-toast-message";
 
 export default function VisualizarPublicacao() {
-  
   const params = useLocalSearchParams() as unknown as IPublicacaoParams;
   const [idUsuario, setIdUsuario] = useState<number | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
@@ -42,18 +41,18 @@ export default function VisualizarPublicacao() {
 
   const mapIdUsuarioReporte = (payload: string) => {
     if (!payload) return [];
-  
-    return payload.split(",").map((item) => Number(item));
-  };  
 
-// Verifique como você obtém a publicação dos parâmetros  
-const getPublicacaoFromParams = () => {
-  const payload: IPublicacaoUsuario = {
-    ...params,
-    idUsuarioReporte: mapIdUsuarioReporte(params.idUsuarioReporte),
+    return payload.split(",").map((item) => Number(item));
   };
-  setPublicacao(payload);
-};
+
+  // Verifique como você obtém a publicação dos parâmetros
+  const getPublicacaoFromParams = () => {
+    const payload: IPublicacaoUsuario = {
+      ...params,
+      idUsuarioReporte: mapIdUsuarioReporte(params.idUsuarioReporte),
+    };
+    setPublicacao(payload);
+  };
 
   const getUsuario = () => {
     AsyncStorage.getItem("usuario").then((response) => {
@@ -83,7 +82,7 @@ const getPublicacaoFromParams = () => {
         idUsuarioReporte: pub.idUsuarioReporte.join(","), // Converte o array para string se necessário
       },
     });
-  };  
+  };
 
   const apagarPublicacao = async () => {
     setModalVisibleApagar(false);
@@ -177,10 +176,9 @@ const getPublicacaoFromParams = () => {
         <View style={styles.actions}>
           {(isAdmin || publicacao?.idUsuario == idUsuario) && (
             <Pressable
-          onPress={() => setModalVisibleApagar(true)}
-          style={[styles.actionButton, styles.deleteButton]}
-          testID="deleteBtn"
-                    >
+              onPress={() => setModalVisibleApagar(true)}
+              style={[styles.actionButton, styles.deleteButton]}
+              testID="deleteBtn">
               {showLoadingApagar && (
                 <ActivityIndicator size="small" color="#FFF" />
               )}
@@ -196,10 +194,9 @@ const getPublicacaoFromParams = () => {
 
           {idUsuario && publicacao?.idUsuario != idUsuario && (
             <Pressable
-                onPress={() => setModalVisibleReportar(true)}
-                style={[styles.actionButton, styles.reportButton]}
-                testID="reportBtn"
-              >
+              onPress={() => setModalVisibleReportar(true)}
+              style={[styles.actionButton, styles.reportButton]}
+              testID="reportBtn">
               {showLoadingReportar && (
                 <ActivityIndicator size="small" color="#FFF" />
               )}
@@ -223,10 +220,9 @@ const getPublicacaoFromParams = () => {
 
           {idUsuario && publicacao?.idUsuario == idUsuario && (
             <Pressable
-            onPress={editarPublicacao}
-            style={[styles.actionButton, styles.editButton]}
-            testID="editBtn"
-          >
+              onPress={editarPublicacao}
+              style={[styles.actionButton, styles.editButton]}
+              testID="editBtn">
               <Text style={styles.actionButtonText}>Editar</Text>
               <Icon name="pencil" size={18} color={"white"} />
             </Pressable>
@@ -237,7 +233,7 @@ const getPublicacaoFromParams = () => {
         {publicacao && <PublicacaoVisualizar item={publicacao}/>}
         </ScrollView>
 
-        <ModalConfirmation
+      <ModalConfirmation
         visible={modalVisibleApagar}
         callbackFn={apagarPublicacao}
         closeModal={() => setModalVisibleApagar(false)}
@@ -245,26 +241,26 @@ const getPublicacaoFromParams = () => {
         messageButton="Apagar"
         testID="deleteModal"
       />
-        <ModalConfirmation
-          visible={modalVisibleReportar}
-          callbackFn={
-            publicacao?.idUsuarioReporte.includes(Number(idUsuario))
-              ? cancelarReporte
-              : reportarPublicacao
-          }
-          closeModal={() => setModalVisibleReportar(false)}
-          message={
-            publicacao?.idUsuarioReporte.includes(Number(idUsuario))
-              ? "Desfazer reporte?"
-              : "Reportar publicação?"
-          }
-          messageButton={
-            publicacao?.idUsuarioReporte.includes(Number(idUsuario))
-              ? "Desfazer"
-              : "Reportar"
-          }
-          testID="reportModal"
-        />
+      <ModalConfirmation
+        visible={modalVisibleReportar}
+        callbackFn={
+          publicacao?.idUsuarioReporte.includes(Number(idUsuario))
+            ? cancelarReporte
+            : reportarPublicacao
+        }
+        closeModal={() => setModalVisibleReportar(false)}
+        message={
+          publicacao?.idUsuarioReporte.includes(Number(idUsuario))
+            ? "Desfazer reporte?"
+            : "Reportar publicação?"
+        }
+        messageButton={
+          publicacao?.idUsuarioReporte.includes(Number(idUsuario))
+            ? "Desfazer"
+            : "Reportar"
+        }
+        testID="reportModal"
+      />
     </View>
   );
 }

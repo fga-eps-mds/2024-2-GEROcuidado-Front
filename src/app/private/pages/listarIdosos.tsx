@@ -123,7 +123,7 @@ export default function ListarIdosos() {
   //       return;
   //     }
 
-  //     const dataIdoso = await responseIdoso.json()
+      // console.log("Dados recebidos:", data);
 
   //     const idosoCollection = database.get('idoso') as Collection<Idoso>;
 
@@ -139,21 +139,19 @@ export default function ListarIdosos() {
   //       foto: getImageUri(item.foto),
   //     }));
 
-
-  //     setIdosos(dataIdoso.data);
-  //     setIdosos(mappedIdoso);
-  //     console.log("Idosos carregados:", mappedIdoso);
-  //   } catch (err) {
-  //     const error = err as { message: string };
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Erro!",
-  //       text2: error.message,
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      setIdosos(mappedIdoso);
+      // console.log("Idosos carregados:", mappedIdoso);
+    } catch (err) {
+      const error = err as { message: string };
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: error.message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const navigateCadastrar = () => {
     router.push("/private/pages/cadastrarIdoso");
