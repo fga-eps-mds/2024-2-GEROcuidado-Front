@@ -111,7 +111,7 @@ export default function ListarIdosos() {
 
       const data = await response.json();
 
-      console.log("Dados recebidos:", data);
+      // console.log("Dados recebidos:", data);
 
       const idosoRecords: any[] = data.data
 
@@ -121,7 +121,7 @@ export default function ListarIdosos() {
       }));
 
       setIdosos(mappedIdoso);
-      console.log("Idosos carregados:", mappedIdoso);
+      // console.log("Idosos carregados:", mappedIdoso);
     } catch (err) {
       const error = err as { message: string };
       Toast.show({

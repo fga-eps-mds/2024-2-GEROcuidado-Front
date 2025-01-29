@@ -26,8 +26,7 @@ export interface IPublicacaoBody {
 export interface IPublicacao extends IPublicacaoBody {
   id: number;
   usuario?: IUser;
-  //idUsuarioReporte: number[];
-  idUsuarioReporte: Array<{ idUsuario: number; motivo: string }>;
+  idUsuarioReporte: number[];
   categoria: ECategoriaPublicacao;
 }
 
@@ -35,6 +34,14 @@ export interface IPublicacaoParams extends IPublicacaoBody, IUser {
   id: number;
   usuario?: IUser;
   idUsuarioReporte: string;
+}
+
+export interface IDenuncia {
+  dataHora: Date | string;
+  id: number;
+  idUsuario?: number;
+  motivo: string;
+  descricao: string;
 }
 
 export interface IPublicacaoUsuario extends IPublicacao, IUser { }
