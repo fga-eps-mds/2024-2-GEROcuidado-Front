@@ -35,7 +35,6 @@ export interface IPublicacaoParams extends IPublicacaoBody, IUser {
   usuario?: IUser;
   idUsuarioReporte: string;
 }
-
 export interface IDenuncia {
   dataHora: Date | string;
   id: number;
@@ -44,6 +43,17 @@ export interface IDenuncia {
   descricao: string;
 }
 
+<<<<<<< HEAD
+export interface IDenuncia {
+  dataHora: Date | string;
+  id: number;
+  idUsuario?: number;
+  motivo: string;
+  descricao: string;
+}
+
+=======
+>>>>>>> e78bbd4 (Merge pull request #11 from fga-eps-mds/denuncia-post)
 export interface IPublicacaoUsuario extends IPublicacao, IUser { }
 
 export interface IPublicacaoFilter {

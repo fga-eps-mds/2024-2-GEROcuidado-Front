@@ -120,6 +120,16 @@ export default function ListarIdosos() {
         foto: getImageUri(item.foto),
       }));
 
+<<<<<<< HEAD
+=======
+  //     const idosoRecords = await idosoCollection.query(query).fetch();
+
+  //     const mappedIdoso = idosoRecords.map((item) => ({
+  //       ...item._raw,
+  //       foto: getImageUri(item.foto),
+  //     }));
+
+>>>>>>> e78bbd4 (Merge pull request #11 from fga-eps-mds/denuncia-post)
       setIdosos(mappedIdoso);
       // console.log("Idosos carregados:", mappedIdoso);
     } catch (err) {
