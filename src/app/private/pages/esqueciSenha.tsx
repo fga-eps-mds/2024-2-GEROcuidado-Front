@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { forgotPassword } from "../../services/user.service";
-import { Image, Alert, Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
-import { router } from "expo-router";
-import { ScrollView } from "react-native";
-import BackButton from "../../components/BackButton"
-import RememberButton from "../../components/rememberButton";
+import { Alert, Text, View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import axios from 'axios';
+//import BackButton from "/components/BackButton.tsx"; Não consigo achar esse caminho, preciso fazer rodar... (é o botão q volta pra outra pag)
 
 export default function EsqueciSenha() {
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+  const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
+  const BASE_URL = `${API_URL}:${API_PORT}/api/usuario/esqueci-senha`;
   const [email, setEmail] = useState("");
-  const [showLoading, setShowLoading] = useState(false);
 
   const handleRecuperarSenha = async () => {
     if (!email) {
@@ -20,23 +20,12 @@ export default function EsqueciSenha() {
       console.log("E-mail de recuperação enviado:", response);
     } catch (error) {
       console.error("Erro ao solicitar recuperação de senha:", error.message);
-    } finally {
-      Alert.alert("Sucesso", "E-mail de recuperação enviado com sucesso!");
     }
     };
-
   return (
-
     
     <View style={styles.container}>
-    <BackButton color="#000" route="/" />
-
-      <View style={styles.imagem}>
-        <Image
-          source={require("../../../../assets/logo.png")}
-          style={{ width: 220, height: 200 }}
-        />
-      </View>
+      {/* Logo deveria estar aqui, mas não consegui encaixá-la */}
 
       <Text style={styles.title}>Esqueceu sua senha? </Text>
       <Text style={styles.subtitle}>Calma, a GERO te ajuda!! </Text>
@@ -52,13 +41,9 @@ export default function EsqueciSenha() {
         />
       </View>
 
-      <View style={styles.EsqueciButton}>
-                <RememberButton
-                  title="Recuperar senha"
-                  showLoading={showLoading}
-                  onPress={handleRecuperarSenha}
-                />
-              </View>
+      <TouchableOpacity style={styles.button} onPress={handleRecuperarSenha}>
+        <Text style={styles.buttonText}>Recuperar senha</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -66,11 +51,11 @@ export default function EsqueciSenha() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#FFF",
-    padding: 20,
-    },
+    padding: 16,
+  },
   logo: {
     width: 280,
     height: 90,
@@ -114,18 +99,5 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "600",
-  },
-  imagem: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 30,
-  },
-  EsqueciButton: {
-    marginTop: 35,
-    alignItems: "center",
-    justifyContent: "center", // Adicionado para centralizar verticalmente
-    width: "100%",
-    flex: 1,
   },
 });

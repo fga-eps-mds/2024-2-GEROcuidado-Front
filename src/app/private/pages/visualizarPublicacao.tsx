@@ -12,7 +12,6 @@ import AntDesing from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   IPublicacao,
-  IPublicacaoBody,
   IPublicacaoParams,
   IPublicacaoUsuario,
 } from "../../interfaces/forum.interface";
@@ -46,7 +45,7 @@ export default function VisualizarPublicacao() {
     return payload.split(",").map((item) => Number(item));
   };  
 
-// Verifique como você obtém a publicação dos parâmetros  
+// Verifique como você obtém a publicação dos parâmetros
 const getPublicacaoFromParams = () => {
   const payload: IPublicacaoUsuario = {
     ...params,
@@ -170,7 +169,7 @@ const getPublicacaoFromParams = () => {
       <View style={styles.header}>
         <BackButton route="private/tabs/forum" />
 
-        <Text style={styles.tituloheader}>Visualizar publicação</Text>
+        <Text style={styles.tituloheader}>Visualizar Publicação</Text>
       </View>
 
       <ScrollView>
@@ -232,10 +231,9 @@ const getPublicacaoFromParams = () => {
             </Pressable>
           )}
         </View>
-        
 
-        {publicacao && <PublicacaoVisualizar item={publicacao}/>}
-        </ScrollView>
+        {publicacao && <PublicacaoVisualizar item={publicacao} />}
+      </ScrollView>
 
         <ModalConfirmation
         visible={modalVisibleApagar}
@@ -278,7 +276,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     paddingBottom: 5,
-    position: "relative",
   },
   header: {
     backgroundColor: "#2CCDB5",
@@ -350,12 +347,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     margin: 20,
-  },
-  descricao: {
-    fontSize: 14,
-    marginTop: 25,
-    lineHeight: 20, 
-    color: "#000000", 
-    textAlign: "justify", 
   },
 });

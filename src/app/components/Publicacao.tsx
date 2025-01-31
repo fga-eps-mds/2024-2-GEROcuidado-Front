@@ -38,11 +38,7 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
   };
 
   const navigate = () => {
-    const params = { ...item,
-      id: item.id,
-      foto: item.usuario?.foto,
-      nome: item.usuario?.nome,
-    };
+    const params = { ...item, ...item.usuario, id: item.id };
 
     router.push({
       pathname: "/private/pages/visualizarPublicacao",
@@ -66,7 +62,7 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
   const getDescricao = (descricao: string): string => {
     if (!crop) return descricao;
 
-    return descricao.length < 250 ? descricao : descricao.slice(0, 250) + "...";
+    return descricao.length < 150 ? descricao : descricao.slice(0, 150) + "...";
   };
 
   return (
@@ -142,7 +138,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   postContent: {
-    fontSize: 15,
+    fontSize: 16,
     marginTop: 15,
   },
   fotoPerfil: {
@@ -161,7 +157,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   username: {
-    color: "#000001",
+    color: "#000000",
     opacity: 0.5,
     fontSize: 13,
   },

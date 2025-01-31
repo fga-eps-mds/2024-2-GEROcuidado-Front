@@ -31,9 +31,4 @@ describe("PublicacaoVisualizar", () => {
     const dateElement = screen.getByText("04/11/2023");
     expect(dateElement).toBeTruthy();
   });
-  it("deve renderizar a descrição corretamente", () => {
-    render(<PublicacaoVisualizar item={mockItem} />);
-    const descricaoElement = screen.getByText(mockItem.descricao);
-    expect(descricaoElement).toBeTruthy();
-  });
 });

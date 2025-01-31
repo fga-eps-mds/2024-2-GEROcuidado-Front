@@ -30,7 +30,7 @@ describe('EditarPublicacao', () => {
   const mockPublicacao = {
     id: '1',
     titulo: 'Test Title',
-    descricao: 'Test Description, should be different them the Profile Description',
+    descricao: 'Test Description',
     categoria: 'GERAL',
     // Adicione outros campos necessários aqui
   };
