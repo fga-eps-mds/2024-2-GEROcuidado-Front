@@ -1,57 +1,96 @@
-import React, { useEffect, useRef } from "react";
-import { Stack } from "expo-router";
-import * as Notifications from "expo-notifications";
-import { LogBox, View } from "react-native";
-import Toast from "react-native-toast-message";
+import { Platform, StyleSheet } from "react-native";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import React from "react";
+import { Tabs } from "expo-router";
 
-export default function AppLayout() {
-  const notificationListener = useRef<Notifications.Subscription>();
-  const responseListener = useRef<Notifications.Subscription>();
-
-  LogBox.ignoreLogs([
-    'JSI SQLiteAdapter not available',
-  ]);
-
-  useEffect(() => {
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
-
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current as Notifications.Subscription,
-      );
-      Notifications.removeNotificationSubscription(
-        responseListener.current as Notifications.Subscription,
-      );
-    };
-  }, []);
+export default function TabsLayout() {
+  const iconComponent = (focused: boolean, size: number, iconName: string) => (
+    <Icon
+      name={focused ? iconName : ${iconName}-outline}
+      style={styles.itemIcon}
+      size={size}
+    />
+  );
 
   return (
     <>
-      <View style={{ zIndex: 9999 }} testID="toast-view">
-        <Toast />
-      </View>
-      <Stack
+      <Tabs
         screenOptions={{
-          header: () => <View style={{ height: 50 }} testID="stack-header" />,
+          tabBarActiveTintColor: "lightgrey",
+          tabBarStyle: {
+            backgroundColor: "#2CCDB5",
+            height: 65,
+          },
+          tabBarLabelStyle: {
+            marginBottom: Platform.OS === "ios" ? -15 : 10,
+            fontWeight: "600",
+            color: "#fff",
+            fontSize: 14,
+          },
         }}
-      />
-      <View testID="layout-view" />
+      >
+        <Tabs.Screen
+          name="rotinas"
+          options={{
+            title: "Rotinas",
+            headerShown: false,
+            tabBarIcon: ({ size, focused }) => {
+              return iconComponent(focused, size, "calendar");
+            },
+          }}
+        />
+
+          <Tabs.Screen
+          name="eventos"
+          options={{
+            title: "Eventos",
+            headerShown: false,
+            tabBarIcon: ({ size, focused }) => {
+              return iconComponent(focused, size, "calendar");
+            },
+          }}
+        />      
+        <Tabs.Screen
+          name="registros"
+          options={{
+            title: "Registros",
+            headerShown: false,
+            tabBarIcon: ({ size, focused }) => {
+              return iconComponent(focused, size, "heart");
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="forum"
+          options={{
+            title: "Forum",
+            headerShown: false,
+            tabBarHideOnKeyboard: true,
+            tabBarIcon: ({ size, focused }) => {
+              return iconComponent(focused, size, "message");
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="perfil"
+          options={{
+            title: "Perfil",
+            headerShown: false,
+            tabBarIcon: ({ size, focused }) => {
+              return iconComponent(focused, size, "account");
+            },
+          }}
+        />
+      </Tabs>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  itemIcon: {
+    color: "#fff",
+    marginTop: Platform.OS === "ios" ? 10 : 0,
+    marginBottom: Platform.OS === "ios" ? 0 : -10,
+  },
+});
