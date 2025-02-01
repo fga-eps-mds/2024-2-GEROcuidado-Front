@@ -31,7 +31,7 @@ export default function CriaPublicacao() {
   const getIdUsuario = () => {
     AsyncStorage.getItem("usuario").then((response) => {
       const usuario = JSON.parse(response as string) as IUser;
-      setIdUsuario(usuario.id);
+      setIdUsuario(Number(usuario.id));
     });
     AsyncStorage.getItem("token").then((response) => {
       setToken(response as string);

@@ -83,7 +83,7 @@ export default function CriarDenuncia() {
     }
 
     const body = {
-      idUsuario: idUsuario,
+      idUsuario: Number(idUsuario),
       motivo: report.motivo,
       descricao: report.descricao,
       publicacaoId: Number(publicacao.id),
@@ -104,7 +104,7 @@ export default function CriarDenuncia() {
       return;
     }
 
-    await updatePublicacao(publicacao.id, { idUsuarioReporte: [idUsuario] }, token);
+    await updatePublicacao(publicacao.id, { idUsuarioReporte: [Number(idUsuario)] }, token);
 
     alert("Denúncia realizada com sucesso");
     router.push({ pathname: "/private/tabs/forum" });
