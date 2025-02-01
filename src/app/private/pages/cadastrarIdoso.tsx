@@ -26,13 +26,18 @@ import Usuario from "../../model/Usuario";
 import Metrica from "../../model/Metrica";
 import { getTipoSanguineoOptions } from "../../shared/helpers/useNotification";
 import styles from "../../components/style/styles";
+
 interface IErrors {
- nome?: string;
- dataNascimento?: string;
- tipoSanguineo?: string;
- telefoneResponsavel?: string;
- descricao?: string;
+  nome?: string;
+  dataNascimento?: string;
+  tipoSanguineo?: string;
+  telefoneResponsavel?: string;
+  descricao?: string;
 }
+
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
+const BASE_URL = `${API_URL}:${API_PORT}/api/usuario`;
 
 export default function CadastrarIdoso() {
   const [foto, setFoto] = useState<string | undefined>();
@@ -56,16 +61,23 @@ export default function CadastrarIdoso() {
         const response = await AsyncStorage.getItem("usuario");
         if (response) {
           const usuario = JSON.parse(response) as IUser;
-          setIdUsuario(usuario.id);
-          console.log("Usuário logado:", usuario);
+          // console.log("Usuário logado:", usuario);
+          setIdUsuario(Number(usuario.id));
         } else {
           console.log("Usuário não encontrado no AsyncStorage.");
+        }
+
+        const token = await AsyncStorage.getItem("token");
+        if (token) {
+          setToken(token);
+          console.log("Token:", token);
+        } else {
+          console.log("Token não encontrado no AsyncStorage.");
         }
       } catch (error) {
         console.error("Erro ao obter usuário:", error);
       }
     };
-
 
     getIdUsuario();
   }, []);
@@ -123,52 +135,52 @@ export default function CadastrarIdoso() {
     { key: EMetricas.HIDRATACAO, value: EMetricas.HIDRATACAO },
   ];
 
-  const salvarNoBancoLocal = async () => {
-    if (!idUsuario) {
-      console.error('Usuário não encontrado.');
-      return;
-    }
+  // const salvarNoBancoLocal = async () => {
+  //   if (!idUsuario) {
+  //     console.error('Usuário não encontrado.');
+  //     return;
+  //   }
 
-    try {
-      const idosoCollection = database.get('idoso') as Collection<Idoso>;
-      const usersCollection = database.get('usuario') as Collection<Usuario>;
-      const metricasCollection = database.get('metrica') as Collection<Metrica>;
-      const userQuery = await usersCollection.query(Q.where('id', idUsuario.toString())).fetch();
+  //   try {
+  //     const idosoCollection = database.get('idoso') as Collection<Idoso>;
+  //     const usersCollection = database.get('usuario') as Collection<Usuario>;
+  //     const metricasCollection = database.get('metrica') as Collection<Metrica>;
+  //     const userQuery = await usersCollection.query(Q.where('id', idUsuario.toString())).fetch();
 
-      if (userQuery.length === 0) {
-        console.error('Usuário não encontrado.');
-        return;
-      }
+  //     if (userQuery.length === 0) {
+  //       console.error('Usuário não encontrado.');
+  //       return;
+  //     }
 
-      const user = userQuery[0];
+  //     const user = userQuery[0];
 
-      await database.write(async () => {
-        const createdIdoso = await idosoCollection.create((idoso) => {
-          idoso.nome = nome;
-          idoso.dataNascimento = getDateIsoString(dataNascimento);
-          idoso.telefoneResponsavel = telefoneResponsavel;
-          idoso.descricao = descricao;
-          idoso.tipoSanguineo = tipoSanguineo;
-          idoso.userId = idUsuario.toString();
-          idoso.foto = foto || '';
-        });
+  //     await database.write(async () => {
+  //       const createdIdoso = await idosoCollection.create((idoso) => {
+  //         idoso.nome = nome;
+  //         idoso.dataNascimento = getDateIsoString(dataNascimento);
+  //         idoso.telefoneResponsavel = telefoneResponsavel;
+  //         idoso.descricao = descricao;
+  //         idoso.tipoSanguineo = tipoSanguineo;
+  //         idoso.userId = idUsuario.toString();
+  //         idoso.foto = foto || '';
+  //       });
 
-        for (const tipoMetrica of metricas) {
-          await metricasCollection.create((metrica) => {
-            metrica.idIdoso = createdIdoso.id;
-            metrica.categoria = tipoMetrica.value;
-            metrica.valorMaximo = "0";
-          });
-        }
+  //       for (const tipoMetrica of metricas) {
+  //         await metricasCollection.create((metrica) => {
+  //           metrica.idIdoso = createdIdoso.id;
+  //           metrica.categoria = tipoMetrica.value;
+  //           metrica.valorMaximo = "0";
+  //         });
+  //       }
 
-        console.log("Metricas do idoso:", await metricasCollection.query().fetch());
-      });
+  //       console.log("Metricas do idoso:", await metricasCollection.query().fetch());
+  //     });
 
-      console.log("Idoso salvo no banco local com sucesso!");
-    } catch (error) {
-      console.error("Erro ao salvar o idoso no banco local:", error);
-    }
-  };
+  //     console.log("Idoso salvo no banco local com sucesso!");
+  //   } catch (error) {
+  //     console.error("Erro ao salvar o idoso no banco local:", error);
+  //   }
+  // };
 
   const salvar = async () => {
     if (Object.keys(erros).length > 0) {
@@ -176,10 +188,28 @@ export default function CadastrarIdoso() {
       return;
     }
 
+    if (idUsuario === null) {
+      throw new Error("Usuário não encontrado.");
+    }
+
     try {
       setShowLoading(true);
-      await salvarNoBancoLocal();
-      ToastAndroid.show("Idoso salvo no banco local com sucesso!", ToastAndroid.SHORT);
+      // await salvarNoBancoLocal();
+
+      const body = {
+        nome: nome,
+        dataNascimento: getDateIsoString(dataNascimento),
+        telefoneResponsavel: telefoneResponsavel,
+        descricao: descricao,
+        tipoSanguineo: tipoSanguineo,
+        idUsuario: idUsuario,
+        foto: foto || '',
+        dataHora: new Date().toISOString()
+      };
+
+      await postIdoso(body, token);
+
+      ToastAndroid.show("Idoso salvo com sucesso!", ToastAndroid.SHORT);
       router.replace("/private/pages/listarIdosos");
     } catch (err) {
       const error = err as { message: string };
