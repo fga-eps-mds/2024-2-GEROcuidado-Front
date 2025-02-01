@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Stack } from "expo-router";
 import * as Notifications from "expo-notifications";
-import { View } from "react-native";
+import { LogBox, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 Notifications.setNotificationHandler({
@@ -15,6 +15,10 @@ Notifications.setNotificationHandler({
 export default function AppLayout() {
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
+
+  LogBox.ignoreLogs([
+    'JSI SQLiteAdapter not available',
+  ]);
 
   useEffect(() => {
     notificationListener.current =
@@ -39,15 +43,15 @@ export default function AppLayout() {
 
   return (
     <>
-      <View style={{ zIndex: 9999 }}  testID="toast-view">
+      <View style={{ zIndex: 9999 }} testID="toast-view">
         <Toast />
       </View>
       <Stack
         screenOptions={{
-          header: () => <View style={{ height: 50 }} testID="stack-header"/>,
+          header: () => <View style={{ height: 50 }} testID="stack-header" />,
         }}
       />
-      <View style={{ height: 25 }} testID="layout-view"/>
+      <View testID="layout-view" />
     </>
   );
 }
