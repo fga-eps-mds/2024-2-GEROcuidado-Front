@@ -20,11 +20,11 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      # - name: Linter
-        # run: yarn eslint . --format json --output-file reports/eslint-report.json
+      - name: Linter
+        run: yarn eslint . --format json --output-file reports/eslint-report.json
 
       - name: Test and coverage
-        run: TZ=UTC yarn run test:cov
+        run: TZ=UTC yarn jest --coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v4
