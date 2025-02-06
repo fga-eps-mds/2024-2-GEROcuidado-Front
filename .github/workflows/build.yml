@@ -24,7 +24,8 @@ jobs:
        # run: yarn eslint . --format json --output-file reports/eslint-report.json
 
       - name: Test and coverage
-        run: TZ=UTC npm jest --passWithNoTests --no-cache --runInBand --detectOpenHandles --coverage --colors
+        run: npm test 
+      # TZ=UTC npm jest --passWithNoTests --no-cache --runInBand --detectOpenHandles --coverage --colors
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v4
