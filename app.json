@@ -51,14 +51,14 @@
         "origin": false
       },
       "eas": {
-        "projectId": "53b640fc-f72d-4fb5-88b4-c80d4162aa8b"
+        "projectId": "85c91bce-80b2-45f0-b630-5d388169ff2b"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/53b640fc-f72d-4fb5-88b4-c80d4162aa8b"
+      "url": "https://u.expo.dev/85c91bce-80b2-45f0-b630-5d388169ff2b"
     }
   }
 }

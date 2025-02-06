@@ -24,8 +24,12 @@ export default function Registros() {
   const [metricas, setMetricas] = useState<IMetrica[]>([]);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => handleUser(), []);
+  useEffect(() => getIdoso(), []);
+  useEffect(() => { getMetricas() }, [idoso]);
+
   const handleUser = () => {
-    AsyncStorage.getItem("usuario").then((response) => {
+    AsyncStorage.getItem("usuario2").then((response) => {
       const usuario = JSON.parse(response as string);
       setUser(usuario);
     });
@@ -52,12 +56,9 @@ export default function Registros() {
     });
   };
 
-
   const getMetricas = async () => {
     if (!idoso) return;
-
-    // const metricasCollection = database.get('metrica');
-
+  
     try {
       setLoading(true);
       // const idosoMetricas = await metricasCollection.query(Q.where('idoso_id', idoso.id)).fetch();
@@ -82,23 +83,28 @@ export default function Registros() {
     }
   };
 
-  useEffect(() => handleUser(), []);
-  useEffect(() => getIdoso(), []);
-  useEffect(() => { getMetricas() }, [idoso]);
-
   return (
     <>
-      {!user?.id && <NaoAutenticado />}
-      {user?.id && !idoso?.id && <IdosoNaoSelecionado />}
+      
+      {user?.id && <NaoAutenticado />}
 
-      {user?.id && idoso?.id && (
+      {user?.id && !idoso?.id && <IdosoNaoSelecionado />}
+      
+      
+      <View>
         <View style={styles.header}>
           {getFoto(idoso?.foto)}
-          <Text style={styles.nomeUsuario}>
-            <Text style={styles.negrito}>{idoso?.nome}</Text>
-          </Text>
+            <Text style={styles.nomeUsuario}>
+              <Text style={styles.negrito}>{idoso?.nome}</Text>
+            </Text>
         </View>
-      )}
+      </View>
+      
+
+      <Pressable style={styles.botaoCriarMetrica} onPress={() => router.push({ pathname: "/private/pages/cadastrarMetrica" })}>
+        <Icon name="plus" color={"white"} size={20}></Icon>
+        <Text style={styles.textoBotaoCriarMetricas}>Nova Métrica</Text>
+      </Pressable>
 
       <View style={styles.verMetrica}>
         <FlatList
@@ -114,7 +120,6 @@ export default function Registros() {
     </>
   );
 }
-
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#2CCDB5",
@@ -126,9 +131,8 @@ const styles = StyleSheet.create({
 
   verMetrica: {
     alignSelf: "center",
-    width: "100%",
     height: Dimensions.get("window").height - 230,
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
 
   fotoPerfil: {
@@ -162,7 +166,13 @@ const styles = StyleSheet.create({
   list: {
     width: "100%",
   },
-  botaoCriarMetricas: {
+  textoBotaoCriarMetricas: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 14,
+    marginLeft: 5,
+  },
+  botaoCriarMetrica: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#B4026D",
@@ -172,11 +182,5 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: 10,
     marginVertical: 10,
-  },
-  textoBotaoCriarMetricas: {
-    color: "white",
-    fontWeight: "600",
-    fontSize: 14,
-    marginLeft: 5,
   },
 });

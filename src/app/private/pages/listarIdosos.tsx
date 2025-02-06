@@ -1,25 +1,20 @@
+import { AntDesign } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
   ActivityIndicator,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import { FlatList } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { SelectList } from "react-native-dropdown-select-list";
 import BackButton from "../../components/BackButton";
 import CardIdoso from "../../components/CardIdoso";
-import { useRouter } from "expo-router";
 import { IIdoso, IOrder } from "../../interfaces/idoso.interface";
-import Toast from "react-native-toast-message";
-import { SelectList } from "react-native-dropdown-select-list";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "../../interfaces/user.interface";
-import database from "../../db";
-import Idoso from "../../model/Idoso";
-import { Collection, Q } from "@nozbe/watermelondb";
-import { getImageUri } from "../../shared/helpers/image.helper";
 import { getAllIdoso } from "../../services/idoso.service";
 
 
@@ -105,55 +100,6 @@ export default function ListarIdosos() {
     setIdosos(idosos as unknown as IIdoso[])
 
   }
-  //   if (!idUsuario) return;
-
-  //   setLoading(true);
-
-  //   try {
-  //     const responseIdoso = await fetch(BASE_URL, {
-  //       method: 'GET',
-  //       headers: {
-  //         "Authorization": `Bearer ${token}`,
-  //         Accept: "application/json"
-  //       }
-  //     })
-
-  //     if (!responseIdoso.ok) {
-  //       console.error('Erro na resposta da API:', responseIdoso.status, responseIdoso.statusText);
-  //       return;
-  //     }
-
-  //     const dataIdoso = await responseIdoso.json()
-
-  //     const idosoCollection = database.get('idoso') as Collection<Idoso>;
-
-  //     const query = Q.sortBy(
-  //       orderOption.column,
-  //       orderOption.dir.toLowerCase() as 'asc' | 'desc'
-  //     );
-
-  //     const idosoRecords = await idosoCollection.query(query).fetch();
-
-  //     const mappedIdoso = idosoRecords.map((item) => ({
-  //       ...item._raw,
-  //       foto: getImageUri(item.foto),
-  //     }));
-
-
-  //     setIdosos(dataIdoso.data);
-  //     setIdosos(mappedIdoso);
-  //     console.log("Idosos carregados:", mappedIdoso);
-  //   } catch (err) {
-  //     const error = err as { message: string };
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Erro!",
-  //       text2: error.message,
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const navigateCadastrar = () => {
     router.push("/private/pages/cadastrarIdoso");

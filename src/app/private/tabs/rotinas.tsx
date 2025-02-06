@@ -34,6 +34,7 @@ import Rotina from "../../model/Rotina";
 import { getFoto } from "../../shared/helpers/photo.helper";
 import { all } from "axios";
 
+
 export default function Rotinas() {
   moment.locale("pt-br");
 

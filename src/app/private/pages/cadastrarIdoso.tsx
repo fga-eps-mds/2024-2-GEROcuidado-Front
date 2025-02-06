@@ -61,8 +61,8 @@ export default function CadastrarIdoso() {
         const response = await AsyncStorage.getItem("usuario");
         if (response) {
           const usuario = JSON.parse(response) as IUser;
-          setIdUsuario(usuario.id);
           // console.log("Usuário logado:", usuario);
+          setIdUsuario(Number(usuario.id));
         } else {
           console.log("Usuário não encontrado no AsyncStorage.");
         }
