@@ -88,7 +88,7 @@ export default function CadastrarIdoso() {
 
   const getDateIsoString = (value: string) => {
     const dateArray = value.split("/");
-    return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
+    return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`; // Remova o horário
   };
 
 
@@ -135,52 +135,52 @@ export default function CadastrarIdoso() {
     { key: EMetricas.HIDRATACAO, value: EMetricas.HIDRATACAO },
   ];
 
-  // const salvarNoBancoLocal = async () => {
-  //   if (!idUsuario) {
-  //     console.error('Usuário não encontrado.');
-  //     return;
-  //   }
-
-  //   try {
-  //     const idosoCollection = database.get('idoso') as Collection<Idoso>;
-  //     const usersCollection = database.get('usuario') as Collection<Usuario>;
-  //     const metricasCollection = database.get('metrica') as Collection<Metrica>;
-  //     const userQuery = await usersCollection.query(Q.where('id', idUsuario.toString())).fetch();
-
-  //     if (userQuery.length === 0) {
-  //       console.error('Usuário não encontrado.');
-  //       return;
-  //     }
-
-  //     const user = userQuery[0];
-
-  //     await database.write(async () => {
-  //       const createdIdoso = await idosoCollection.create((idoso) => {
-  //         idoso.nome = nome;
-  //         idoso.dataNascimento = getDateIsoString(dataNascimento);
-  //         idoso.telefoneResponsavel = telefoneResponsavel;
-  //         idoso.descricao = descricao;
-  //         idoso.tipoSanguineo = tipoSanguineo;
-  //         idoso.userId = idUsuario.toString();
-  //         idoso.foto = foto || '';
-  //       });
-
-  //       for (const tipoMetrica of metricas) {
-  //         await metricasCollection.create((metrica) => {
-  //           metrica.idIdoso = createdIdoso.id;
-  //           metrica.categoria = tipoMetrica.value;
-  //           metrica.valorMaximo = "0";
-  //         });
-  //       }
-
-  //       console.log("Metricas do idoso:", await metricasCollection.query().fetch());
-  //     });
-
-  //     console.log("Idoso salvo no banco local com sucesso!");
-  //   } catch (error) {
-  //     console.error("Erro ao salvar o idoso no banco local:", error);
-  //   }
-  // };
+  const salvarNoBancoLocal = async () => {
+    if (!idUsuario) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+  
+    try {
+      const idosoCollection = database.get('idoso') as Collection<Idoso>;
+      const usersCollection = database.get('usuario') as Collection<Usuario>;
+      const metricasCollection = database.get('metrica') as Collection<Metrica>;
+      const userQuery = await usersCollection.query(Q.where('id', idUsuario.toString())).fetch();
+  
+      if (userQuery.length === 0) {
+        console.error('Usuário não encontrado.');
+        return;
+      }
+  
+      const user = userQuery[0];
+  
+      await database.write(async () => {
+        const createdIdoso = await idosoCollection.create((idoso) => {
+          idoso.nome = nome;
+          idoso.dataNascimento = getDateIsoString(dataNascimento);
+          idoso.telefoneResponsavel = telefoneResponsavel;
+          idoso.descricao = descricao;
+          idoso.tipoSanguineo = tipoSanguineo;
+          idoso.userId = idUsuario.toString();
+          idoso.foto = foto || '';
+        });
+  
+        for (const tipoMetrica of metricas) {
+          await metricasCollection.create((metrica) => {
+            metrica.idIdoso = createdIdoso.id;
+            metrica.categoria = tipoMetrica.value;
+            metrica.valorMaximo = "0";
+          });
+        }
+  
+        console.log("Metricas do idoso:", await metricasCollection.query().fetch());
+      });
+  
+      console.log("Idoso salvo no banco local com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar o idoso no banco local:", error);
+    }
+  };
 
   const salvar = async () => {
     if (Object.keys(erros).length > 0) {
@@ -194,8 +194,7 @@ export default function CadastrarIdoso() {
 
     try {
       setShowLoading(true);
-      // await salvarNoBancoLocal();
-
+      await salvarNoBancoLocal(); // Salva localmente
       const body = {
         nome: nome,
         dataNascimento: getDateIsoString(dataNascimento),

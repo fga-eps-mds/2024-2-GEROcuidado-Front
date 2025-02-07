@@ -140,7 +140,7 @@ export default function ListarIdosos() {
   //     }));
 
       setIdosos(mappedIdoso);
-      // console.log("Idosos carregados:", mappedIdoso);
+      console.log("Idosos carregados:", mappedIdoso);
     } catch (err) {
       const error = err as { message: string };
       Toast.show({

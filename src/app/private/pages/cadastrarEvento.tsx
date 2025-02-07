@@ -89,9 +89,12 @@ import { Try } from "expo-router/build/views/Try";
       { key: ECategoriaRotina.EXERCICIOS, value: ECategoriaRotina.EXERCICIOS },
     ];
   
-    const getDateIsoString = () => {
-      const dateArray = data.split("/");
-      return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T${hora}:00.000`;
+    const getDateIsoString = (value: string) => {
+      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+        throw new Error("Formato de data inválido!");
+      }
+      const dateArray = value.split("/");
+      return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T12:00:00.000Z`;
     };
   
     const salvarNoBancoLocal = async () => {
