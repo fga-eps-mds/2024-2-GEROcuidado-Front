@@ -48,3 +48,8 @@ export interface IOrder {
   column: string;
   dir: "DESC" | "ASC";
 }
+
+export interface IComentarioBody {
+  comentario: string;
+  idUsuario: number;
+}
