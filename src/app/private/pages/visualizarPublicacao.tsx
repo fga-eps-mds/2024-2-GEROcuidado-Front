@@ -174,7 +174,7 @@ const getPublicacaoFromParams = () => {
       </View>
 
       <View style={styles.answers}>
-        <Text style={styles.resposta}>Respostas: 0</Text
+        <Text style={styles.resposta}>Respostas:</Text
         >
         {idUsuario && publicacao?.idUsuario != idUsuario && (
           <Pressable
