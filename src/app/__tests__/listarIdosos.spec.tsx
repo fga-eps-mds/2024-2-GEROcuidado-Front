@@ -1,11 +1,11 @@
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react-native";
 import ListarIdosos from "../private/pages/listarIdosos";
-import { getAllIdoso } from "../services/idoso.service";
+import { getAllIdoso } from "../services/idoso.service"; // Função para buscar idosos no servidor
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 
-// Mockando o expo-router
+// Mocking
 jest.mock('expo-router', () => ({
   useLocalSearchParams: jest.fn().mockReturnValue({
     id: "123",
@@ -13,31 +13,35 @@ jest.mock('expo-router', () => ({
     foto: null,
   }),
   router: {
-    push: jest.fn(), // Mocka o método push para verificações de navegação
-    back: jest.fn(), // Mocka o método back para o caso de não haver a prop route
-    canGoBack: jest.fn().mockReturnValue(true), // Mocka o método canGoBack
+    push: jest.fn(),
+    back: jest.fn(),
+    canGoBack: jest.fn().mockReturnValue(true),
   },
   useRouter: jest.fn().mockReturnValue({
-    push: jest.fn(), // Mocka novamente o push no caso do uso da função useRouter
+    push: jest.fn(),
     back: jest.fn(),
     canGoBack: jest.fn().mockReturnValue(true),
   }),
 }));
 
-// Mockando o banco de dados e a função getIdosos
 jest.mock("../db/index", () => ({
   get: jest.fn().mockReturnValue({
     query: jest.fn().mockReturnValue({
       fetch: jest.fn().mockResolvedValueOnce([
         { _raw: { id: 1, nome: "Idoso 1", foto: "foto1.jpg" } },
         { _raw: { id: 2, nome: "Idoso 2", foto: "foto2.jpg" } },
-      ]),
+      ]), 
     }),
   }),
 }));
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
+  setItem: jest.fn(),
+}));
+
+jest.mock("../services/idoso.service", () => ({
+  getAllIdoso: jest.fn(),
 }));
 
 describe("ListarIdosos", () => {
@@ -57,18 +61,56 @@ describe("ListarIdosos", () => {
     await waitFor(() => expect(getByText("Idoso 1")).toBeTruthy());
     expect(getByText("Idoso 2")).toBeTruthy();
   });
- 
-  test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
-    // Renderiza o componente ListarIdosos
+
+  it("deve exibir mensagem de loading enquanto aguarda a resposta da API", () => {
+    // Mockando getAllIdoso para um valor vazio (ou seja, a resposta demora)
+    (getAllIdoso as jest.Mock).mockResolvedValueOnce([]);
+
     const { getByTestId } = render(<ListarIdosos />);
 
-    // Obtendo o botão de voltar
+    expect(getByTestId("loading")).toBeTruthy();
+  });
+
+  it("deve sincronizar dados locais com o servidor quando houver conectividade", async () => {
+    // Simulando dados locais e remoto
+    const localData = [
+      { _raw: { id: 1, nome: "Idoso 1", foto: "foto1.jpg" } },
+    ];
+    const remoteData = [
+      { id: 1, nome: "Idoso 1", foto: "foto1.jpg" },
+      { id: 2, nome: "Idoso 2", foto: "foto2.jpg" },
+    ];
+
+    // Mock para retornar dados locais e dados de sincronização
+    (getAllIdoso as jest.Mock).mockResolvedValue(remoteData);
+
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify({ id: 1 }));
+
+    const { getByText } = render(<ListarIdosos />);
+
+    // Verificando se a lista local e remota são atualizadas após a sincronização
+    await waitFor(() => expect(getByText("Idoso 2")).toBeTruthy());
+  });
+
+  it("deve navegar para a tela de cadastro ao clicar no botão de adicionar", async () => {
+    const { getByTestId } = render(<ListarIdosos />);
+
+    const cadastroBtn = getByTestId("add-button");
+
+    fireEvent.press(cadastroBtn);
+
+    await waitFor(() => {
+      expect(router.push).toHaveBeenCalledWith("/private/pages/cadastrarIdoso");
+    });
+  });
+
+  test("Navega para a tela anterior ao clicar no botão de voltar", async () => {
+    const { getByTestId } = render(<ListarIdosos />);
+
     const backButton = getByTestId("back-button-pressable");
 
-    // Simula o clique no botão de voltar
     fireEvent.press(backButton);
 
-    // Verifica se a função de navegação foi chamada corretamente
     await waitFor(() => {
       expect(router.push).toHaveBeenCalledWith("/private/tabs/perfil");
     });
