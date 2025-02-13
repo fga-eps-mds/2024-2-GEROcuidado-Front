@@ -43,6 +43,7 @@
           "usesCleartextTraffic": true
         }
       }
+    ]
     ],
     "extra": {
       "expoEnv": "process.env.EXPO_PUBLIC_API_URL",

@@ -55,3 +55,19 @@ export interface IOrder {
   column: string;
   dir: "DESC" | "ASC";
 }
+
+export interface IComentarioBody {
+  idUsuario: number;
+  conteudo: string;
+  dataHora: Date | string;
+  publicacaoId: number;
+}
+
+export interface IComentario extends IComentarioBody {
+  id: number;
+  usuario: IUser;
+}
+
+export interface IComentarioParams extends IComentarioBody{
+  id: number;
+}

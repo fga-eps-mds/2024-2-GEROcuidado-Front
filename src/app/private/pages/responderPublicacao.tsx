@@ -15,7 +15,6 @@ import ErrorMessage from "../../components/ErrorMessage";
 interface IErrors {
   titulo?: string;
   descricao?: string;
-  categoria?: string;
 }
 
 export default function CriaPublicacao() {
@@ -23,7 +22,6 @@ export default function CriaPublicacao() {
   const [token, setToken] = useState<string>("");
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [categoria, setCategoria] = useState<ECategoriaPublicacao | null>(null);
   const [erros, setErros] = useState<IErrors>({});
   const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -38,19 +36,6 @@ export default function CriaPublicacao() {
     });
   };
 
-  const data = [
-    { key: ECategoriaPublicacao.GERAL, value: ECategoriaPublicacao.GERAL },
-    { key: ECategoriaPublicacao.SAUDE, value: ECategoriaPublicacao.SAUDE },
-    {
-      key: ECategoriaPublicacao.ALIMENTACAO,
-      value: ECategoriaPublicacao.ALIMENTACAO,
-    },
-    {
-      key: ECategoriaPublicacao.EXERCICIOS,
-      value: ECategoriaPublicacao.EXERCICIOS,
-    },
-  ];
-
   const publicar = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
@@ -62,18 +47,17 @@ export default function CriaPublicacao() {
       titulo,
       descricao,
       dataHora: new Date(),
-      categoria: categoria as ECategoriaPublicacao,
     };
 
     try {
       setLoading(true);
-      const response = await postPublicacao(body, token);
+      const response = await (body, token);
       Toast.show({
         type: "success",
         text1: "Sucesso!",
         text2: response.message as string,
       });
-      router.push("/private/tabs/forum");
+      router.push("");
     } catch (err) {
       const error = err as { message: string };
       Toast.show({
@@ -86,7 +70,7 @@ export default function CriaPublicacao() {
     }
   };
 
-  useEffect(() => handleErrors(), [titulo, descricao, categoria]);
+  useEffect(() => handleErrors(), [titulo, descricao]);
   useEffect(() => getIdUsuario(), []);
 
   const handleErrors = () => {
@@ -100,12 +84,8 @@ export default function CriaPublicacao() {
 
     if (!descricao) {
       erros.descricao = "Campo Obrigatório!";
-    } else if (descricao.length > 700) {
-      erros.descricao = "Deve ter no máximo 700 caracteres!";
-    }
-
-    if (!categoria) {
-      erros.categoria = "Campo Obrigatório!";
+    } else if (descricao.length > 300) {
+      erros.descricao = "Deve ter no máximo 500 caracteres!";
     }
 
     setErros(erros);
@@ -118,7 +98,7 @@ export default function CriaPublicacao() {
           <Icon name="chevron-left" size={40} color="#fff" />
         </Link>
 
-        <Text style={styles.tituloheader}>Nova publicação</Text>
+        <Text style={styles.tituloheader}>Resposta</Text>
       </View>
 
       <View style={styles.publicacao}>
@@ -139,7 +119,7 @@ export default function CriaPublicacao() {
             onChangeText={setDescricao}
             value={descricao}
             multiline={true}
-            placeholder="Descrição"
+            placeholder="Comentário"
             numberOfLines={Platform.OS === "ios" ? undefined : 12}
             style={[
               styles.input,
@@ -149,21 +129,9 @@ export default function CriaPublicacao() {
           <ErrorMessage show={showErrors} text={erros.descricao} />
         </View>
 
-        <View style={styles.formControl}>
-          <View style={styles.selectInput}>
-            <SelectList
-              data={data}
-              setSelected={setCategoria}
-              placeholder="Categoria"
-              search={false}
-            />
-          </View>
-          <ErrorMessage show={showErrors} text={erros.categoria} />
-        </View>
-
         <View style={styles.botaoPublicar}>
           <CustomButton
-            title="Publicar"
+            title="Responder"
             callbackFn={publicar}
             showLoading={loading}
           />
@@ -196,7 +164,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   formControl: {
-    marginBottom: 15,
+    marginBottom: 3,
   },
   inputLabel: {
     marginBottom: 10,

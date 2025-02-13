@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import AntDesing from "react-native-vector-icons/AntDesign";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   IPublicacao,
@@ -41,11 +41,9 @@ export default function VisualizarPublicacao() {
 
   const mapIdUsuarioReporte = (payload: string) => {
     if (!payload) return [];
-
     return payload.split(",").map((item) => Number(item));
   };
 
-  // Verifique como você obtém a publicação dos parâmetros
   const getPublicacaoFromParams = () => {
     const payload: IPublicacaoUsuario = {
       ...params,
@@ -76,10 +74,10 @@ export default function VisualizarPublicacao() {
         id: pub.id,
         titulo: pub.titulo,
         descricao: pub.descricao,
-        dataHora: pub.dataHora.toString(), // Converte para string se necessário
+        dataHora: pub.dataHora.toString(),
         categoria: pub.categoria,
         idUsuario: pub.idUsuario,
-        idUsuarioReporte: pub.idUsuarioReporte.join(","), // Converte o array para string se necessário
+        idUsuarioReporte: pub.idUsuarioReporte.join(","),
       },
     });
   };
@@ -168,8 +166,20 @@ export default function VisualizarPublicacao() {
     <View>
       <View style={styles.header}>
         <BackButton route="private/tabs/forum" />
-
         <Text style={styles.tituloheader}>Visualizar publicação</Text>
+      </View>
+
+      <View style={styles.answers}>
+        <Text style={styles.resposta}>Respostas:</Text>
+        {idUsuario && publicacao?.idUsuario != idUsuario && (
+          <Pressable
+            onPress={() => router.push("/private/pages/responderPublicacao")}
+            style={styles.botaoResponder}
+            testID="answerBtn"
+          >
+            <Text style={{ color: "white", fontWeight: "bold", marginLeft: 3 }}>Responder</Text>
+          </Pressable>
+        )}
       </View>
 
       <ScrollView>
@@ -212,7 +222,7 @@ export default function VisualizarPublicacao() {
                 !publicacao?.idUsuarioReporte.includes(idUsuario) && (
                   <>
                     <Text style={styles.actionButtonText}>Reportar</Text>
-                    <AntDesing name="warning" size={18} color="white" />
+                    <AntDesign name="warning" size={18} color="white" />
                   </>
                 )}
             </Pressable>
@@ -228,10 +238,9 @@ export default function VisualizarPublicacao() {
             </Pressable>
           )}
         </View>
-        
 
-        {publicacao && <PublicacaoVisualizar item={publicacao}/>}
-        </ScrollView>
+        {publicacao && <PublicacaoVisualizar item={publicacao} />}
+      </ScrollView>
 
       <ModalConfirmation
         visible={modalVisibleApagar}
@@ -282,6 +291,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  answers: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "absolute",
+    marginTop: 0,
+    bottom: -60,
+    right: 10,
+    zIndex: 10,
+  },
   tituloheader: {
     fontWeight: "bold",
     color: "white",
@@ -323,14 +342,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 5,
-    marginRight: 15,
-    marginLeft: 15,
-    marginTop: 5,
+    marginRight: 25,
+    marginLeft: 90,
+    marginTop: 0,
     borderRadius: 12,
     width: "auto",
-    right: 0,
-    shadowColor: "#333",
-    shadowOffset: { width: 0, height: 1 },
+    right: -10,
+    shadowColor: "#0000000",
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 2,
   },
@@ -350,8 +369,8 @@ const styles = StyleSheet.create({
   descricao: {
     fontSize: 14,
     marginTop: 25,
-    lineHeight: 20, 
-    color: "#000000", 
-    textAlign: "justify", 
+    lineHeight: 20,
+    color: "#000000",
+    textAlign: "justify",
   },
 });

@@ -1,52 +1,58 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { IDenuncia, IPublicacaoUsuario } from "../interfaces/forum.interface";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFoto } from "../shared/helpers/photo.helper";
-
-interface IProps {
-  item: IPublicacaoUsuario;
-}
+import { getAllComentarios, postComentario, deleteComentarioById } from "../services/forum.service";
+import { IComentario, IComentarioBody } from "../interfaces/forum.interface";
+import { IDenuncia } from "../interfaces/forum.interface";
 
 const URL_DENUNCIAS = `${process.env.EXPO_PUBLIC_API_URL}:${process.env.EXPO_PUBLIC_API_FORUM_PORT}/api/forum/denuncias`;
 
-export default function PublicacaoVisualizar({ item: itemPublicacao }: IProps) {
+interface IProps {
+  item: any;
+  token: string;
+}
+
+export default function PublicacaoVisualizar({ item, token }: IProps) {
+  const [comentarios, setComentarios] = useState<IComentario[]>([]);
+  const [novoComentario, setNovoComentario] = useState("");
   const [denuncias, setDenuncias] = useState<{ [idUsuario: number]: IDenuncia[] }>({});
-  const [token, setToken] = useState("");
 
   useEffect(() => {
-    const getDenuncias = async () => {
-      const token = await AsyncStorage.getItem("token");
+    carregarComentarios(item.id);
+    carregarDenuncias(item.id);
+  }, [item.id]);
 
-      if (!token) {
-        console.error("Token não encontrado.");
-        return;
+  const carregarComentarios = async (publicacaoId: number) => {
+    try {
+      const response = await getAllComentarios(publicacaoId);
+      if (response.data) {
+        setComentarios(response.data);
       }
+    } catch (error) {
+      console.error("Erro ao carregar comentários", error);
+    }
+  };
 
-      setToken(token);
+  const carregarDenuncias = async (publicacaoId: number) => {
+    try {
+      const response = await fetch(`${URL_DENUNCIAS}/byPublicacaoId/${publicacaoId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      try {
-        const response = await fetch(`${URL_DENUNCIAS}/byPublicacaoId/${itemPublicacao.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const dataDenuncias = await response.json();
 
-        const dataDenuncias = await response.json();
-
-        if (!Array.isArray(dataDenuncias.data)) {
-          console.error("Erro ao buscar denúncias:", dataDenuncias);
-          return;
-        }
-
-        // Agrupar denúncias por usuário
+      if (Array.isArray(dataDenuncias.data)) {
         const groupedDenuncias = dataDenuncias.data.reduce(
           (acc: { [idUsuario: number]: IDenuncia[] }, denuncia: IDenuncia) => {
-            if (denuncia.idUsuario !== undefined && !acc[denuncia.idUsuario]) {
-              acc[denuncia.idUsuario] = [];
-            }
             if (denuncia.idUsuario !== undefined) {
+              if (!acc[denuncia.idUsuario]) {
+                acc[denuncia.idUsuario] = [];
+              }
               acc[denuncia.idUsuario].push(denuncia);
             }
             return acc;
@@ -55,13 +61,51 @@ export default function PublicacaoVisualizar({ item: itemPublicacao }: IProps) {
         );
 
         setDenuncias(groupedDenuncias);
-      } catch (error) {
-        console.error("Erro ao buscar denúncias:", error);
       }
-    };
+    } catch (error) {
+      console.error("Erro ao buscar denúncias:", error);
+    }
+  };
 
-    getDenuncias();
-  }, []);
+  const handleAdicionarComentario = async () => {
+    if (novoComentario.trim()) {
+      const comentarioBody: IComentarioBody = {
+        idUsuario: Number(item.idUsuario),
+        publicacaoId: Number(item.id),
+        conteudo: novoComentario,
+        dataHora: new Date().toISOString(),
+      };
+
+      if (!comentarioBody.conteudo) {
+        alert("O comentario não pode estar vazio!");
+        return;
+      }
+
+      if (isNaN(comentarioBody.idUsuario) || isNaN(comentarioBody.publicacaoId)) {
+        console.error("Erro: o idUsuario ou o idPublicacao não são numeros");
+        return;
+      }
+
+      try {
+        const response = await postComentario(comentarioBody, token);
+        if (response.data) {
+          setComentarios([...comentarios, response.data]);
+          setNovoComentario("");
+        }
+      } catch (error) {
+        console.error("Erro ao adicionar comentário", error);
+      }
+    }
+  };
+
+  const handleDeletarComentario = async (idComentario: number) => {
+    try {
+      await deleteComentarioById(idComentario, token);
+      setComentarios(comentarios.filter((comentario) => comentario.id !== idComentario));
+    } catch (error) {
+      console.error("Erro ao deletar comentário", error);
+    }
+  };
 
   const getFormattedDate = (payload: Date | string): string => {
     const date = new Date(payload);
@@ -71,17 +115,18 @@ export default function PublicacaoVisualizar({ item: itemPublicacao }: IProps) {
   return (
     <View style={styles.postContainer}>
       <View style={styles.userInfo}>
-        {getFoto(itemPublicacao.foto)}
-        <Text style={styles.username}>{itemPublicacao.nome || "Usuário deletado"}</Text>
+        {getFoto(item.foto)}
+        <Text style={styles.username}>{item.nome || "Usuário deletado"}</Text>
       </View>
-      <Text style={styles.titulo}>{itemPublicacao.titulo}</Text>
-      <Text style={styles.descricao}>{itemPublicacao.descricao}</Text>
+      <Text style={styles.titulo}>{item.titulo}</Text>
+      <Text style={styles.descricao}>{item.descricao}</Text>
       <View style={styles.underInfo}>
-        <Text style={styles.categoria}>{itemPublicacao.categoria}</Text>
-        <Text style={styles.date}>{getFormattedDate(itemPublicacao.dataHora)}</Text>
+        <Text style={styles.categoria}>{item.categoria}</Text>
+        <Text style={styles.date}>{getFormattedDate(item.dataHora)}</Text>
       </View>
-      <View style={styles.secondUnderInfo}>
-        {itemPublicacao.idUsuarioReporte && itemPublicacao.idUsuarioReporte.length > 0 && (
+
+      {Object.keys(denuncias).length > 0 && (
+        <View style={styles.secondUnderInfo}>
           <View style={styles.reports}>
             <View style={styles.reportsContainer}>
               <View style={{ flexDirection: "row", alignItems: "center", justifyContent: 'center', marginBottom: 5, marginTop: 10, gap: 7 }}>
@@ -106,7 +151,32 @@ export default function PublicacaoVisualizar({ item: itemPublicacao }: IProps) {
               ))}
             </View>
           </View>
-        )}
+        </View>
+      )}
+
+      <View style={styles.commentsSection}>
+        <Text style={styles.commentsTitle}>Comentários</Text>
+        <FlatList
+          data={comentarios}
+          keyExtractor={(comentario) => comentario.id.toString()}
+          renderItem={({ item: comentario }) => (
+            <View style={styles.commentContainer}>
+              <Text style={styles.commentText}>
+                <Text style={styles.commentUser}>{comentario.usuario?.nome || "Usuario Desconhecido"}:</Text> {comentario.conteudo}
+              </Text>
+              <TouchableOpacity onPress={() => handleDeletarComentario(comentario.id)}>
+                <Icon name="delete" size={18} color="red" />
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Adicione um comentário..."
+          value={novoComentario}
+          onChangeText={setNovoComentario}
+        />
+        <Button title="Comentar" onPress={handleAdicionarComentario} />
       </View>
     </View>
   );
@@ -143,7 +213,7 @@ const styles = StyleSheet.create({
   descricao: {
     fontSize: 14,
     marginTop: 20,
-    color: "#0000000",
+    color: "#000000",
   },
   underInfo: {
     flexDirection: "row",
@@ -165,7 +235,6 @@ const styles = StyleSheet.create({
   reportsText: {
     fontSize: 14,
     color: "#FF8800",
-    textAlign: "center",
   },
   reportsContainer: {
     flexDirection: "column",
@@ -204,5 +273,31 @@ const styles = StyleSheet.create({
   date: {
     color: "#000",
     fontSize: 14,
+  },
+  commentsSection: {
+    marginTop: 20,
+  },
+  commentsTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  commentContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 5,
+  },
+  commentUser: {
+    fontWeight: "bold",
+  },
+  commentText: {
+    flex: 1,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 8,
+    marginTop: 10,
   },
 });
