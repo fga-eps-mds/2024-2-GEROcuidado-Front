@@ -24,10 +24,10 @@ jobs:
        # run: yarn eslint . --format json --output-file reports/eslint-report.json
 
       - name: Test and coverage
-        run: |
-          (docker compose -f docker-compose.test.yml up -V --force-recreate --build --abort-on-container-exit --exit-code-from gerocuidado-front-test)  || true
+        run:
+          # (docker compose -f docker-compose.test.yml up -V --force-recreate --build --abort-on-container-exit --exit-code-from gerocuidado-front-test)  || true
       #  run: npm test 
-      # TZ=UTC npm jest --passWithNoTests --no-cache --runInBand --detectOpenHandles --coverage --colors
+         TZ=UTC npm jest --passWithNoTests --no-cache --runInBand --detectOpenHandles --coverage --colors
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v4
