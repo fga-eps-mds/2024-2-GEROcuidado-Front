@@ -165,6 +165,7 @@ export default function Login() {
     try {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       // Aqui acontece a sincronização com o backend
       await syncDatabaseWithServer();
 
@@ -208,6 +209,16 @@ export default function Login() {
       ).fetch();
 >>>>>>> Stashed changes
 
+=======
+      console.log("Buscando usuário no banco...");
+      const usersCollection = database.get('usuario') as Collection<Usuario>;
+
+      // Verifica se o usuário já está presente no banco local
+      const queryResult = await usersCollection.query(
+        Q.where('id', id.toString())
+      ).fetch();
+
+>>>>>>> Stashed changes
 =======
       console.log("Buscando usuário no banco...");
       const usersCollection = database.get('usuario') as Collection<Usuario>;

@@ -59,6 +59,7 @@ export default function Registros() {
     if (!idoso) return;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   
     try {
       setLoading(true);
@@ -90,6 +91,13 @@ export default function Registros() {
     try {
       setLoading(true);
 >>>>>>> Stashed changes
+=======
+    
+    const metricaCollection = database.get('metrica');
+    
+    try {
+      setLoading(true);
+>>>>>>> Stashed changes
       const idosoMetricas = await metricaCollection.query(Q.where('idoso_id', idoso.id)).fetch();
       
       // Map the WatermelonDB models to your IMetrica interface
@@ -110,7 +118,45 @@ export default function Registros() {
         text2: "Ocorreu um erro ao buscar as métricas.",
       });
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const syncMetricasWithServer = async () => {
+    try {
+      setLoading(true);
+      const metricaCollection = database.get('metrica');
+      const metricaRecords = await metricaCollection.query(Q.where('isSynced', Q.eq(false))).fetch();
+
+      if (metricaRecords.length > 0) {
+        // Sincronizar métricas com o servidor (Função fictícia)
+        await syncDatabaseWithServer(metricaRecords);
+
+        // Atualiza o banco local marcando as métricas como sincronizadas
+        await database.write(async () => {
+          for (let record of metricaRecords) {
+            await record.update(item => {
+              item.isSynced = true;
+            });
+          }
+        });
+
+        Toast.show({
+          type: 'success',
+          text1: 'Métricas sincronizadas com sucesso!',
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao sincronizar métricas',
+        text2: error.message,
+      });
+>>>>>>> Stashed changes
     } finally {
       setLoading(false);
     }
@@ -262,6 +308,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 =======
     justifyContent: "space-between",
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   },
   nomeUsuario: {
@@ -273,6 +322,7 @@ const styles = StyleSheet.create({
   negrito: {
     fontWeight: "bold",
   },
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
   cardMetrica: {
@@ -299,6 +349,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginVertical: 10,
   },
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======

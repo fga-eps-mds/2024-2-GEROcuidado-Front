@@ -32,8 +32,12 @@ import Rotina from "../../model/Rotina";
 import { getFoto } from "../../shared/helpers/photo.helper";
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { all } from "axios";
 
+=======
+import NetInfo from '@react-native-community/netinfo'; // Importando NetInfo para verificar a conexão
+>>>>>>> Stashed changes
 =======
 import NetInfo from '@react-native-community/netinfo'; // Importando NetInfo para verificar a conexão
 >>>>>>> Stashed changes
@@ -93,6 +97,7 @@ export default function Rotinas() {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       // const allIdosoRotinas = await rotinaCollection.query(
       //   Q.where('idoso_id', idoso.id)
       // ).fetch();
@@ -103,6 +108,8 @@ export default function Rotinas() {
       //     const date = selectedDate.toDate();
       //     const weekday = date.getDay().toString();
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
       // Filtra as rotinas do idoso localmente
@@ -145,6 +152,9 @@ export default function Rotinas() {
     }
   };
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -197,11 +207,14 @@ export default function Rotinas() {
   useEffect(() => {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     getRotinas()
   },
     [idoso, selectedDate]
   );
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     if (idoso) {
@@ -217,6 +230,9 @@ export default function Rotinas() {
     }
   }, [idoso, selectedDate]);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
