@@ -30,7 +30,7 @@ export const postPublicacao = async (
 
   const json = await response.json();
 
-  if (response.status !== 201) {
+  if (!response.ok) {
     throw new Error(json.message as string);
   }
 

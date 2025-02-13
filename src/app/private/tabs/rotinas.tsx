@@ -32,6 +32,7 @@ import database from "../../db";
 import { Collection, Q } from "@nozbe/watermelondb";
 import Rotina from "../../model/Rotina";
 import { getFoto } from "../../shared/helpers/photo.helper";
+import { all } from "axios";
 
 export default function Rotinas() {
   moment.locale("pt-br");
@@ -81,25 +82,32 @@ export default function Rotinas() {
     setLoading(true);
 
     try {
-      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+      // const rotinaCollection = database.get('rotina') as Collection<Rotina>;
 
-      const allIdosoRotinas = await rotinaCollection.query(
-        Q.where('idoso_id', idoso.id)
-      ).fetch();
+      // const allIdosoRotinas = await rotinaCollection.query(
+      //   Q.where('idoso_id', idoso.id)
+      // ).fetch();
 
       // TODO: tenta fazer essa filtragem direto na query meu nobre
-      const filteredRotinas = allIdosoRotinas.filter((rotina) => {
-        if (rotina.dias.length > 0) {
-          const date = selectedDate.toDate();
-          const weekday = date.getDay().toString();
+      // const filteredRotinas = allIdosoRotinas.filter((rotina) => {
+      //   if (rotina.dias.length > 0) {
+      //     const date = selectedDate.toDate();
+      //     const weekday = date.getDay().toString();
 
-          return rotina.dias.includes(weekday) && rotina.dataHora < date;
-        } else {
-          return true;
-        }
-      });
+      //     return rotina.dias.includes(weekday) && rotina.dataHora < date;
+      //   } else {
+      //     return true;
+      //   }
+      // });
 
-      setRotinas(filteredRotinas);
+      const allRotinas = await getAllRotina({
+        idIdoso: idoso.id,
+        dataHora: selectedDate.toDate().toString(),
+      }, { column: "dataHora", dir: "ASC" });
+
+      // setRotinas(filteredRotinas);
+
+      if (Array.isArray(allRotinas) && allRotinas.length > 0) setRotinas(allRotinas);
 
     } finally {
       setLoading(false);
@@ -116,8 +124,8 @@ export default function Rotinas() {
   useEffect(() => handleUser(), []);
   useEffect(() => getIdoso(), []);
   useEffect(() => {
-      getRotinas()
-    },
+    getRotinas()
+  },
     [idoso, selectedDate]
   );
 
@@ -139,7 +147,7 @@ export default function Rotinas() {
           <View>
             <CalendarStrip
               scrollerPaging={true}
-              scrollable={true}
+              scrollable={false}
               style={styles.Calendar}
               calendarHeaderStyle={{ color: "#fff" }}
               dateNumberStyle={{ color: "#fff" }}
