@@ -5,7 +5,7 @@ import Idoso from './Idoso';
 
 export default class Usuario extends Model {
   static table = 'usuario';
-
+  
   @text('nome') nome!: string;
   @field('foto') foto!: string;
   @text('email') email!: string;

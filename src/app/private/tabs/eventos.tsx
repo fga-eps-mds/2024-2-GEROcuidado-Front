@@ -4,7 +4,6 @@ import { IUser } from "../../interfaces/user.interface";
 import NaoAutenticado from "../../components/NaoAutenticado";
 import IdosoNaoSelecionado from "../../components/IdosoNaoSelecionado";
 import CalendarStrip from "react-native-calendar-strip";
-
 import {
   Pressable,
   StyleSheet,
@@ -17,7 +16,6 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
 import { IEvento, IEventoFilter, IOrder } from "../../interfaces/evento.interface";
 import CardEvento from "../../components/CardEvento";
-import { getAllEvento } from "../../services/evento.service";
 import Toast from "react-native-toast-message";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
@@ -80,17 +78,13 @@ export default function Eventos() {
     try {
       const eventoCollection = database.get('evento') as Collection<Evento>;
 
-      // TODO: Consulta com defeito, arrumar um jeito de filtar com ela
-      /*const eventoFiltrados = await eventoCollection.query(
-        Q.where('idoso_id', idoso.id),
-      ).fetch();*/
-
+      // TODO: Consulta com defeito, arrumar um jeito de filtrar com ela
       const todosEventos = await eventoCollection.query().fetch();
 
       const startOfDay = selectedDate.startOf('day').toISOString();
       const endOfDay = selectedDate.endOf('day').toISOString();
 
-      // Metodo menos eficiente, assim que resolvido deve ser descontinuado
+      // Método menos eficiente, assim que resolvido deve ser descontinuado
       const eventosFiltrados = todosEventos.filter(evento => {
         const eventoDataHora = new Date(evento.dataHora).toISOString(); 
         return evento.idIdoso === idoso.id && eventoDataHora >= startOfDay && eventoDataHora <= endOfDay;

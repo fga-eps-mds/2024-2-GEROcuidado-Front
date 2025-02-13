@@ -18,6 +18,24 @@ import { syncDatabaseWithServer } from "../services/watermelon.service";
 import Usuario from "../model/Usuario";
 import ForgetButton from "../components/ForgetButton";
 
+// Função para excluir registros locais
+const excluirTodosOsRegistros = async () => {
+  try {
+    // Inicia uma transação de gravação (write)
+    await database.write(async () => {
+      const usuariosCollection = database.get('usuario');
+      await usuariosCollection.query().destroyAllPermanently();  // Apaga todos os usuários locais
+  
+      const idososCollection = database.get('idoso');
+      await idososCollection.query().destroyAllPermanently();  // Apaga todos os idosos locais
+    });
+  
+    console.log("Todos os registros locais foram excluídos.");
+  } catch (error) {
+    console.error("Erro ao excluir registros locais:", error);
+  }
+};
+
 interface IErrors {
   email?: string;
   senha?: string;
@@ -33,7 +51,7 @@ export default function Login() {
   const [erros, setErros] = useState<IErrors>({});
   const [showErrors, setShowErrors] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
-  
+
   const login = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
@@ -45,22 +63,29 @@ export default function Login() {
     try {
       setShowLoading(true);
       console.log("Iniciando o login...");
-      console.log(BASE_URL);
       const response = await loginUser(body);
       console.log("Resposta do login:", response);
 
       const token = response.data;
       console.log("Token recebido:", token);
 
+      // Passo 1: Sincronizar dados com o servidor
+      await syncDatabaseWithServer();
+
+      // Passo 2: Excluir dados locais APENAS após a sincronização
+      await excluirTodosOsRegistros();
+
+      // Passo 3: Processar e armazenar o usuário
       await handleUser(token);
+
+      // Redireciona para a próxima página
       router.push("/private/pages/listarIdosos");
     } catch (err) {
       console.error("Erro durante o login:", err);
-      const error = err as { message: string };
       Toast.show({
         type: "error",
         text1: "Erro!",
-        text2: error.message,
+        text2: err.message,
       });
     } finally {
       setShowLoading(false);
@@ -111,7 +136,6 @@ export default function Login() {
     handleErrors();
   }, [email, senha]);
 
-
   const handleUser = async (token: string) => {
     try {
       console.log("Processando o token para obter o usuário...");
@@ -126,7 +150,6 @@ export default function Login() {
         console.log("Token decodificado:", userInfo);
       } catch (decodeError) {
         console.error("Erro ao decodificar o token:", decodeError);
-        // Trate o erro conforme necessário, talvez exiba uma mensagem para o usuário
       }
 
       if (userInfo) {
@@ -140,6 +163,7 @@ export default function Login() {
 
   const getUser = async (id: number, token: string) => {
     try {
+<<<<<<< Updated upstream
       // Aqui acontece a sincronização com o backend
       await syncDatabaseWithServer();
 
@@ -173,28 +197,37 @@ export default function Login() {
         //   await AsyncStorage.setItem("usuario", JSON.stringify(
         //     userTransformed
         //   ));
+=======
+      console.log("Buscando usuário no banco...");
+      const usersCollection = database.get('usuario') as Collection<Usuario>;
 
+      // Verifica se o usuário já está presente no banco local
+      const queryResult = await usersCollection.query(
+        Q.where('id', id.toString())
+      ).fetch();
+>>>>>>> Stashed changes
+
+      if (queryResult.length === 0) {
+        // Se não encontrar o usuário localmente, realiza a requisição ao servidor
         const response = await getUserById(id, token);
+        const responseUser = response.data as IUser & { foto: { data: Uint8Array } };
 
-        const responseUser = response.data as IUser & {
-          foto: { data: Uint8Array };
-        };
+        // Armazena o usuário no banco local
+        await database.write(async () => {
+          const usuariosCollection = database.get('usuario');
+          await usuariosCollection.create((usuario) => {
+            usuario.id = responseUser.id;
+            usuario.nome = responseUser.nome;
+            usuario.email = responseUser.email;
+            usuario.foto = responseUser.foto.data;
+          });
+        });
 
-        await AsyncStorage.setItem("usuario", JSON.stringify(
-          responseUser
-        ));
-
-        // TODO: Remove this in the future
-        // console.log("Usuario buscado diretamente da API...");
-        // console.log(await usersCollection.query().fetch());
-
+        // Armazena o usuário também no AsyncStorage
         await AsyncStorage.setItem("usuario", JSON.stringify(responseUser));
-
-      } catch (err) {
-        console.log("Erro ao buscar usuário no banco local:", err);
+      } else {
+        console.log("Usuário já existe localmente.");
       }
-
-
     } catch (err) {
       console.error("Erro ao obter o usuário:", err);
       const error = err as { message: string };
@@ -272,7 +305,7 @@ export default function Login() {
         </View>
       </ScrollView>
     </View>
-  );  
+  );
 }
 
 const styles = StyleSheet.create({

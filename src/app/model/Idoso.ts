@@ -12,7 +12,8 @@ export default class Idoso extends Model {
   @text('telefoneResponsavel') telefoneResponsavel!: string;
   @text('descricao') descricao!: string;
   @field('foto') foto!: string;
-  @field('user_id') userId!: string;
+  @field('user_id') userId!: number;
+  @field('sincronizado') sincronizado!: boolean;
 
   @relation('usuario', 'user_id') user!: Usuario;
 

@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, Image, Dimensions } from "react-native";
+import { View, StyleSheet, Text, Dimensions, FlatList, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "../../interfaces/user.interface";
 import NaoAutenticado from "../../components/NaoAutenticado";
 import { IIdoso } from "../../interfaces/idoso.interface";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import IdosoNaoSelecionado from "../../components/IdosoNaoSelecionado";
 import CardMetrica from "../../components/CardMetrica";
-import { FlatList } from "react-native";
-import { IMetrica, IMetricaFilter } from "../../interfaces/metricas.interface";
 import { router } from "expo-router";
-import { Pressable } from "react-native";
 import { getAllMetrica } from "../../services/metrica.service";
 import Toast from "react-native-toast-message";
 import database from "../../db";
 import { Q } from "@nozbe/watermelondb";
-import { hasFoto } from "../../shared/helpers/foto.helper";
+import { NetInfo } from "@react-native-community/netinfo";
+import { IMetrica } from "../../interfaces/metricas.interface";
 import { getFoto } from "../../shared/helpers/photo.helper";
+import { syncDatabaseWithServer } from "../../services/watermelon.service";
+
 
 export default function Registros() {
   const [user, setUser] = useState<IUser | undefined>(undefined);
@@ -58,6 +57,7 @@ export default function Registros() {
 
   const getMetricas = async () => {
     if (!idoso) return;
+<<<<<<< Updated upstream
   
     try {
       setLoading(true);
@@ -76,13 +76,90 @@ export default function Registros() {
       if (Array.isArray(response) && response.length > 0) {
         setMetricas(response);
       }
+=======
+    
+    const metricaCollection = database.get('metrica');
+    
+    try {
+      setLoading(true);
+      const idosoMetricas = await metricaCollection.query(Q.where('idoso_id', idoso.id)).fetch();
+      
+      // Map the WatermelonDB models to your IMetrica interface
+      const metricasData: IMetrica[] = idosoMetricas.map((metrica: any) => ({
+        id: metrica._raw.id,
+        idIdoso: metrica._raw.idoso_id,
+        categoria: metrica._raw.categoria,
+        valorMaximo: metrica._raw.valorMaximo,
+      }));
+      
+      setMetricas(metricasData);
+>>>>>>> Stashed changes
     } catch (err) {
       console.log("Erro ao obter metricas do idoso:", err);
+      Toast.show({
+        type: "error",
+        text1: "Erro ao carregar métricas.",
+        text2: "Ocorreu um erro ao buscar as métricas.",
+      });
     } finally {
       setLoading(false);
     }
   };
 
+  const syncMetricasWithServer = async () => {
+    try {
+      setLoading(true);
+      const metricaCollection = database.get('metrica');
+      const metricaRecords = await metricaCollection.query(Q.where('isSynced', Q.eq(false))).fetch();
+
+      if (metricaRecords.length > 0) {
+        // Sincronizar métricas com o servidor (Função fictícia)
+        await syncDatabaseWithServer(metricaRecords);
+
+        // Atualiza o banco local marcando as métricas como sincronizadas
+        await database.write(async () => {
+          for (let record of metricaRecords) {
+            await record.update(item => {
+              item.isSynced = true;
+            });
+          }
+        });
+
+        Toast.show({
+          type: 'success',
+          text1: 'Métricas sincronizadas com sucesso!',
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao sincronizar métricas',
+        text2: error.message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+<<<<<<< Updated upstream
+=======
+  useEffect(() => handleUser(), []);
+  useEffect(() => getIdoso(), []);
+  useEffect(() => {
+    if (idoso) {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          //console.log('Conectado à internet');
+          syncMetricasWithServer();
+        } else {
+          //console.log('Sem conexão');
+          getMetricas();
+        }
+      });
+    }
+  }, [idoso]);
+
+>>>>>>> Stashed changes
   return (
     <>
       
@@ -107,15 +184,19 @@ export default function Registros() {
       </Pressable>
 
       <View style={styles.verMetrica}>
-        <FlatList
-          data={metricas}
-          numColumns={2}
-          renderItem={({ item }) => (
-            <Pressable onPress={() => visualizarMetrica(item)}>
-              <CardMetrica item={item} />
-            </Pressable>
-          )}
-        />
+        {loading && <Text>Carregando métricas...</Text>}
+        {!loading && (
+          <FlatList
+            data={metricas}
+            numColumns={2}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => visualizarMetrica(item)}>
+                <CardMetrica item={item} />
+              </Pressable>
+            )}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        )}
       </View>
     </>
   );
@@ -128,27 +209,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-
   verMetrica: {
     alignSelf: "center",
     height: Dimensions.get("window").height - 230,
     justifyContent: "center",
-  },
-
-  fotoPerfil: {
-    width: 60,
-    aspectRatio: 1,
-    borderRadius: 100,
-  },
-  semFoto: { position: "relative", backgroundColor: "#EFEFF0" },
-  semFotoIcon: {
-    position: "absolute",
-    right: "38%",
-    bottom: "38%",
-    opacity: 0.4,
-    margin: "auto",
-    alignSelf: "center",
-    zIndex: 1,
   },
   nomeUsuario: {
     color: "#FFFFFF",
@@ -159,6 +223,7 @@ const styles = StyleSheet.create({
   negrito: {
     fontWeight: "bold",
   },
+<<<<<<< Updated upstream
   cardMetrica: {
     width: "40%",
     margin: 10,
@@ -183,4 +248,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginVertical: 10,
   },
+=======
+>>>>>>> Stashed changes
 });

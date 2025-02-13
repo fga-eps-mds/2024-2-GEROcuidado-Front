@@ -4,6 +4,8 @@ import { IUser } from "../../interfaces/user.interface";
 import NaoAutenticado from "../../components/NaoAutenticado";
 import IdosoNaoSelecionado from "../../components/IdosoNaoSelecionado";
 import CalendarStrip from "react-native-calendar-strip";
+import { syncDatabaseWithServer } from "../../services/watermelon.service";
+
 
 import {
   Pressable,
@@ -15,11 +17,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
-import {
-  IOrder,
-  IRotina,
-  IRotinaFilter,
-} from "../../interfaces/rotina.interface";
+import { IOrder, IRotina } from "../../interfaces/rotina.interface";
 import CardRotina from "../../components/CardRotina";
 import { getAllRotina } from "../../services/rotina.service";
 import Toast from "react-native-toast-message";
@@ -32,8 +30,12 @@ import database from "../../db";
 import { Collection, Q } from "@nozbe/watermelondb";
 import Rotina from "../../model/Rotina";
 import { getFoto } from "../../shared/helpers/photo.helper";
+<<<<<<< Updated upstream
 import { all } from "axios";
 
+=======
+import NetInfo from '@react-native-community/netinfo'; // Importando NetInfo para verificar a conexão
+>>>>>>> Stashed changes
 
 export default function Rotinas() {
   moment.locale("pt-br");
@@ -85,6 +87,7 @@ export default function Rotinas() {
     try {
       // const rotinaCollection = database.get('rotina') as Collection<Rotina>;
 
+<<<<<<< Updated upstream
       // const allIdosoRotinas = await rotinaCollection.query(
       //   Q.where('idoso_id', idoso.id)
       // ).fetch();
@@ -94,6 +97,18 @@ export default function Rotinas() {
       //   if (rotina.dias.length > 0) {
       //     const date = selectedDate.toDate();
       //     const weekday = date.getDay().toString();
+=======
+      // Filtra as rotinas do idoso localmente
+      const allIdosoRotinas = await rotinaCollection.query(
+        Q.where('idoso_id', idoso.id)
+      ).fetch();
+
+      // Filtra as rotinas do dia selecionado
+      const filteredRotinas = allIdosoRotinas.filter((rotina) => {
+        if (rotina.dias.length > 0) {
+          const date = selectedDate.toDate();
+          const weekday = date.getDay().toString();
+>>>>>>> Stashed changes
 
       //     return rotina.dias.includes(weekday) && rotina.dataHora < date;
       //   } else {
@@ -101,6 +116,7 @@ export default function Rotinas() {
       //   }
       // });
 
+<<<<<<< Updated upstream
       const allRotinas = await getAllRotina({
         idIdoso: idoso.id,
         dataHora: selectedDate.toDate().toString(),
@@ -109,7 +125,50 @@ export default function Rotinas() {
       // setRotinas(filteredRotinas);
 
       if (Array.isArray(allRotinas) && allRotinas.length > 0) setRotinas(allRotinas);
+=======
+      setRotinas(filteredRotinas);
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: "Erro ao carregar as rotinas.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+>>>>>>> Stashed changes
 
+  const syncRotinasWithServer = async () => {
+    try {
+      setLoading(true);
+      const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+      const rotinaRecords = await rotinaCollection.query(Q.where('isSynced', Q.eq(false))).fetch();
+
+      if (rotinaRecords.length > 0) {
+        // Sincronizar rotinas com o servidor (Função fictícia)
+        await syncDatabaseWithServer(rotinaRecords);
+
+        // Atualiza o banco local marcando as rotinas como sincronizadas
+        await database.write(async () => {
+          for (let record of rotinaRecords) {
+            await record.update(item => {
+              item.isSynced = true;
+            });
+          }
+        });
+
+        Toast.show({
+          type: 'success',
+          text1: 'Rotinas sincronizadas com sucesso!',
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao sincronizar rotinas',
+        text2: error.message,
+      });
     } finally {
       setLoading(false);
     }
@@ -124,11 +183,27 @@ export default function Rotinas() {
 
   useEffect(() => handleUser(), []);
   useEffect(() => getIdoso(), []);
+
   useEffect(() => {
+<<<<<<< Updated upstream
     getRotinas()
   },
     [idoso, selectedDate]
   );
+=======
+    if (idoso) {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          //console.log('Conectado à internet');
+          syncRotinasWithServer();
+        } else {
+          //console.log('Sem conexão');
+          getRotinas();
+        }
+      });
+    }
+  }, [idoso, selectedDate]);
+>>>>>>> Stashed changes
 
   return (
     <>

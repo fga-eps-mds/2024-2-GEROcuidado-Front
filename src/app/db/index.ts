@@ -15,6 +15,7 @@ import Evento from '../model/Evento'
 // First, create the adapter to the underlying database:
 const adapter = new SQLiteAdapter({
   schema,
+  migrations,
   // (You might want to comment it out for development purposes -- see Migrations documentation)
   // (optional database name or file system path)
   // dbName: 'myapp',

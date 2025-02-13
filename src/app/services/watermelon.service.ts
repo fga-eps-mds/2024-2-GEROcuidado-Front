@@ -38,15 +38,15 @@ export const syncDatabaseWithServer = async (): Promise<void> => {
       });
 
       if (!response.ok) {
-        console.log("Sync was not ok", await response.text());
+        //console.log("Sync was not ok", await response.text());
         throw new Error(await response.text());
       }
 
       const { data: { changes, timestamp }, message } = await response.json();
 
-      // console.log(changes);
-      // console.log(timestamp);
-      // console.log(message);
+       //console.log("Resposta da API:", changes);
+       //console.log(timestamp);
+       //console.log(message);
 
       return { changes, timestamp }
     },

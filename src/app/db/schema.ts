@@ -2,7 +2,7 @@ import { appSchema, tableSchema } from '@nozbe/watermelondb';
 
 
 export default appSchema({
- version: 8,
+ version: 10,
  tables: [
    tableSchema({
     name: 'usuario',
@@ -25,9 +25,10 @@ export default appSchema({
       { name: 'telefoneResponsavel', type: 'string' },
       { name: 'descricao', type: 'string' },
       { name: 'foto', type: 'string' },
-      { name: 'user_id', type: 'string', isIndexed: true },
+      { name: 'user_id', type: 'number', isIndexed: true },
       { name: 'created_at', type: 'number' },
       { name: 'updated_at', type: 'number' },
+      { name: 'isSynced', type: 'boolean' },
     ],
   }),
   tableSchema({

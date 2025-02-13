@@ -1,31 +1,24 @@
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet, ScrollView } from "react-native";
-import Toast from "react-native-toast-message";
+import { View, TextInput, ScrollView, ToastAndroid } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign, Fontisto } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { SelectList } from "react-native-dropdown-select-list";
+import MaskInput, { Masks } from "react-native-mask-input";
 import BackButton from "../../components/BackButton";
 import ErrorMessage from "../../components/ErrorMessage";
 import CustomButton from "../../components/CustomButton";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { SelectList } from "react-native-dropdown-select-list";
+import UploadImageV2 from "../../components/UploadImageV2";
 import { ETipoSanguineo } from "../../interfaces/idoso.interface";
 import { postIdoso } from "../../services/idoso.service";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IUser } from "../../interfaces/user.interface";
-import MaskInput, { Masks } from "react-native-mask-input";
-import UploadImageV2 from "../../components/UploadImageV2";
-import { EMetricas } from "../../interfaces/metricas.interface";
-import { postMetrica } from "../../services/metrica.service";
 import database from "../../db";
 import Idoso from "../../model/Idoso";
-import { Collection, Q } from "@nozbe/watermelondb";
-import { ToastAndroid } from "react-native";
-import { useRouter } from "expo-router";
-import { IIdoso } from "../../interfaces/idoso.interface";
 import Usuario from "../../model/Usuario";
-import Metrica from "../../model/Metrica";
+import { Collection, Q } from "@nozbe/watermelondb";
 import { getTipoSanguineoOptions } from "../../shared/helpers/useNotification";
 import styles from "../../components/style/styles";
+<<<<<<< Updated upstream
 
 interface IErrors {
   nome?: string;
@@ -34,6 +27,10 @@ interface IErrors {
   telefoneResponsavel?: string;
   descricao?: string;
 }
+=======
+import { checkNetworkConnection } from "../../components/networkUtils";
+import { syncUnsyncedIdosos } from "../../components/syncService";
+>>>>>>> Stashed changes
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
@@ -42,15 +39,14 @@ const BASE_URL = `${API_URL}:${API_PORT}/api/usuario`;
 export default function CadastrarIdoso() {
   const [foto, setFoto] = useState<string | undefined>();
   const [nome, setNome] = useState<string>("");
-  const [tipoSanguineo, setTipoSanguineo] = useState<ETipoSanguineo>(ETipoSanguineo.AB_NEGATIVO);
+  const [tipoSanguineo, setTipoSanguineo] = useState<ETipoSanguineo | null>(null);
   const [telefoneResponsavel, setTelefoneResponsavel] = useState<string>("");
   const [dataNascimento, setDataNascimento] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
-  const [token, setToken] = useState<string>("");
-  const [erros, setErros] = useState<IErrors>({});
+  const [erros, setErros] = useState<any>({});
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [showLoading, setShowLoading] = useState<boolean>(false);
-  const [idUsuario, setIdUsuario] = useState<number | null>(null);
+  const [idUsuario, setIdUsuario] = useState<string | null>(null);
   const [maskedTelefoneResponsavel, setMaskedTelefoneResponsavel] = useState<string>("");
 
   const router = useRouter();
@@ -60,11 +56,20 @@ export default function CadastrarIdoso() {
       try {
         const response = await AsyncStorage.getItem("usuario");
         if (response) {
+<<<<<<< Updated upstream
           const usuario = JSON.parse(response) as IUser;
           // console.log("Usuário logado:", usuario);
           setIdUsuario(Number(usuario.id));
         } else {
           console.log("Usuário não encontrado no AsyncStorage.");
+=======
+          const usuario = JSON.parse(response);
+          if (usuario?.id) {
+            setIdUsuario(usuario.id.toString());
+          } else {
+            console.error("Usuário não encontrado no AsyncStorage.");
+          }
+>>>>>>> Stashed changes
         }
 
         const token = await AsyncStorage.getItem("token");
@@ -82,6 +87,7 @@ export default function CadastrarIdoso() {
     getIdUsuario();
   }, []);
 
+<<<<<<< Updated upstream
 
   useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
 
@@ -181,12 +187,95 @@ export default function CadastrarIdoso() {
   //     console.error("Erro ao salvar o idoso no banco local:", error);
   //   }
   // };
+=======
+  const salvarNoBancoLocal = async () => {
+    if (!idUsuario) {
+      console.error("Usuário não encontrado.");
+      return;
+    }
+
+    try {
+      const idosoCollection = database.get("idoso") as Collection<Idoso>;
+      const usersCollection = database.get("usuario") as Collection<Usuario>;
+      
+      const userQuery = await usersCollection.query(Q.where("id", idUsuario)).fetch();
+      if (userQuery.length === 0) {
+        console.error("Usuário não encontrado localmente.");
+        return;
+      }
+
+      if (!nome || !dataNascimento || !telefoneResponsavel || !tipoSanguineo) {
+        console.error("Campos obrigatórios faltando:", { nome, dataNascimento, telefoneResponsavel, tipoSanguineo });
+        return;
+      }
+      
+      console.log("Dados do idoso antes de salvar:", {
+        nome,
+        dataNascimento,
+        telefoneResponsavel,
+        descricao,
+        tipoSanguineo,  
+        userId: idUsuario,
+        foto,
+      });
+
+      await database.write(async () => {
+        const createdIdoso = await idosoCollection.create((idoso) => {
+          idoso.nome = nome;
+          idoso.dataNascimento = `${dataNascimento.split("/").reverse().join("-")}T12:00:00.000Z`;
+          idoso.telefoneResponsavel = telefoneResponsavel;
+          idoso.descricao = descricao;
+          idoso.tipoSanguineo = tipoSanguineo;
+          idoso.userId = Number(idUsuario); // Garantindo que userId seja um número
+          idoso.foto = foto || ""; // Se foto for undefined, atribui uma string vazia
+          idoso.sincronizado = false;
+        });
+
+        console.log("Idoso criado com sucesso:", createdIdoso);
+
+        const isConnected = await checkNetworkConnection();
+        if (isConnected) {
+          await syncIdosoWithServer(createdIdoso);
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao salvar o idoso no banco local:", error);
+    }
+  };
+>>>>>>> Stashed changes
+
+  const syncIdosoWithServer = async (idoso: Idoso) => {
+    try {
+      const response = await postIdoso({
+        nome: idoso.nome,
+        dataNascimento: idoso.dataNascimento,
+        telefoneResponsavel: idoso.telefoneResponsavel,
+        descricao: idoso.descricao,
+        tipoSanguineo: idoso.tipoSanguineo,
+        foto: idoso.foto,
+        userId: idoso.userId,
+      });
+
+      if (response) {
+        await database.write(async () => {
+          await idoso.update(() => {
+            idoso.sincronizado = true;
+          });
+        });
+        console.log("Idoso sincronizado com sucesso!");
+      }
+    } catch (error) {
+      console.error("Erro ao sincronizar idoso com o servidor:", error);
+      ToastAndroid.show("Erro ao sincronizar idoso.", ToastAndroid.SHORT);
+    }
+  };
 
   const salvar = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
       return;
     }
+<<<<<<< Updated upstream
 
     if (idUsuario === null) {
       throw new Error("Usuário não encontrado.");
@@ -209,19 +298,19 @@ export default function CadastrarIdoso() {
 
       await postIdoso(body, token);
 
+=======
+    try {
+      setShowLoading(true);
+      await salvarNoBancoLocal();
+>>>>>>> Stashed changes
       ToastAndroid.show("Idoso salvo com sucesso!", ToastAndroid.SHORT);
       router.replace("/private/pages/listarIdosos");
     } catch (err) {
-      const error = err as { message: string };
-      ToastAndroid.show(`Erro: ${error.message}`, ToastAndroid.SHORT);
+      ToastAndroid.show(`Erro: ${(err as Error).message}`, ToastAndroid.SHORT);
     } finally {
       setShowLoading(false);
     }
   };
-
-  useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
-
-  const data = getTipoSanguineoOptions();
 
   return (
     <View>
@@ -321,7 +410,7 @@ export default function CadastrarIdoso() {
               <SelectList
                 boxStyles={styles.dropdown}
                 inputStyles={styles.textInput}
-                data={data}
+                data={getTipoSanguineoOptions()}
                 setSelected={setTipoSanguineo}
                 placeholder="Tipo Sanguíneo"
                 search={false}

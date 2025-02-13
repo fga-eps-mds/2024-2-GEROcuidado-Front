@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { AntDesign } from "@expo/vector-icons";
-import { Text, View, StyleSheet, Image, Pressable } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "../../interfaces/user.interface";
 import { router } from "expo-router";
 import NaoAutenticado from "../../components/NaoAutenticado";
-import { hasFoto } from "../../shared/helpers/foto.helper";
 import { getFoto } from "../../shared/helpers/photo.helper";
 
 export default function Perfil() {
@@ -25,7 +24,7 @@ export default function Perfil() {
     router.push({ pathname: "/private/pages/listarIdosos", params: user });
   };
 
-  useEffect(() => getIdUsuario());
+  useEffect(() => getIdUsuario(), []);
 
   const handleUser = () => {
     AsyncStorage.getItem("usuario").then((response) => {

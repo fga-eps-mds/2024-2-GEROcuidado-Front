@@ -3,20 +3,37 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+<<<<<<< Updated upstream
   ActivityIndicator,
   FlatList,
   Pressable,
   StyleSheet,
   Text,
   View,
+=======
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+>>>>>>> Stashed changes
 } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import BackButton from "../../components/BackButton";
 import CardIdoso from "../../components/CardIdoso";
 import { IIdoso, IOrder } from "../../interfaces/idoso.interface";
 import { IUser } from "../../interfaces/user.interface";
+<<<<<<< Updated upstream
 import { getAllIdoso } from "../../services/idoso.service";
 
+=======
+import database from "../../db";
+import Idoso from "../../model/Idoso";
+import { Collection, Q } from "@nozbe/watermelondb";
+import { getImageUri } from "../../shared/helpers/image.helper";
+import NetInfo from '@react-native-community/netinfo'; // Importando NetInfo para verificar conexão
+import { syncDatabaseWithServer } from "../../services/watermelon.service";
+>>>>>>> Stashed changes
 
 interface IOrderOption {
   key: IOrder;
@@ -54,15 +71,19 @@ const data: IOrderOption[] = [
   },
 ];
 
+<<<<<<< Updated upstream
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
 const BASE_URL = `${API_URL}:${API_PORT}/api/saude/idoso`;
 
+=======
+>>>>>>> Stashed changes
 export default function ListarIdosos() {
   const [idosos, setIdosos] = useState<IIdoso[]>([]);
   const [loading, setLoading] = useState(true);
   const [orderOption, setOrderOption] = useState<IOrder>(data[0].key);
   const [idUsuario, setIdUsuario] = useState<number | null>(null);
+<<<<<<< Updated upstream
   const [token, setToken] = useState<string>("");
   const router = useRouter();
 
@@ -86,8 +107,12 @@ export default function ListarIdosos() {
         console.error("Erro ao obter usuário:", error);
       }
     };
+=======
+>>>>>>> Stashed changes
 
+  const router = useRouter();
 
+<<<<<<< Updated upstream
     getIdUsuario();
   }, []);
 
@@ -104,14 +129,167 @@ export default function ListarIdosos() {
   const navigateCadastrar = () => {
     router.push("/private/pages/cadastrarIdoso");
   };
+=======
+  // Função para obter o usuário logado
+  useEffect(() => {
+    const getIdUsuario = async () => {
+      try {
+        const response = await AsyncStorage.getItem("usuario");
+        if (response) {
+          const usuario = JSON.parse(response) as IUser;
+          setIdUsuario(usuario.id);
+          console.log("Usuário logado:", usuario);
+        }
+      } catch (error) {
+        console.error("Erro ao obter usuário:", error);
+      }
+    };
+>>>>>>> Stashed changes
 
+    getIdUsuario();
+  }, []);
 
+<<<<<<< Updated upstream
   useEffect(() => {
     if (idUsuario) {
       getIdosos(idUsuario);
     }
   }, [orderOption, idUsuario]);
+=======
+  // Função para carregar os idosos do banco local
+  const getIdosos = async () => {
+    if (!idUsuario) return;
+>>>>>>> Stashed changes
 
+    setLoading(true);
+
+<<<<<<< Updated upstream
+  return (
+    <View style={styles.screen}>
+      <View style={styles.backButton}>
+        <BackButton route="/private/tabs/perfil" color="#000" />
+      </View>
+=======
+    try {
+      const idosoCollection = database.get('idoso') as Collection<Idoso>;
+>>>>>>> Stashed changes
+
+      // Usando a mesma lógica de consulta para pegar os idosos não sincronizados
+      const idosoRecords = await idosoCollection.query(Q.where('isSynced', Q.eq(false))).fetch();
+
+<<<<<<< Updated upstream
+      <Text style={styles.header}>De quem está cuidando agora?</Text>
+=======
+      if (idosoRecords.length === 0) {
+        Toast.show({
+          type: "info",
+          text1: "Nenhum idoso encontrado.",
+        });
+      }
+>>>>>>> Stashed changes
+
+      console.log("Idosos não sincronizados:", idosoRecords);
+
+<<<<<<< Updated upstream
+      <View style={styles.list}>
+        <SelectList
+          data={data}
+          setSelected={(item: IOrder) => {
+            setOrderOption(item);
+          }}
+          search={false}
+          boxStyles={styles.boxDropDown}
+          inputStyles={styles.boxInputDropDown}
+          dropdownStyles={styles.dropDown}
+          placeholder="selecione"
+        />
+      </View>
+=======
+      const mappedIdoso = idosoRecords.map((item) => ({
+        ...item._raw,
+        foto: getImageUri(item.foto), // Convertendo a foto para o URI
+      }));
+>>>>>>> Stashed changes
+
+      setIdosos(mappedIdoso);
+    } catch (err) {
+      const error = err as { message: string };
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
+        text2: error.message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+<<<<<<< Updated upstream
+      {loading && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#2CCDB5" />
+        </View>
+      )}
+=======
+  const navigateCadastrar = () => {
+    router.push("/private/pages/cadastrarIdoso");
+  };
+>>>>>>> Stashed changes
+
+  // UseEffect para verificar a conexão e carregar dados
+  useEffect(() => {
+    if (idUsuario) {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          console.log('Conectado à internet');
+          syncIdosoWithServer(); // Sincroniza com o servidor se houver conexão
+        } else {
+          console.log('Sem conexão');
+          getIdosos(); // Carrega dados locais se não houver conexão
+        }
+      });
+    }
+  }, [orderOption, idUsuario]);
+
+<<<<<<< Updated upstream
+=======
+  // Função para sincronizar dados com o servidor
+  const syncIdosoWithServer = async () => {
+    try {
+      setLoading(true);
+      const idosoCollection = database.get('idoso') as Collection<Idoso>;
+      const idosoRecords = await idosoCollection.query(Q.where('isSynced', Q.eq(false))).fetch(); // Filtra os dados não sincronizados
+
+      // Envia os dados para o backend
+      await syncDatabaseWithServer(); // Chama a função para sincronizar o banco de dados com o servidor
+
+      // Atualiza os idosos não sincronizados após a sincronização
+      const updatedIdosos = await idosoCollection.query(Q.where('isSynced', Q.eq(false))).fetch();
+      console.log("Idosos não sincronizados após sincronização:", updatedIdosos);
+
+      // Marca os dados como sincronizados no banco local
+      await database.write(async () => {
+        for (let record of idosoRecords) {
+          await record.update(item => {
+            item.isSynced = true; // Marca o registro como sincronizado
+          });
+        }
+      });
+
+      Toast.show({
+        type: 'success',
+        text1: 'Sincronização concluída',
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao sincronizar',
+        text2: error.message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -119,9 +297,7 @@ export default function ListarIdosos() {
         <BackButton route="/private/tabs/perfil" color="#000" />
       </View>
 
-
       <Text style={styles.header}>De quem está cuidando agora?</Text>
-
 
       <View style={styles.list}>
         <SelectList
@@ -137,14 +313,13 @@ export default function ListarIdosos() {
         />
       </View>
 
-
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#2CCDB5" />
         </View>
       )}
 
-
+>>>>>>> Stashed changes
       {!loading && (
         <View style={styles.cardIdoso}>
           <FlatList
@@ -155,6 +330,10 @@ export default function ListarIdosos() {
           />
         </View>
       )}
+<<<<<<< Updated upstream
+=======
+      
+>>>>>>> Stashed changes
       <View style={styles.cadastroContainer}>
         <Pressable style={styles.cadastroBtn} onPress={navigateCadastrar}>
           <AntDesign name="pluscircleo" size={54} />
@@ -280,4 +459,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 20,
   },
+<<<<<<< Updated upstream
 });
+=======
+});
+>>>>>>> Stashed changes
