@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   ActivityIndicator,
   FlatList,
   Pressable,
@@ -11,11 +12,16 @@ import {
   Text,
   View,
 =======
+=======
+>>>>>>> Stashed changes
   View,
   Text,
   StyleSheet,
   Pressable,
   ActivityIndicator,
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -33,6 +39,9 @@ import { Collection, Q } from "@nozbe/watermelondb";
 import { getImageUri } from "../../shared/helpers/image.helper";
 import NetInfo from '@react-native-community/netinfo'; // Importando NetInfo para verificar conexão
 import { syncDatabaseWithServer } from "../../services/watermelon.service";
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 interface IOrderOption {
@@ -72,10 +81,13 @@ const data: IOrderOption[] = [
 ];
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
 const BASE_URL = `${API_URL}:${API_PORT}/api/saude/idoso`;
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 export default function ListarIdosos() {
@@ -83,6 +95,7 @@ export default function ListarIdosos() {
   const [loading, setLoading] = useState(true);
   const [orderOption, setOrderOption] = useState<IOrder>(data[0].key);
   const [idUsuario, setIdUsuario] = useState<number | null>(null);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   const [token, setToken] = useState<string>("");
   const router = useRouter();
@@ -102,11 +115,26 @@ export default function ListarIdosos() {
           setToken(token);
         } else {
           console.log("Token não encontrado no AsyncStorage.");
+=======
+
+  const router = useRouter();
+
+  // Função para obter o usuário logado
+  useEffect(() => {
+    const getIdUsuario = async () => {
+      try {
+        const response = await AsyncStorage.getItem("usuario");
+        if (response) {
+          const usuario = JSON.parse(response) as IUser;
+          setIdUsuario(usuario.id);
+          console.log("Usuário logado:", usuario);
+>>>>>>> Stashed changes
         }
       } catch (error) {
         console.error("Erro ao obter usuário:", error);
       }
     };
+<<<<<<< Updated upstream
 =======
 >>>>>>> Stashed changes
 
@@ -217,6 +245,43 @@ export default function ListarIdosos() {
       Toast.show({
         type: "error",
         text1: "Erro!",
+=======
+
+    getIdUsuario();
+  }, []);
+
+  // Função para carregar os idosos do banco local
+  const getIdosos = async () => {
+    if (!idUsuario) return;
+
+    setLoading(true);
+
+    try {
+      const idosoCollection = database.get('idoso') as Collection<Idoso>;
+
+      // Usando a mesma lógica de consulta para pegar os idosos não sincronizados
+      const idosoRecords = await idosoCollection.query(Q.where('isSynced', Q.eq(false))).fetch();
+
+      if (idosoRecords.length === 0) {
+        Toast.show({
+          type: "info",
+          text1: "Nenhum idoso encontrado.",
+        });
+      }
+
+      console.log("Idosos não sincronizados:", idosoRecords);
+
+      const mappedIdoso = idosoRecords.map((item) => ({
+        ...item._raw,
+        foto: getImageUri(item.foto), // Convertendo a foto para o URI
+      }));
+
+      setIdosos(mappedIdoso);
+    } catch (err) {
+      const error = err as { message: string };
+      Toast.show({
+        type: "error",
+        text1: "Erro!",
         text2: error.message,
       });
     } finally {
@@ -224,6 +289,65 @@ export default function ListarIdosos() {
     }
   };
 
+  const navigateCadastrar = () => {
+    router.push("/private/pages/cadastrarIdoso");
+  };
+
+  // UseEffect para verificar a conexão e carregar dados
+  useEffect(() => {
+    if (idUsuario) {
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          console.log('Conectado à internet');
+          syncIdosoWithServer(); // Sincroniza com o servidor se houver conexão
+        } else {
+          console.log('Sem conexão');
+          getIdosos(); // Carrega dados locais se não houver conexão
+        }
+      });
+    }
+  }, [orderOption, idUsuario]);
+
+  // Função para sincronizar dados com o servidor
+  const syncIdosoWithServer = async () => {
+    try {
+      setLoading(true);
+      const idosoCollection = database.get('idoso') as Collection<Idoso>;
+      const idosoRecords = await idosoCollection.query(Q.where('isSynced', Q.eq(false))).fetch(); // Filtra os dados não sincronizados
+
+      // Envia os dados para o backend
+      await syncDatabaseWithServer(); // Chama a função para sincronizar o banco de dados com o servidor
+
+      // Atualiza os idosos não sincronizados após a sincronização
+      const updatedIdosos = await idosoCollection.query(Q.where('isSynced', Q.eq(false))).fetch();
+      console.log("Idosos não sincronizados após sincronização:", updatedIdosos);
+
+      // Marca os dados como sincronizados no banco local
+      await database.write(async () => {
+        for (let record of idosoRecords) {
+          await record.update(item => {
+            item.isSynced = true; // Marca o registro como sincronizado
+          });
+        }
+      });
+
+      Toast.show({
+        type: 'success',
+        text1: 'Sincronização concluída',
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao sincronizar',
+>>>>>>> Stashed changes
+        text2: error.message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
       {loading && (
         <View style={styles.loading}>
@@ -320,6 +444,36 @@ export default function ListarIdosos() {
       )}
 
 >>>>>>> Stashed changes
+=======
+  return (
+    <View style={styles.screen}>
+      <View style={styles.backButton}>
+        <BackButton route="/private/tabs/perfil" color="#000" />
+      </View>
+
+      <Text style={styles.header}>De quem está cuidando agora?</Text>
+
+      <View style={styles.list}>
+        <SelectList
+          data={data}
+          setSelected={(item: IOrder) => {
+            setOrderOption(item);
+          }}
+          search={false}
+          boxStyles={styles.boxDropDown}
+          inputStyles={styles.boxInputDropDown}
+          dropdownStyles={styles.dropDown}
+          placeholder="selecione"
+        />
+      </View>
+
+      {loading && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#2CCDB5" />
+        </View>
+      )}
+
+>>>>>>> Stashed changes
       {!loading && (
         <View style={styles.cardIdoso}>
           <FlatList
@@ -331,6 +485,10 @@ export default function ListarIdosos() {
         </View>
       )}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+      
+>>>>>>> Stashed changes
 =======
       
 >>>>>>> Stashed changes
@@ -460,6 +618,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
 });
 =======
 });

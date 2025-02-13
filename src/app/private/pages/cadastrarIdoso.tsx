@@ -19,6 +19,7 @@ import { Collection, Q } from "@nozbe/watermelondb";
 import { getTipoSanguineoOptions } from "../../shared/helpers/useNotification";
 import styles from "../../components/style/styles";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 interface IErrors {
   nome?: string;
@@ -35,6 +36,10 @@ import { syncUnsyncedIdosos } from "../../components/syncService";
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
 const BASE_URL = `${API_URL}:${API_PORT}/api/usuario`;
+=======
+import { checkNetworkConnection } from "../../components/networkUtils";
+import { syncUnsyncedIdosos } from "../../components/syncService";
+>>>>>>> Stashed changes
 
 export default function CadastrarIdoso() {
   const [foto, setFoto] = useState<string | undefined>();
@@ -57,18 +62,22 @@ export default function CadastrarIdoso() {
         const response = await AsyncStorage.getItem("usuario");
         if (response) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
           const usuario = JSON.parse(response) as IUser;
           // console.log("Usuário logado:", usuario);
           setIdUsuario(Number(usuario.id));
         } else {
           console.log("Usuário não encontrado no AsyncStorage.");
 =======
+=======
+>>>>>>> Stashed changes
           const usuario = JSON.parse(response);
           if (usuario?.id) {
             setIdUsuario(usuario.id.toString());
           } else {
             console.error("Usuário não encontrado no AsyncStorage.");
           }
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
         }
 
@@ -78,6 +87,8 @@ export default function CadastrarIdoso() {
           console.log("Token:", token);
         } else {
           console.log("Token não encontrado no AsyncStorage.");
+=======
+>>>>>>> Stashed changes
         }
       } catch (error) {
         console.error("Erro ao obter usuário:", error);
@@ -87,6 +98,7 @@ export default function CadastrarIdoso() {
     getIdUsuario();
   }, []);
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
   useEffect(() => handleErrors(), [nome, telefoneResponsavel, dataNascimento]);
@@ -188,6 +200,8 @@ export default function CadastrarIdoso() {
   //   }
   // };
 =======
+=======
+>>>>>>> Stashed changes
   const salvarNoBancoLocal = async () => {
     if (!idUsuario) {
       console.error("Usuário não encontrado.");
@@ -270,17 +284,46 @@ export default function CadastrarIdoso() {
     }
   };
 
+  const syncIdosoWithServer = async (idoso: Idoso) => {
+    try {
+      const response = await postIdoso({
+        nome: idoso.nome,
+        dataNascimento: idoso.dataNascimento,
+        telefoneResponsavel: idoso.telefoneResponsavel,
+        descricao: idoso.descricao,
+        tipoSanguineo: idoso.tipoSanguineo,
+        foto: idoso.foto,
+        userId: idoso.userId,
+      });
+
+      if (response) {
+        await database.write(async () => {
+          await idoso.update(() => {
+            idoso.sincronizado = true;
+          });
+        });
+        console.log("Idoso sincronizado com sucesso!");
+      }
+    } catch (error) {
+      console.error("Erro ao sincronizar idoso com o servidor:", error);
+      ToastAndroid.show("Erro ao sincronizar idoso.", ToastAndroid.SHORT);
+    }
+  };
+
   const salvar = async () => {
     if (Object.keys(erros).length > 0) {
       setShowErrors(true);
       return;
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     if (idUsuario === null) {
       throw new Error("Usuário não encontrado.");
     }
 
+=======
+>>>>>>> Stashed changes
     try {
       setShowLoading(true);
       // await salvarNoBancoLocal();
@@ -302,6 +345,9 @@ export default function CadastrarIdoso() {
     try {
       setShowLoading(true);
       await salvarNoBancoLocal();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       ToastAndroid.show("Idoso salvo com sucesso!", ToastAndroid.SHORT);
       router.replace("/private/pages/listarIdosos");

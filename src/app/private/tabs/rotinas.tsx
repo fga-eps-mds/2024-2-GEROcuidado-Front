@@ -31,8 +31,12 @@ import { Collection, Q } from "@nozbe/watermelondb";
 import Rotina from "../../model/Rotina";
 import { getFoto } from "../../shared/helpers/photo.helper";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { all } from "axios";
 
+=======
+import NetInfo from '@react-native-community/netinfo'; // Importando NetInfo para verificar a conexão
+>>>>>>> Stashed changes
 =======
 import NetInfo from '@react-native-community/netinfo'; // Importando NetInfo para verificar a conexão
 >>>>>>> Stashed changes
@@ -88,6 +92,7 @@ export default function Rotinas() {
       // const rotinaCollection = database.get('rotina') as Collection<Rotina>;
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       // const allIdosoRotinas = await rotinaCollection.query(
       //   Q.where('idoso_id', idoso.id)
       // ).fetch();
@@ -98,6 +103,8 @@ export default function Rotinas() {
       //     const date = selectedDate.toDate();
       //     const weekday = date.getDay().toString();
 =======
+=======
+>>>>>>> Stashed changes
       // Filtra as rotinas do idoso localmente
       const allIdosoRotinas = await rotinaCollection.query(
         Q.where('idoso_id', idoso.id)
@@ -137,6 +144,9 @@ export default function Rotinas() {
       setLoading(false);
     }
   };
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
   const syncRotinasWithServer = async () => {
@@ -186,11 +196,14 @@ export default function Rotinas() {
 
   useEffect(() => {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     getRotinas()
   },
     [idoso, selectedDate]
   );
 =======
+=======
+>>>>>>> Stashed changes
     if (idoso) {
       NetInfo.fetch().then(state => {
         if (state.isConnected) {
@@ -203,6 +216,9 @@ export default function Rotinas() {
       });
     }
   }, [idoso, selectedDate]);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
   return (
