@@ -37,12 +37,13 @@
     "plugins": [
       "expo-router",
       [
-      "expo-build-properties",
-      {
-        "android": {
-          "usesCleartextTraffic": true
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
         }
-      }
+      ]
     ],
     "extra": {
       "expoEnv": "process.env.EXPO_PUBLIC_API_URL",

@@ -26,7 +26,7 @@ interface IErrors {
 export default function Login() {
   const API_URL = process.env.EXPO_PUBLIC_API_URL;
   const API_PORT = process.env.EXPO_PUBLIC_API_USUARIO_PORT;
-  const BASE_URL = `${API_URL}:${API_PORT}/api/usuario`;
+  const BASE_URL = `${API_URL}:${API_PORT}/api/usuario/`;
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [escondeSenha, setEscondeSenha] = useState(true);
