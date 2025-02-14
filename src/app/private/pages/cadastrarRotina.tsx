@@ -12,7 +12,7 @@ import { ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
 import { SelectList } from "react-native-dropdown-select-list";
-import { ECategoriaRotina, IRotina, IRotinaBody } from "../../interfaces/rotina.interface";
+import { ECategoriaRotina } from "../../interfaces/rotina.interface";
 import WeekDays from "../../components/weekDay";
 import Calendar from "react-native-vector-icons/Feather";
 import CustomButton from "../../components/CustomButton";
@@ -61,17 +61,17 @@ export default function CadastrarRotina() {
   const [token, setToken] = useState<string>("");
   const [dias, setDias] = useState<number[]>([]);
 
+  const getToken = () => {
+    AsyncStorage.getItem("token").then((response) => {
+      setToken(response as string);
+    });
+  };
+
   const getIdoso = () => {
     AsyncStorage.getItem("idoso").then((idosoString) => {
       if (idosoString) {
         const idosoPayload = JSON.parse(idosoString) as IIdoso;
         setIdoso(idosoPayload);
-      }
-    });
-
-    AsyncStorage.getItem("token").then((token) => {
-      if (token) {
-        setToken(token);
       }
     });
   };
@@ -94,25 +94,25 @@ export default function CadastrarRotina() {
     return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}T${hora}:00.000`;
   };
 
-  // const salvarNoBancoLocal = async () => {
-  //   const rotinaCollection = database.get('rotina') as Collection<Rotina>;
+   const salvarNoBancoLocal = async () => {
+     const rotinaCollection = database.get('rotina') as Collection<Rotina>;
 
-  //   await database.write(async () => {
-  //     await rotinaCollection.create((rotina) => {
-  //       rotina.titulo = titulo;
-  //       rotina.descricao = descricao;
-  //       rotina.categoria = String(categoria);
-  //       rotina.dias = dias.map(String); // Mudar o tipo de dias pra String[]
-  //       rotina.dataHora = new Date(getDateIsoString());
-  //       rotina.token = token;
-  //       rotina.notificacao = notificacao;
-  //       rotina.dataHoraConcluidos = [];
-  //       rotina.idIdoso = String(idoso?.id);
-  //     });
-  //   });
+    await database.write(async () => {
+       await rotinaCollection.create((rotina) => {
+         rotina.titulo = titulo;
+         rotina.descricao = descricao;
+         rotina.categoria = String(categoria);
+         rotina.dias = dias.map(String); // Mudar o tipo de dias pra String[]
+         rotina.dataHora = new Date(getDateIsoString());
+         rotina.token = token;
+         rotina.notificacao = notificacao;
+         rotina.dataHoraConcluidos = [];
+         rotina.idIdoso = String(idoso?.id);
+       });
+     });
 
-  //   // console.log("Estado atual do banco:", await rotinaCollection.query().fetch());
-  // }
+     // console.log("Estado atual do banco:", await rotinaCollection.query().fetch());
+   }
 
   const salvar = async () => {
     if (Object.keys(erros).length > 0) {
@@ -120,35 +120,20 @@ export default function CadastrarRotina() {
       return;
     }
 
-    if (!idoso) return
-
     try {
       setShowLoading(true);
-      // await salvarNoBancoLocal().then(()=>{
-      //   // A notificação tem um delay minimo mas que pode afetar maracações de horario muito instantaneas. Tentar correção futura (Possivelmente fuso horario)
-      //   Notifications.scheduleNotificationAsync({
-      //     content: {
-      //       title: titulo,
-      //       body: "Hora de realizar a rotina!",
-      //     },
-      //     trigger: {
-      //       date: new Date(data.split("/").reverse().join("-") + "T" + hora + ":00"),
-      //     },
-      //   });
-      // });
-
-      const rotina: IRotinaBody = {
-        titulo,
-        descricao,
-        categoria,
-        dias,
-        dataHora: getDateIsoString(),
-        notificacao,
-        idIdoso: idoso.id,
-        dataHoraConcluidos: [],
-      };
-
-      await postRotina(rotina, token);
+      await salvarNoBancoLocal().then(()=>{
+         // A notificação tem um delay minimo mas que pode afetar maracações de horario muito instantaneas. Tentar correção futura (Possivelmente fuso horario)
+         Notifications.scheduleNotificationAsync({
+           content: {
+             title: titulo,
+             body: "Hora de realizar a rotina!",
+           },
+           trigger: {
+             date: new Date(data.split("/").reverse().join("-") + "T" + hora + ":00"),
+           },
+       });
+       });
 
       Toast.show({
         type: "success",
@@ -283,7 +268,7 @@ export default function CadastrarRotina() {
             />
           </View>
           <View testID="Erro-categoria">
-            <ErrorMessage show={showErrors} text={erros.categoria} />
+            <ErrorMessage show={showErrors} text={erros.categoria}/>
           </View>
         </View>
 

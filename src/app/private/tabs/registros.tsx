@@ -56,26 +56,22 @@ export default function Registros() {
   const getMetricas = async () => {
     if (!idoso) return;
 
-    // const metricasCollection = database.get('metrica');
+     const metricasCollection = database.get('metrica');
 
     try {
       setLoading(true);
-      // const idosoMetricas = await metricasCollection.query(Q.where('idoso_id', idoso.id)).fetch();
+      const idosoMetricas = await metricasCollection.query(Q.where('idoso_id', idoso.id)).fetch();
 
       // Map the WatermelonDB models to your IMetrica interface
-      // const metricasData: IMetrica[] = idosoMetricas.map((metrica: any) => ({
-      //   id: metrica._raw.id,  // Assuming `id` is a field in the _raw object
-      //   idIdoso: metrica._raw.idoso_id,
-      //   categoria: metrica._raw.categoria,
-      //   valorMaximo: metrica._raw.valorMaximo,
-      // }));
+       const metricasData: IMetrica[] = idosoMetricas.map((metrica: any) => ({
+         id: metrica._raw.id,  // Assuming `id` is a field in the _raw object
+         idIdoso: metrica._raw.idoso_id,
+         categoria: metrica._raw.categoria,
+         valorMaximo: metrica._raw.valorMaximo,
+       }));
 
-      const response = await getAllMetrica({ idIdoso: Number(idoso.id) })
-
-      if (Array.isArray(response) && response.length > 0) {
-        setMetricas(response);
-      }
-    } catch (err) {
+       setMetricas(metricasData);
+      } catch (err) {
       console.log("Erro ao obter metricas do idoso:", err);
     } finally {
       setLoading(false);

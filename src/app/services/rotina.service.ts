@@ -30,7 +30,7 @@ export const postRotina = async (
     throw new Error(json.message as string);
   }
 
-  return json.data;
+  return json;
 };
 
 export const getAllRotina = async (
