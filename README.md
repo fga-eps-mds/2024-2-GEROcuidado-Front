@@ -1,67 +1,22 @@
-# GEROcuidado Mobile App
+# Estado Atual e Próximos Passos
 
-## Badges
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2023-2-GEROcuidado-Front&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=fga-eps-mds_2023-2-GEROcuidado-Front)
+## Estado Atual
+Atualmente, o código para salvar dados tanto localmente quanto remotamente está implementado nesta branch específica. O aplicativo pode operar offline e armazenar os dados localmente, enviando-os ao servidor quando houver conexão com a internet. No entanto, a sincronização entre o banco de dados local e o banco de dados remoto não está funcionando corretamente. 
 
+Isso ocorre porque as tabelas nos dois bancos possuem estruturas diferentes, impedindo a sincronização adequada dos dados. Além disso, foram identificados outros problemas ao longo das tentativas de implementação, como o fato de que o código inteiro estava preparado apenas para funcionar localmente, sem considerar a necessidade de integração com um banco remoto.
 
-## Como rodar o projeto
+## Próximos Passos
+1. **Analisar e Unificar Estruturas:**
+   - Comparar as tabelas do banco local e do banco remoto.
+   - Ajustar a estrutura do banco local para que corresponda à do banco remoto ou vice-versa.
 
-1. Clonar o repositório:
-```bash
-git clone https://github.com/fga-eps-mds/2023-2-GEROcuidado-Front.git
-```
+2. **Ajustar a Lógica de Sincronização:**
+   - Garantir que os identificadores e relacionamentos estejam coerentes entre os dois bancos.
 
-2. Ir para a pasta do projeto:
-```bash
-cd 2023-2-GEROcuidado-Front/
-```
+3. **Ajustar o Código para Suporte a Sincronização:**
+   - Refatorar trechos do código que assumem funcionamento exclusivamente local.
+   - Ajustar mecanismos para cenários offline e estratégias de reconciliação de dados ao reconectar.
 
-3. Rodar o container:
-- em ambiente de dev:
-```bash
-docker compose up
-```
+---
+Essa abordagem garantirá que o aplicativo funcione corretamente em modo offline e consiga sincronizar os dados de forma confiável quando a conexão for restabelecida.
 
-- em ambiente de prod:
-```bash
-NODE_ENV=production docker compose up
-```
-
-### OBSERVAÇÕES IMPORTANTES
-
-1. Para testar a aplicação no celular, basta subir o container com os passos acima, ter baixado no seu dispositivo o aplicativo EXPO GO e por fim acessar o link exp://192.168.0.9:8081 no seu navegador. (A aplicação não aparecerá automaticamente no aplicativo do EXPO GO, é necessário acessar o link)
-
-2. Para testar a aplicação no celular em ambiente de desenvolvimento, é necessário também remover essa configuração do app.json:
-
-```json
-"eas": {
-  "projectId": "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx"
-}
-```
-
-## Testes Unitários
-
-Para rodar os testes unitários, basta executar o comando:
-```bash
-docker compose -f docker-compose.test.yml up
-```
-
-## QR Code para testes
-### IOS
-![IOS](https://github.com/fga-eps-mds/2023-2-GEROcuidado-Front/assets/51385738/1a9562d5-dec5-485d-999a-59f2f16e2427)
-### Android
-![Android](https://github.com/fga-eps-mds/2023-2-GEROcuidado-Front/assets/51385738/9a6d23c0-2f88-42de-ac26-719e6faa9fd3)
-### 📝 Notes.
-
-- [Expo Router: Docs](https://expo.github.io/router)
-- [Expo Router: Repo](https://github.com/expo/router)
