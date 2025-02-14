@@ -123,7 +123,7 @@ export default function CriarDenuncia() {
       </View>
 
       <ScrollView >
-        {publicacao && <PublicacaoVisualizar item={publicacao} />}
+        {publicacao && <PublicacaoVisualizar showComentarios={false} item={publicacao} />}
         <Text style={styles.mainText}>Motivo da denúncia:</Text>
         <View style={styles.actions}>
           <SelectList

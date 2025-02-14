@@ -7,18 +7,20 @@ import { getFoto } from "../shared/helpers/photo.helper";
 import { getAllComentarios, postComentario, deleteComentarioById } from "../services/forum.service";
 import { IComentario, IComentarioBody } from "../interfaces/forum.interface";
 import { IDenuncia } from "../interfaces/forum.interface";
+import { useRouter } from "expo-router";
 
 const URL_DENUNCIAS = `${process.env.EXPO_PUBLIC_API_URL}:${process.env.EXPO_PUBLIC_API_FORUM_PORT}/api/forum/denuncias`;
 
 interface IProps {
   item: any;
-  token: string;
+  token?: string;
+  showComentarios?:boolean;
 }
 
-export default function PublicacaoVisualizar({ item, token }: IProps) {
+export default function PublicacaoVisualizar({ item, token, showComentarios=true}: IProps) {
   const [comentarios, setComentarios] = useState<IComentario[]>([]);
   const [novoComentario, setNovoComentario] = useState("");
-  const [denuncias, setDenuncias] = useState<{ [idUsuario: number]: IDenuncia[] }>({});
+  const [denuncias, setDenuncias] = useState<{ [idUsuario: number]: IDenuncia[] }>({});;
 
   useEffect(() => {
     carregarComentarios(item.id);
@@ -87,7 +89,7 @@ export default function PublicacaoVisualizar({ item, token }: IProps) {
       }
 
       try {
-        const response = await postComentario(comentarioBody, token);
+        const response = await postComentario(comentarioBody, token!);
         if (response.data) {
           setComentarios([...comentarios, response.data]);
           setNovoComentario("");
@@ -100,7 +102,7 @@ export default function PublicacaoVisualizar({ item, token }: IProps) {
 
   const handleDeletarComentario = async (idComentario: number) => {
     try {
-      await deleteComentarioById(idComentario, token);
+      await deleteComentarioById(idComentario, token!);
       setComentarios(comentarios.filter((comentario) => comentario.id !== idComentario));
     } catch (error) {
       console.error("Erro ao deletar comentário", error);
@@ -154,7 +156,7 @@ export default function PublicacaoVisualizar({ item, token }: IProps) {
         </View>
       )}
 
-      <View style={styles.commentsSection}>
+      {showComentarios && <View style={styles.commentsSection}>
         <Text style={styles.commentsTitle}>Comentários</Text>
         <FlatList
           data={comentarios}
@@ -177,7 +179,7 @@ export default function PublicacaoVisualizar({ item, token }: IProps) {
           onChangeText={setNovoComentario}
         />
         <Button title="Comentar" onPress={handleAdicionarComentario} />
-      </View>
+      </View>}
     </View>
   );
 }
