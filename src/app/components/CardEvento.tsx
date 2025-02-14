@@ -9,23 +9,23 @@ import { Collection } from "@nozbe/watermelondb";
 import Evento from "../model/Evento";
 
 interface IProps {
-    item: IEvento;
-    index: number;
-    date: Date;
-  }
+  item: IEvento;
+  index: number;
+  date: Date;
+}
 
-  export default function CardEvento({ item, index, date }: IProps) {
-    const dateString = date.toLocaleString("pt-BR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-    
-    const [nameIcon, setnameIcon] = useState("view-grid-outline");
-    const [check, setCheck] = useState(false);
-    const [time, setTime] = useState<string>("");
-    const [token, setToken] = useState<string>("");
-    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+export default function CardEvento({ item, index, date }: IProps) {
+  const dateString = date.toLocaleString("pt-BR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  const [nameIcon, setnameIcon] = useState("view-grid-outline");
+  const [check, setCheck] = useState(false);
+  const [time, setTime] = useState<string>("");
+  const [token, setToken] = useState<string>("");
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
 
   const editar = () => {
@@ -66,6 +66,7 @@ interface IProps {
     <>
       <Text style={styles.hora}>{time}</Text>
       <Pressable
+        testID="card-evento"
         onPress={editar}
         style={[
           styles.container,
