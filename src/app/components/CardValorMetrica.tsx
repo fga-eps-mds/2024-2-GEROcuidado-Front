@@ -84,16 +84,16 @@ export default function CardValorMetrica({ item, metrica }: IProps) {
 
   const icone = () => {
     if (item.categoria == EMetricas.FREQ_CARDIACA) {
-      return <FontAwesome name="heartbeat" color={"#FF7D7D"} size={25} />;
+      return <FontAwesome testID="heartbeat" name="heartbeat" color={"#FF7D7D"} size={25} />;
     }
     if (item.categoria == EMetricas.GLICEMIA) {
-      return <FontAwesome name="cubes" color={"#3F3F3F"} size={25} />;
+      return <FontAwesome testID="cubes" name="cubes" color={"#3F3F3F"} size={25} />;
     }
     if (item.categoria == EMetricas.PESO) {
-      return <Icon name="scale-bathroom" color={"#B4026D"} size={25} />;
+      return <Icon  testID="peso" name="scale-bathroom" color={"#B4026D"} size={25} />;
     }
     if (item.categoria == EMetricas.PRESSAO_SANGUINEA) {
-      return <FontAwesome name="tint" color={"#FF7D7D"} size={25} />;
+      return <FontAwesome testID="tint" name="tint" color={"#FF7D7D"} size={25} />;
     }
     if (item.categoria == EMetricas.SATURACAO_OXIGENIO) {
       return (
@@ -105,14 +105,15 @@ export default function CardValorMetrica({ item, metrica }: IProps) {
       );
     }
     if (item.categoria == EMetricas.TEMPERATURA) {
-      return <FontAwesome name="thermometer" color={"#FFAC7D"} size={25} />;
+      return <FontAwesome testID="thermometer" name="thermometer" color={"#FFAC7D"} size={25} />;
     }
     if (item.categoria == EMetricas.HORAS_DORMIDAS) {
-      return <FontAwesome name="bed" color={"#4B0082"} size={25} />;
+      return <FontAwesome testID="bed" name="bed" color={"#4B0082"} size={25} />;
     }
     if (item.categoria == EMetricas.ALTURA) {
       return (
         <Entypo
+          testID="ruler"
           name="ruler"
           color={"#000"}
           size={25}
@@ -121,11 +122,11 @@ export default function CardValorMetrica({ item, metrica }: IProps) {
       );
     }
     if (item.categoria == EMetricas.IMC) {
-      return <Entypo name="calculator" color={"#000"} size={25} />;
+      return <Entypo testID="calculator" name="calculator" color={"#000"} size={25} />;
     }
     if (item.categoria == EMetricas.HIDRATACAO) {
       return (
-        <MaterialCommunityIcons name="cup-water" color={"#1075c8"} size={25} />
+        <MaterialCommunityIcons testID="cup-water" name="cup-water" color={"#1075c8"} size={25} />
       );
     }
   };
@@ -137,7 +138,7 @@ export default function CardValorMetrica({ item, metrica }: IProps) {
       const valorMetricasCollection = database.get('valor_metrica') as Collection<ValorMetrica>;
       await database.write(async () => {
         const valorMetrica = await valorMetricasCollection.find(String(item.id));
-        await valorMetrica.destroyPermanently(); // Change it to mark as deleted when implementing sync
+        await valorMetrica.destroyPermanently();
       });
 
       router.replace({
@@ -179,6 +180,7 @@ export default function CardValorMetrica({ item, metrica }: IProps) {
           <Text style={[styles.units, { color: textColor }]}>{unidade()}</Text>
         </View>
         <Octicons
+          testID="apagarButton"
           name="x-circle-fill"
           style={styles.apagar}
           size={22}
