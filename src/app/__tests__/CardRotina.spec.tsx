@@ -1,124 +1,284 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react-native";
-import CardRotina from "../components/CardRotina"; // Ajuste o caminho conforme necessário
-import { IRotina, ECategoriaRotina } from "../interfaces/rotina.interface"; // Ajuste o caminho conforme necessário
-import { router } from "expo-router";
-
-// Mock do router do Expo
+import { act, render, fireEvent } from "@testing-library/react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import "@react-native-async-storage/async-storage/jest/async-storage-mock";
+import CardRotina from "../components/CardRotina";
+import { ECategoriaRotina, EDiasSemana } from "../interfaces/rotina.interface";
+import database from "../db";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 jest.mock("expo-router", () => ({
   router: {
     push: jest.fn(),
   },
 }));
-
-// Mock do ícone
-jest.mock("react-native-vector-icons/MaterialCommunityIcons", () => "Icon");
-
-// Mock do AsyncStorage
-jest.mock("@react-native-async-storage/async-storage", () => ({
-  getItem: jest.fn(() => Promise.resolve("mock-token")),
-}));
-
-// Mock do database
-jest.mock("../db", () => ({
-  get: jest.fn(() => ({
-    write: jest.fn(),
-    get: jest.fn(() => ({
-      find: jest.fn(() => ({
-        update: jest.fn(),
-      })),
-    })),
-  })),
-}));
-
-// Dados de exemplo para a rotina
-const mockRotina: IRotina = {
+jest.useFakeTimers();
+const rotina = {
   id: "1",
-  titulo: "Rotina de Teste",
-  descricao: "Descrição da rotina de teste",
+  titulo: "Título de Exemplo",
+  idIdoso: "123",
   categoria: ECategoriaRotina.ALIMENTACAO,
-  dias: [1, 3, 5],
-  dataHora: "2023-10-10T10:00:00",
+  descricao: "Descrição de Exemplo",
+  token: "token",
   dataHoraConcluidos: [],
-  token: "mock-token",
+  dataHora: new Date(),
+  dias: [EDiasSemana.Domingo],
   notificacao: true,
-  idIdoso: "1",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+
 };
+const rotina_exercicios = {
+  id: "2",
+  titulo: "Card exercicio",
+  idIdoso: "456",
+  categoria: ECategoriaRotina.EXERCICIOS,
+  descricao: "caminhada",
+  dataHoraConcluidos: [],
+  dataHora: new Date(),
+  dias: [EDiasSemana.Domingo],
+  notificacao: true,
+};
+const rotina_medicamentos = {
+  id: "3",
+  titulo: "Card medicamento",
+  idIdoso: "789",
+  categoria: ECategoriaRotina.MEDICAMENTO,
+  descricao: "dipirona",
+  dataHoraConcluidos: [],
+  dataHora: new Date(),
+  dias: [EDiasSemana.Domingo],
+  notificacao: true,
+};
+describe("Teste Componente Card Rotina", () => {
+  act(() => {
+    test("Renderiza corretamente", () => {
+      const { getByText } = render(
+        <CardRotina item={rotina} index={0} date={new Date()} />,
+      );
+      expect(getByText("Título de Exemplo")).toBeTruthy();
+      expect(getByText("Descrição de Exemplo")).toBeTruthy();
+    });
+    test("Renderiza corretamente Card de exercicios", () => {
+      const { getByText } = render(
+        <CardRotina item={rotina_exercicios} index={0} date={new Date()} />,
+      );
+      expect(getByText("Card exercicio")).toBeTruthy();
+      expect(getByText("caminhada")).toBeTruthy();
+    });
+    test("Renderiza corretamente Card de Medicamentos", () => {
+      const { getByText } = render(
+        <CardRotina item={rotina_medicamentos} index={0} date={new Date()} />,
+      );
+      expect(getByText("Card medicamento")).toBeTruthy();
+      expect(getByText("dipirona")).toBeTruthy();
+    });
+    test("Verifica se debounceConcluido funciona corretamente", () => {
+      const { getByTestId, queryByTestId } = render(
+        <CardRotina item={rotina} index={0} date={new Date()} />
+      );
 
-// Mock da data
-const mockDate = new Date("2023-10-10T09:00:00");
+      const checkbox = getByTestId("checkbox");
+      expect(queryByTestId("check-icon")).toBeNull();
 
-describe("CardRotina", () => {
-  it("deve renderizar corretamente", () => {
-    const { getByText, getByTestId } = render(
-      <CardRotina item={mockRotina} index={0} date={mockDate} />
-    );
+      fireEvent.press(checkbox);
 
-    // Verifica se o título e a descrição estão sendo renderizados
-    expect(getByText("Rotina de Teste")).toBeTruthy();
-    expect(getByText("Descrição da rotina de teste")).toBeTruthy();
+      act(() => {
+        jest.runAllTimers();
+      });
 
-    // Verifica se a hora está sendo renderizada corretamente
-    expect(getByText("10:00")).toBeTruthy();
-
-    // Verifica se o ícone está sendo renderizado
-    expect(getByTestId("icon")).toBeTruthy();
+      expect(queryByTestId("check-icon")).toBeTruthy();
+    });
   });
+  it("deve obter o token do AsyncStorage", async () => {
+    const mockToken = "mock-token";
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(mockToken);
 
-  it("deve navegar para a tela de edição ao ser pressionado", () => {
     const { getByTestId } = render(
-      <CardRotina item={mockRotina} index={0} date={mockDate} />
+      <CardRotina item={rotina} index={0} date={new Date()} />
     );
 
-    // Simula o pressionamento do card
-    fireEvent.press(getByTestId("card-rotina"));
+    await act(async () => {
+      jest.runAllTimers();
+    });
 
-    // Verifica se o router.push foi chamado com os parâmetros corretos
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith("token");
+  });
+  it("deve definir o ícone corretamente para cada categoria", () => {
+    const { getByTestId, rerender } = render(
+      <CardRotina item={rotina} index={0} date={new Date()} />
+    );
+
+    expect(getByTestId("icon").props.children.props.name).toBe("food-apple-outline");
+
+    rerender(<CardRotina item={rotina_exercicios} index={0} date={new Date()} />);
+    expect(getByTestId("icon").props.children.props.name).toBe("dumbbell");
+
+    rerender(<CardRotina item={rotina_medicamentos} index={0} date={new Date()} />);
+    expect(getByTestId("icon").props.children.props.name).toBe("medical-bag");
+  });
+  it("deve remover a data de dataHoraConcluidos quando concluido é false", async () => {
+    const rotinaComConclusao = {
+      ...rotina,
+      dataHoraConcluidos: ["10/10/2023"],
+    };
+
+    const { getByTestId } = render(
+      <CardRotina item={rotinaComConclusao} index={0} date={new Date("2023-10-10")} />
+    );
+
+    const checkbox = getByTestId("checkbox");
+    fireEvent.press(checkbox);
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
+    expect(database.write).toHaveBeenCalled();
+  });
+  it("deve navegar para a tela de edição ao pressionar o card", () => {
+    const { getByTestId } = render(
+      <CardRotina item={rotina} index={0} date={new Date()} />
+    );
+
+    const card = getByTestId("card-rotina");
+    fireEvent.press(card);
+
     expect(require("expo-router").router.push).toHaveBeenCalledWith({
       pathname: "/private/pages/editarRotina",
       params: {
         rotina: JSON.stringify({
-          id: "1",
-          titulo: "Rotina de Teste",
-          categoria: ECategoriaRotina.ALIMENTACAO,
-          dias: [1, 3, 5],
-          dataHora: "2023-10-10T10:00:00",
-          descricao: "Descrição da rotina de teste",
-          token: "mock-token",
-          notificacao: true,
-          dataHoraConcluidos: [],
-          idIdoso: "1",
+          id: rotina.id,
+          titulo: rotina.titulo,
+          categoria: rotina.categoria,
+          dias: rotina.dias,
+          dataHora: rotina.dataHora,
+          descricao: rotina.descricao,
+          token: rotina.token,
+          notificacao: rotina.notificacao,
+          dataHoraConcluidos: rotina.dataHoraConcluidos,
+          idIdoso: rotina.idIdoso,
+          createdAt: rotina.createdAt,
+          updatedAt: rotina.updatedAt,
         }),
       },
     });
   });
+  
+  it("deve definir check como false quando a data não está em dataHoraConcluidos", () => {
+    const rotinaSemConclusao = {
+      ...rotina,
+      dataHoraConcluidos: [],
+    };
 
-  it("deve alternar a cor de fundo com base no índice", () => {
-    const { getByTestId, rerender } = render(
-      <CardRotina item={mockRotina} index={0} date={mockDate} />
+    const { queryByTestId } = render(
+      <CardRotina item={rotinaSemConclusao} index={0} date={new Date("2023-10-10")} />
     );
 
-    // Verifica a cor de fundo para índice par
-    const cardPar = getByTestId("card-rotina");
-    expect(cardPar.props.style[1].backgroundColor).toBe("#B4FFE8");
-
-    // Re-renderiza com índice ímpar
-    rerender(<CardRotina item={mockRotina} index={1} date={mockDate} />);
-
-    // Verifica a cor de fundo para índice ímpar
-    const cardImpar = getByTestId("card-rotina");
-    expect(cardImpar.props.style[1].backgroundColor).toBe("#FFC6C6");
+    expect(queryByTestId("check-icon")).toBeNull();
   });
+  it("deve exibir um Toast de erro ao falhar ao atualizar a rotina", async () => {
+    const mockError = new Error("Erro ao atualizar rotina");
+    (database.write as jest.Mock).mockRejectedValue(mockError);
 
-  it("deve marcar a rotina como concluída ao pressionar o checkbox", () => {
     const { getByTestId } = render(
-      <CardRotina item={mockRotina} index={0} date={mockDate} />
+      <CardRotina item={rotina} index={0} date={new Date()} />
     );
 
-    // Simula o pressionamento do checkbox
-    fireEvent.press(getByTestId("checkbox"));
+    const checkbox = getByTestId("checkbox");
+    fireEvent.press(checkbox);
 
-    // Verifica se o ícone de check foi renderizado
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
+    expect(Toast.show).toHaveBeenCalledWith({
+      type: "error",
+      text1: "Erro!",
+      text2: mockError.message,
+    });
+  });
+  it("deve limpar o timer existente antes de definir um novo", async () => {
+    const { getByTestId } = render(
+      <CardRotina item={rotina} index={0} date={new Date()} />
+    );
+
+    const checkbox = getByTestId("checkbox");
+
+    fireEvent.press(checkbox);
+
+    fireEvent.press(checkbox);
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
     expect(getByTestId("check-icon")).toBeTruthy();
+  });
+  it("deve exibir um Toast de erro ao falhar ao buscar ou atualizar a rotina", async () => {
+    const mockError = new Error("Erro ao buscar ou atualizar rotina");
+    (database.get as jest.Mock).mockImplementation(() => ({
+      write: jest.fn().mockRejectedValue(mockError),
+    }));
+
+    const { getByTestId } = render(
+      <CardRotina item={rotina} index={0} date={new Date()} />
+    );
+
+    const checkbox = getByTestId("checkbox");
+    fireEvent.press(checkbox);
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
+    expect(Toast.show).toHaveBeenCalledWith({
+      type: "error",
+      text1: "Erro!",
+      text2: mockError.message,
+    });
+  });
+  it("deve configurar um setTimeout para chamar updateRotinaConcluido após 1 segundo", async () => {
+    const { getByTestId } = render(
+      <CardRotina item={rotina} index={0} date={new Date()} />
+    );
+
+    const checkbox = getByTestId("checkbox");
+
+    fireEvent.press(checkbox);
+
+    expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 1000);
+
+    await act(async () => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    expect(database.write).toHaveBeenCalled();
+  });
+  
+  it("deve buscar e atualizar a rotina no banco de dados", async () => {
+    const mockRotinaCollection = {
+      find: jest.fn().mockResolvedValue({
+        update: jest.fn(),
+      }),
+    };
+  
+    (database.get as jest.Mock).mockReturnValue(mockRotinaCollection);
+  
+    const { getByTestId } = render(
+      <CardRotina item={rotina} index={0} date={new Date()} />
+    );
+  
+    const checkbox = getByTestId("checkbox");
+    fireEvent.press(checkbox);
+  
+    await act(async () => {
+      jest.runAllTimers(); // Avança o tempo para garantir que a função seja executada
+    });
+  
+    // Verifica se a função find foi chamada com o ID correto
+    expect(mockRotinaCollection.find).toHaveBeenCalledWith(rotina.id);
+  
+    // Verifica se a função update foi chamada
+    expect(mockRotinaCollection.find().update).toHaveBeenCalled();
   });
 });

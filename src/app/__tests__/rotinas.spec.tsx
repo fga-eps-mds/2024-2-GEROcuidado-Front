@@ -5,13 +5,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage/jest/async-s
 import { hasFoto } from "../shared/helpers/foto.helper";
 
 describe("Rotinas", () => {
+  // Simula chamadas da API antes de cada teste
+  beforeEach(() => {
+    global.fetch = jest.fn().mockResolvedValue({
+      status: 200, // Garante que o teste não falha por status inválido
+      json: jest.fn().mockResolvedValue({
+        message: "Sucesso", // Evita erro ao acessar json.message
+        data: [], // Simula resposta esperada da API
+      }),
+    });
+  });
 
   it("renderiza corretamente", async () => {
     await waitFor(() => render(<Rotinas />));
   });
 
   it("renderiza corretamente com user id", async () => {
-    AsyncStorage.setItem("usuario", JSON.stringify({ id: 1 }));
+    await AsyncStorage.setItem("usuario", JSON.stringify({ id: 1 }));
 
     await waitFor(() => render(<Rotinas />));
   });
@@ -45,15 +55,17 @@ describe("Rotinas", () => {
 });
 
 describe("hasFoto", () => {
+  it("should return false if foto is null or undefined", () => {
+    expect(hasFoto(null)).toBe(false);
+    expect(hasFoto(undefined)).toBe(false);
+  });
 
   it("should return false if foto is an empty string", () => {
-    console.log("Testing hasFoto with an empty string...");
     expect(hasFoto("")).toBe(false);
   });
 
   it("should return true if foto contains valid base64 data", () => {
-    console.log("Testing hasFoto with valid base64 data...");
-    const validFoto = "data:image/png;base64,validbase64string";
+    const validFoto = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/LE5HwAAAABJRU5ErkJggg==";
     expect(hasFoto(validFoto)).toBe(true);
   });
 });
