@@ -164,7 +164,7 @@ describe('evento.service.ts', () => {
       json: jest.fn().mockResolvedValue(mockResponse),
     } as unknown as Response);
 
-    await expect(eventoService.updateEvento(1, mockEvento, mockToken)).rejects.toThrowError(mockResponse.message);
+    await expect(eventoService.updateEvento(1, mockEvento, mockToken)).rejects.toThrow(mockResponse.message as string);
     expect(global.fetch).toHaveBeenCalledWith(`${BASE_URL}/1`, {
       method: 'PATCH',
       headers: {
