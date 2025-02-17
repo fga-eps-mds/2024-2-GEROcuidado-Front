@@ -179,6 +179,7 @@ import { Try } from "expo-router/build/views/Try";
         <View style={styles.evento}>
           <View style={styles.titulo}>
             <TextInput
+              testID="titulo"
               value={titulo}
               onChangeText={(titulo) => setTitulo(titulo)}
               placeholder="Adicionar título"
@@ -192,6 +193,7 @@ import { Try } from "expo-router/build/views/Try";
           <View style={styles.dataHora}>
             <Calendar style={styles.iconDataHora} name="calendar" size={20} />
             <MaskInput
+              testID="data"
               style={styles.textInput}
               value={data}
               onChangeText={setData}
@@ -206,11 +208,13 @@ import { Try } from "expo-router/build/views/Try";
   
           <View style={styles.dataHora}>
             <Icon
+              testID="hora-icon"
               style={styles.iconDataHora}
               name="clock-time-four-outline"
               size={20}
             />
             <MaskHour
+              testID="hora"
               style={styles.textInput}
               placeholder="Horário de início"
               placeholderTextColor={"#3D3D3D"}
@@ -224,18 +228,18 @@ import { Try } from "expo-router/build/views/Try";
           </View>
   
           <View>
-            <View style={styles.categoria}>
+            <View style={styles.categoria} testID="categoria">
               {(!categoria || categoria == ECategoriaRotina.GERAL) && (
-                <Icon style={styles.iconCategoria} name="view-grid-outline" />
+                <Icon style={styles.iconCategoria} name="view-grid-outline" testID="geral-icon"/>
               )}
               {categoria === ECategoriaRotina.ALIMENTACAO && (
-                <Icon style={styles.iconCategoria} name="food-apple-outline" />
+                <Icon style={styles.iconCategoria} name="food-apple-outline" testID="alimentacao-icon"/>
               )}
               {categoria === ECategoriaRotina.MEDICAMENTO && (
-                <Icon style={styles.iconCategoria} name="medical-bag" />
+                <Icon style={styles.iconCategoria} name="medical-bag" testID="medicamento-icon"/>
               )}
               {categoria === ECategoriaRotina.EXERCICIOS && (
-                <Icon style={styles.iconCategoria} name="dumbbell" />
+                <Icon style={styles.iconCategoria} name="dumbbell" testID="exercicios-icon"/>
               )}
               <SelectList
                 boxStyles={styles.dropdown}
