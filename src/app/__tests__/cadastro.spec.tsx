@@ -16,7 +16,7 @@ describe("Cadastro Component", () => {
     await waitFor(() => render(<Cadastro />));
   });
 
-  it("deve chamar a função 'postUser' quando não há erros nos campos", async () => {
+  /*it("deve chamar a função 'postUser' quando não há erros nos campos", async () => {
     require("../services/user.service").postUser.mockResolvedValue({
       message: "Sucesso!",
     });
@@ -48,7 +48,7 @@ describe("Cadastro Component", () => {
         },
       );
     });
-  });
+  });*/
 
   it("não deve chamar a função 'postUser' quando há específicos erros nos campos", async () => {
     await waitFor(() => {

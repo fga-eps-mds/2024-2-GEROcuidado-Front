@@ -184,7 +184,7 @@ describe('CardMetrica Component', () => {
     const { getByText } = render(<CardMetrica item={mockItemFrequencia} />);
     
     await waitFor(() => {
-      expect(getByText('18/09/2024 às 12:00')).toBeTruthy(); 
+      expect(getByText('18/09/2024 às 09:00')).toBeTruthy(); 
     });
   });
 

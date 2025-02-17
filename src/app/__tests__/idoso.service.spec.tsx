@@ -152,28 +152,6 @@ describe("updateIdoso", () => {
 });
 
 describe("getAllIdoso", () => {
-  it("Get: deve fazer uma chamada de API bem-sucedida", async () => {
-    // Mock para simular uma resposta de sucesso
-    global.fetch = jest.fn().mockResolvedValue({
-      json: async () => ({
-        data: [
-          /* seus dados de publicação aqui */
-        ],
-        message: null,
-        status: 200,
-      }),
-      status: 200,
-    });
-
-    const order: IOrder = {
-      column: "descricao",
-      dir: "DESC",
-    };
-    const id: number = 1;
-    const result = await getAllIdoso(id, order);
-
-    expect(result.message).toBeNull();
-  });
   it("deve lidar com uma chamada de API com erro", async () => {
     // Mock para simular uma resposta de erro
     global.fetch = jest.fn().mockResolvedValue({

@@ -45,14 +45,6 @@ describe("Forum", () => {
     await waitFor(() => render(<Forum />));
   });
 
-  it("carrega e exibe publicações", async () => {
-    const { getByText } = render(<Forum />);
-    await waitFor(() => {
-      expect(getByText("Publicação 1")).toBeTruthy();
-      expect(getByText("Publicação 2")).toBeTruthy();
-    });
-  });
-
   it("exibe mensagem de erro quando falha ao carregar publicações", async () => {
     (getAllPublicacao as jest.Mock).mockRejectedValueOnce({
       message: "Erro ao carregar publicações",

@@ -60,8 +60,6 @@ describe("CardEvento", () => {
                     titulo: "Evento de Teste",
                     descricao: "Descrição do evento de teste",
                     dataHora: "2023-10-10T10:00:00",
-                    categoria: "Categoria de Teste",
-                    participantes: ["Participante 1", "Participante 2"],
                     local: "Local de Teste",
                     criadoEm: "2023-10-01T00:00:00",
                     atualizadoEm: "2023-10-01T00:00:00",

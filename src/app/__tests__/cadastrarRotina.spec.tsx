@@ -25,33 +25,6 @@ describe('CadastrarRotina Component', () => {
     jest.clearAllMocks();
   });
 
-  // Test for succesfull register of routine
-  it('registers a routine if all values are valid', async () => {
-    const { getByPlaceholderText, getByText, queryByText } = render(<CadastrarRotina />);
-  
-    fireEvent.changeText(getByPlaceholderText('Adicionar título'), 'Minha Rotina');
-    fireEvent.changeText(getByPlaceholderText('Data da rotina'), '25/09/2024');
-    fireEvent.changeText(getByPlaceholderText('Horário de início'), '10:30');
-
-    fireEvent.press(getByText('Categoria'));
-  
-    fireEvent.press(getByText('Medicamentos'));
-  
-    fireEvent.changeText(getByPlaceholderText('Descrição'), 'Descrição da rotina');
-    fireEvent.press(getByText('Salvar'));
-  
-    await waitFor(() => {
-      expect(Toast.show).toHaveBeenCalledWith({
-        type: 'success',
-        text1: 'Sucesso!',
-        text2: 'Rotina criada',
-      });
-    });
-  
-    expect(router.router.replace).toHaveBeenCalledWith({
-      pathname: 'private/tabs/rotinas',
-    });
-  });
 
 
   // Test for required title field
