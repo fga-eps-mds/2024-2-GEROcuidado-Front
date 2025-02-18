@@ -8,6 +8,7 @@ import PublicacaoVisualizar from "../../components/PublicacaoVisualizar";
 import { IPublicacaoParams, IPublicacaoUsuario } from "../../interfaces/forum.interface";
 import { IUser } from "../../interfaces/user.interface";
 import { updatePublicacao } from "../../services/forum.service";
+import { Alert } from "react-native";
 
 export default function CriarDenuncia() {
   interface IReport {
@@ -63,14 +64,14 @@ export default function CriarDenuncia() {
 
   const reportPublication = async () => {
     if (!publicacao || !idUsuario) {
-      alert("Erro ao reportar publicação");
+      Alert.alert("Erro ao reportar publicação");
       return;
     } if (!report.motivo) {
-      alert("Selecione um motivo para a denúncia");
+      Alert.alert("Selecione um motivo para a denúncia");
       return;
     }
     if (!report.descricao) {
-      alert("Descreva o motivo da denúncia");
+      Alert.alert("Descreva o motivo da denúncia");
       return;
     }
 
@@ -100,13 +101,13 @@ export default function CriarDenuncia() {
     });
 
     if (!response.ok) {
-      alert("Erro ao reportar publicação");
+      Alert.alert("Erro ao reportar publicação");
       return;
     }
 
     await updatePublicacao(publicacao.id, { idUsuarioReporte: [idUsuario] }, token);
 
-    alert("Denúncia realizada com sucesso");
+    Alert.alert("Denúncia realizada com sucesso");
     router.push({ pathname: "/private/tabs/forum" });
   }
 
@@ -123,7 +124,7 @@ export default function CriarDenuncia() {
       </View>
 
       <ScrollView >
-        {publicacao && <PublicacaoVisualizar item={publicacao} />}
+        {publicacao && <PublicacaoVisualizar showComentarios={false} item={publicacao} />}
         <Text style={styles.mainText}>Motivo da denúncia:</Text>
         <View style={styles.actions}>
           <SelectList
@@ -138,6 +139,7 @@ export default function CriarDenuncia() {
         </View>
         <View style={styles.actions}>
           <TextInput
+            testID="descricao-denuncia"
             style={styles.textReport}
             placeholder="Descreva o motivo da denúncia!"
             multiline
@@ -148,6 +150,7 @@ export default function CriarDenuncia() {
         </View>
         <View style={styles.botoes}>
           <Pressable
+            testID="report-publicacao"
             style={styles.confirmReportButton}
             onPress={reportPublication}>
             <Text>Reportar Publicação</Text>

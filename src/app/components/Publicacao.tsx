@@ -16,7 +16,7 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
   const getFoto = (foto: string | null | undefined) => {
     if (hasFoto(foto)) {
       return (
-        <Image source={{ uri: foto as string }} style={styles.fotoPerfil} />
+        <Image testID="imageIcon" source={{ uri: foto as string }} style={styles.fotoPerfil} />
       );
     }
 
@@ -82,7 +82,7 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
   };
 
   return (
-    <Pressable onPress={navigate} style={styles.postContainer}>
+    <Pressable testID="publicacaoCard" onPress={navigate} style={styles.postContainer}>
       <View style={styles.postHeader}>
         {getFoto(item.usuario?.foto)}
         <View style={styles.userInfo}>
@@ -110,7 +110,7 @@ export default function Publicacao({ item, crop }: Readonly<IProps>) {
         <Pressable onPress={() => {console.log("Não implementado")}}>
           <Icon name="eye-outline" size={25} />
         </Pressable>
-        <Pressable onPress={makeReport}>
+        <Pressable testID="reportButton" onPress={makeReport}>
           <Icon name="flag" color={"red"} size={25} />
         </Pressable>
       </View>

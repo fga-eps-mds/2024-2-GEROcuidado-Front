@@ -1,5 +1,5 @@
 export interface IEvento {
-    id: number;
+    id: string;
     titulo: string;
     descricao: string;
     dataHora: string;

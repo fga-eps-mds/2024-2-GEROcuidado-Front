@@ -96,10 +96,10 @@ export default function CardRotina({ item, index, date }: IProps) {
       token: rotina.token,
       notificacao: rotina.notificacao,
       dataHoraConcluidos: rotina.dataHoraConcluidos,
-      idosoId: rotina.idIdoso,
+      idIdoso: rotina.idIdoso, // Alterado de idosoId para idIdoso
       createdAt: rotina.createdAt,
       updatedAt: rotina.updatedAt,
-    }
+    };
     const params = { rotina: JSON.stringify(rotinaAttributes) };
 
     router.push({
@@ -130,13 +130,14 @@ export default function CardRotina({ item, index, date }: IProps) {
     <>
       <Text style={styles.hora}>{time}</Text>
       <Pressable
+       testID="card-rotina"
         onPress={editar}
         style={[
           styles.container,
           { backgroundColor: index % 2 == 0 ? "#B4FFE8" : "#FFC6C6" },
         ]}
       >
-        <View style={styles.icon}>
+        <View style={styles.icon} testID="icon">
           <Icon size={30} name={nameIcon}></Icon>
         </View>
         <View style={styles.texts}>
